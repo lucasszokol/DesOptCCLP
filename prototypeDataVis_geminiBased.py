@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 # ---------------------------------------------------------
 # 1. Build the ASU Subgraph Network
@@ -32,7 +33,7 @@ for u, v, dist, temp in campus_edges:
 # ---------------------------------------------------------
 # 2. Sweep Lambda to Trace the Pareto Front
 # ---------------------------------------------------------
-lambdas = np.linspace(0, 1, 100)  # 100 evaluation steps between 0 and 1
+lambdas = np.linspace(0, 1, 100)
 pareto_dict = {}
 
 for lmbda in lambdas:
@@ -43,7 +44,7 @@ for lmbda in lambdas:
     # Solve shortest path for current lambda weighting
     path = nx.shortest_path(G, source="MU", target="Noble", weight='cost')
     
-    # Calculate actual non-weighted totals for this path choice
+    # Calculate non-weighted totals for this path choice
     total_dist = sum(G[u][v]['distance'] for u, v in zip(path[:-1], path[1:]))
     total_heat = sum(G[u][v]['heat'] for u, v in zip(path[:-1], path[1:]))
     
@@ -51,15 +52,13 @@ for lmbda in lambdas:
     pareto_dict[path_name] = (total_dist, total_heat)
 
 # ---------------------------------------------------------
-# 3. Visualize Objective Space (Pareto Front)
+# 3. Export Static Plot (PNG) via Matplotlib
 # ---------------------------------------------------------
 plt.figure(figsize=(9, 5))
 
-# Extract unique optimal routes discovered
 for path_name, (dist, heat) in pareto_dict.items():
     plt.scatter(dist, heat, s=120, label=path_name, zorder=3)
 
-# Draw connecting trade-off line
 sorted_points = sorted(pareto_dict.values(), key=lambda x: x[0])
 plt.plot([p[0] for p in sorted_points], [p[1] for p in sorted_points], 
          linestyle='--', color='gray', zorder=2)
@@ -70,4 +69,45 @@ plt.ylabel("Total Heat Exposure (°F · meters) → [Minimizing]", fontsize=10)
 plt.grid(True, linestyle=':', alpha=0.6)
 plt.legend(loc="upper right", fontsize=8)
 plt.tight_layout()
-plt.show()
+
+# Save plot directly to project folder
+output_png = "pareto_front.png"
+plt.savefig(output_png, dpi=300, bbox_inches='tight')
+plt.close()
+print(f"Static plot saved to: {output_png}")
+
+# ---------------------------------------------------------
+# 4. Export Interactive Web Plot (HTML) via Plotly
+# ---------------------------------------------------------
+fig = go.Figure()
+
+# Add connecting dashed trade-off line
+fig.add_trace(go.Scatter(
+    x=[p[0] for p in sorted_points],
+    y=[p[1] for p in sorted_points],
+    mode='lines',
+    line=dict(dash='dash', color='gray'),
+    showlegend=False
+))
+
+# Add route points
+for path_name, (dist, heat) in pareto_dict.items():
+    fig.add_trace(go.Scatter(
+        x=[dist],
+        y=[heat],
+        mode='markers',
+        marker=dict(size=14),
+        name=path_name,
+        hovertemplate=f"<b>Route:</b> {path_name}<br><b>Distance:</b> %{{x}} m<br><b>Heat Exposure:</b> %{{y}} °F·m<extra></extra>"
+    ))
+
+fig.update_layout(
+    title="ASU Route Optimization: Distance vs. Heat Exposure (Interactive)",
+    xaxis_title="Total Distance (Meters)",
+    yaxis_title="Total Heat Exposure (°F · meters)",
+    template="plotly_white"
+)
+
+output_html = "pareto_front.html"
+fig.write_html(output_html)
+print(f"Interactive HTML plot saved to: {output_html}")
