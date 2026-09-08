@@ -128,7 +128,7 @@ $$\lambda d_{ij}+(1-\lambda)h_{ij}$$
 
 represents the combined distance and heat cost of edge $(i,j)$.
 
-The binary decision variable $x_{ij}$ determines whether that edge is selected and willcontributes to the total cost.
+The binary decision variable $x_{ij}$ determines whether that edge is selected and will contribute to the total cost.
 
 If:
 
