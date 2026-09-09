@@ -270,7 +270,7 @@ The constant-temperature assumption also does not perfectly represent real condi
 
 Future versions of the model could include:
 
-- **Velocity / congestion parameter:** Account for student traffic and walking speeds when selecting an optimal route.
-- **Variable continuous temperatures:** Replace the three fixed temperature regimes with real or estimated temperature data.
-- **Time-of-day dependence:** Account for building closures, changing outdoor temperatures, and expected shade throughout the day.
-- **Higher-resolution routing mesh:** Replace larger path segments with a finer mesh to provide more accurate thermal and routing data at different locations.
+- Velocity / congestion parameter: Account for student traffic and walking speeds when selecting an optimal route.
+- Variable continuous temperatures: Replace the three fixed temperature regimes with real or estimated temperature data.
+- Time-of-day dependence: Account for building closures, changing outdoor temperatures, and expected shade throughout the day.
+- Higher-resolution routing mesh: Replace larger path segments with a finer mesh to provide more accurate thermal and routing data at different locations.
