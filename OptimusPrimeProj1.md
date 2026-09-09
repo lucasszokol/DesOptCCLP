@@ -201,7 +201,8 @@ This constraint allows the solver to choose edges non-sequentially while still a
 
 ## 5. Problem Classification
 
-This problem is specifically a Binary Integer Linear Programming (BILP) problem because the routing decision variables are binary:
+This problem is specifically a Binary Integer Linear Programming (BILP) problem because the routing decision variables are binary. This is a subset of
+Mixed Integer Linear Programming (MILP)
 
 $$
 x_{ij}\in\{0,1\}
