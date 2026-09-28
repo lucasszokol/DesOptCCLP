@@ -934,6 +934,7 @@ def write_ansys_input(model: TrussModel, stiffness_ratio: float, path: Path) -> 
     # Solve the linear static problem and print nodal displacement and reactions.
     lines.extend(
         [
+            "ALLSEL,ALL",
             "FINISH",
             "/SOLU",
             "ANTYPE,STATIC",
@@ -941,12 +942,14 @@ def write_ansys_input(model: TrussModel, stiffness_ratio: float, path: Path) -> 
             "FINISH",
             "/POST1",
             "SET,LAST",
+            "ALLSEL,ALL",
             "/OUTPUT,ansys_nodal_displacements,txt",
             "PRNSOL,U,COMP",
             "/OUTPUT",
             "/OUTPUT,ansys_reactions,txt",
             "PRRSOL",
             "/OUTPUT",
+            "PLDISP,2",
             "FINISH",
         ]
     )

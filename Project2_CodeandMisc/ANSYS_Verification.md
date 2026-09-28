@@ -38,10 +38,21 @@ which exactly matches the Python element stiffness. Soft members use $k_e=1$ N/m
 5. Select `ansys_model_r10000.inp`.
 6. Wait for the static solution and postprocessing commands to finish.
 
-The input file creates the nodes and LINK180 elements, applies the supports and loads, solves the model, and writes:
+The input file creates the nodes and LINK180 elements, applies the supports and loads, solves the model, writes the following files, and finishes by displaying the deformed and undeformed shapes together:
 
 - `ansys_nodal_displacements.txt`
 - `ansys_reactions.txt`
+
+If an older copy of the input file leaves the undeformed element plot on screen, enter these commands one at a time in the MAPDL command field:
+
+```apdl
+/POST1
+SET,LAST
+ALLSEL,ALL
+PLDISP,2
+```
+
+If `SET,LAST` reports that no result set exists, the solve did not finish. Check the MAPDL output window or the job `.err` file for the first error message.
 
 Python node numbers start at 0, while the exported MAPDL node numbers start at 1. Thus Python node 0 corresponds to ANSYS node 1.
 
