@@ -20,6 +20,18 @@ $$
 
 When the condition number is large, $\rho$ approaches one, so each iteration removes only a small fraction of the remaining error. This is why gradient descent converges slowly when the quadratic potential energy surface has a long, narrow shape.
 
+### D1
+The eigenvalue spectrum  is shown below. At $r=10000$, the original condition number is $2.60\times10^6$. The plot shows separated groups of small and large eigenvalues rather than a single uniform stiffness scale.
+
+![D1 figure]()
+**Eigenvalue spectrum placeholder**
+
+### D3
+The convergence behavior of the baseline method is shown below. The convergence curve when gradient descent is used requires $\sim 10^7$ iterations to reach the desired tolerance.  
+
+![D3 figure]()
+**Baseline convergence curves placeholder**
+
 The convergence measure is the fraction of the initial potential energy error that remains:
 
 $$
