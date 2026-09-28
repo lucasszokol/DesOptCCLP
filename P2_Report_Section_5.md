@@ -39,7 +39,7 @@ This graph demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ 
 From this graph, it is evident that the conjugate gradient descent converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
 
 | $r$ | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
-|---:|---:|---:|---:|
+|---:|---:|---:|---:|---:|---:|
 | 1 | 15,168 | 24 | 632 | 0.998786 | 0.297460 |
 | 10 | 22,272 | 24 | 928 | 0.999173 | 0.405690 |
 | 100 | 128,397 | 26 | 4,938 | 0.999857 | 0.367552 |
