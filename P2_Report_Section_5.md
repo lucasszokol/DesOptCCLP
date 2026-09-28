@@ -32,6 +32,10 @@ $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\
 
 Table of convergences and effective rates for GD and CG for R
 
+(idk where else to put this ss)
+<img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
+
+
 
 
 It is important to note that Newton's method could have been used for this solution as well, as that would remedy the ill-constrained Hessian. However, for larger structures or finite element meshes, that Hessian may grow large, and so it may not be desired to calculate or store that Hessian. 
