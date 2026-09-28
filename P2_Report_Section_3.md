@@ -18,33 +18,3 @@ $$
 $$
 
 The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with the constraint that not all members have the same stiffness. This means that the main constraint of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to r, while the smallest eigenvalue does not.
-
-### D1: Eigenvalue spectrum
-
-![Eigenvalue spectrum]()
-**Eigenvalue Spectrum placeholder**
-
-At (r=10000), the original condition number is $2.60\times10^6$. The plot shows separated groups of small and large eigenvalues rather than a single uniform stiffness scale.
-
-### D2: Intrinsic test using diagonal rescaling
-
-**Diagonal rescaling** uses the diagonal matrix of K and forms
-
-$$
-\widehat K=D^{-1/2}KD^{-1/2}.
-$$
-
-This gives each displacement coordinate a unit diagonal stiffness and tests whether the large condition number is caused only by different coordinate scales or units. It is also called Jacobi rescaling.
-
-![Condition number versus stiffness ratio]()
-**Condition Number v Stiffness Ratio Placeholder**
-
-| r | $\kappa(K)$ | $\kappa(\widehat K)$ |
-|---:|---:|---:|
-| 1 | $3.30\times10^3$ | $2.01\times10^3$ |
-| 10 | $4.86\times10^3$ | $2.63\times10^3$ |
-| 100 | $2.81\times10^4$ | $1.49\times10^4$ |
-| 1,000 | $2.62\times10^5$ | $1.39\times10^5$ |
-| 10,000 | $2.60\times10^6$ | $1.38\times10^6$ |
-
-The rescaled condition number still grows by nearly three orders of magnitude. The reason is structural. After rescaling, stiff-member terms are order one and soft-diagonal terms are order (1/r). The stiff-member network still has shear-like mechanism directions, so the smallest eigenvalues are controlled by the (1/r) soft terms while the largest eigenvalues remain order one. Therefore, diagonal rescaling does not remove the dependence on (r). This satisfies the intrinsic ill-conditioning test.
