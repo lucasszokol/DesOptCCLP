@@ -1,0 +1,7 @@
+{
+  "global_stiffness_is_symmetric": true,
+  "smallest_reduced_eigenvalue": 0.01346433719646847,
+  "reduced_stiffness_is_positive_definite": true,
+  "relative_gradient_norm_at_direct_solution": 5.79812470925483e-13,
+  "relative_cg_solution_error": 1.1682860898583596e-13
+}
