@@ -8,7 +8,7 @@ For more information about the code of this project, please see [`README.md`](RE
 
 ## 1. Problem Identification and Motivation
 
-Aircraft spars carry bending and shear loads along a wing. A straight truss member has axial stiffness
+Aircraft spars carry bending and shear loads along a wing. Structural engineers solve stiffness equations when they predict the deformation of a wing structure. Slow convergence increases the computational cost of and time for analyzing large structural models. A straight truss member has axial stiffness
 
 $$
 k=\frac{EA}{L},
@@ -224,7 +224,7 @@ $$
 u_{k+1}=u_k-\alpha(Ku_k-f),
 $$
 
-where $\alpha$ at $u_0=0$ is calculated as
+the method starts with $u_0=0$ and uses the fixed step size
 
 $$
 \alpha=\frac{2}{\lambda_{\max}+\lambda_{\min}},
@@ -241,7 +241,7 @@ When the condition number is large, $\rho$ approaches one, so each iteration rem
 
 ### D1: Eigenvalue spectrum + condition number
 
-The eigenvalue spectrum  is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presence of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
+The eigenvalue spectrum is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presence of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
 
 ![D1](figures/eigenvalue_spectrum.png)
 
@@ -272,7 +272,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient (CG) method is chosen. After the fixed-root degrees of freedom are removed, the reduced stiffness matrix is symmetric positive definite because the boundary conditions eliminate rigid-body motion, the member layout has no internal mechanism, and every member has positive stiffness. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKP_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) method is chosen. After the fixed-root degrees of freedom are removed, the reduced stiffness matrix is symmetric positive definite because the boundary conditions eliminate rigid-body motion, the member layout has no internal mechanism, and every member has positive stiffness. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is method that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKp_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
