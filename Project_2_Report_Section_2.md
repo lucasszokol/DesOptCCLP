@@ -1,6 +1,6 @@
 ## 2. Mathematical formulation
 
-We seek the horizontal and vertical displacements of the truss nodes under a prescribed load. Although this is a structural equilibrium problem, it can also be formulated as minimizing total potential energy. This formulation allows us to study how differences in member stiffness affect the behavior of optimization algorithms.
+We seek the horizontal and vertical displacements of the truss nodes under a prescribed load. Although this is a structural equilibrium problem, it can also be formulated as a total potential energy minimization problem. This formulation allows us to study how differences in member stiffness affect the behavior of optimization algorithms.
 
 ### 2.1 Decision variables and parameters
 
@@ -24,7 +24,7 @@ $$
 k_e=\frac{EA}{L},
 $$
 
-where $E$ is Young’s modulus, $A$ is the cross-sectional area, and $L$ is the original member length.
+where $E$ is Young’s modulus, $A$ is the cross-sectional area, and $L$ is the original member length. $E$ and $A$ are constant along each member but may differ between members.
 
 #### Member orientation and displacement
 
@@ -43,9 +43,9 @@ Each endpoint has a horizontal and a vertical displacement. These four component
 $$
 u_e=
 \begin{bmatrix}
-u_{ix}\
-u_{iy}\
-u_{jx}\
+u_{ix}\\
+u_{iy}\\
+u_{jx}\\
 u_{jy}
 \end{bmatrix}.
 $$
@@ -103,9 +103,9 @@ This matrix relates the four endpoint displacement components to the correspondi
 
 #### Global assembly and boundary conditions
 
-The global stiffness matrix is constructed by adding each member’s stiffness contributions into the rows and columns corresponding to its endpoint displacement coordinates. Members sharing a node contribute to the same nodal equilibrium equations.
+The global stiffness matrix is constructed by adding each member’s stiffness contributions to the rows and columns corresponding to its endpoint displacement coordinates. Members sharing a node contribute to the same nodal equilibrium equations.
 
-The truss has $14$ nodes with two displacement components per node, so the full stiffness matrix is $28\times28$. Both displacement components at each of the two root nodes are fixed at zero. Removing the corresponding four rows and columns applies these boundary conditions and leaves a reduced $24\times24$ stiffness matrix.
+The truss has $14$ nodes with two displacement components per node, so the full stiffness matrix is $28\times28$. Both displacement components at each of the two root nodes are fixed at zero. Removing the corresponding four rows and columns applies these boundary conditions and leaves a reduced $24\times24$ stiffness matrix. The corresponding force-vector entries for the root nodes are also removed. 
 
 In the following sections, $K$ denotes this reduced matrix, $u\in\mathbb{R}^{24}$ contains the unknown free-node displacements, and $f\in\mathbb{R}^{24}$ contains the corresponding applied nodal forces. The total strain energy stored in the supported truss is then
 
@@ -120,10 +120,10 @@ which provides the elastic-energy term in the optimization formulation.
 The equilibrium displacement minimizes total potential energy:
 
 $$
-\min_u \Pi(u)=\frac{1}{2}u^T K u-f^T u,
+\min_u \Pi(u)=\frac{1}{2}u^T K u-f^T u.
 $$
 
-where (f) is the reduced external force vector. The **potential energy** $\Pi(u)$ contains the strain energy stored in the members, $\frac{1}{2}u^T K u$, minus the work done by the external force, $f^Tu$.
+Here, $f$ is the prescribed, displacement-independent reduced external force vector. The total potential energy $\Pi(u)$ is the sum of the elastic strain energy, $\frac12u^TKu$, and the potential energy of the applied loads, $-f^Tu$.
 
 The gradient and Hessian are
 
@@ -137,4 +137,4 @@ $$
 Ku^\star=f.
 $$
 
-After the boundary conditions remove rigid-body motion, the computed eigenvalues of $K$ are positive. Therefore, $K$ is **symmetric positive definite**, meaning $x^TKx>0$ for every nonzero vector $x$. The objective is consequently an unconstrained convex quadratic, and $u^\star$ is its unique global minimizer.
+Each element stiffness matrix $K_e$ is symmetric, and assembly and reduction preserve this symmetry. For this supported truss, the computed eigenvalues of the reduced matrix $K$ are all positive, confirming that no rigid-body modes or internal mechanisms remain in the linearized model. Therefore, $K$ is **symmetric positive definite**, meaning $x^TKx>0$ for every nonzero vector $x$. The objective is consequently an unconstrained strictly convex quadratic, and $u^\star$ is its unique global minimizer.
