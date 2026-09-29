@@ -42,7 +42,7 @@ A decision variable is a quantity whose value is selected by the optimization pr
 The decision variable is
 
 $$
-u=[u_{1x},u_{1y},u_{2x},u_{2y},\ldots]^T,
+u=[u_{1x},u_{1y},u_{2x},u_{2y},\ldots]^T, -\infty \lt u_i \lt \infty
 $$
 
 the vector of unknown nodal displacements. Each of the 14 nodes has two displacement components, giving 28 degrees of freedom. Fixing both root nodes prescribes four of these components as zero, leaving 24 unknown displacements. Therefore, $u\in\mathbb{R}^{24}$, and each candidate vector represents one possible deformed configuration of the truss.
@@ -183,7 +183,7 @@ r=\frac{k_{\max}}{k_{\min}}.
 \end{gather*}
 $$
 
-A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $k$ matrix shows all equivalent spring stiffnesses, which will become more varied as more structural members are added as shown by an increase of the ratio $r$. The tested values are $r = 1, 10, 100, 1000, 10000$.
+A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix shows all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
 The eigenvalues of $k$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
@@ -191,7 +191,7 @@ $$
 \kappa=\frac{\lambda_{\max}}{\lambda_{\min}},
 $$
 
-The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with the constraint that not all members have the same stiffness. This means that the main constraint of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
+The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main constraint of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
 
 ### D2: Intrinsic test using diagonal rescaling
 
@@ -272,7 +272,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient (CG) descent method is chosen. This family of problems is inherently positive definite because of the argument of the minimum function is a positive curvature quadratic. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient descent. Conjugate gradient descent is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient descent ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) descent method is chosen. This reduced stiffness matrix is symmetric positive definite because the supports remove rigid-body motion, the member layout has no remaining mechanism, and all member stiffnesses are positive. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
@@ -296,19 +296,19 @@ $$
 ### D4: The fix
 
 Plot of convergence curves is shown later in this section.
-From the convergence curves, it is clear that the conjugate gradient descent converges quicker across all stiffness ratios
+From the convergence curves, it is clear that the conjugate gradient converges quicker across all stiffness ratios
 
 The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the kth iteration where the tolerance of $10^{-8}$ is reached. 
 
 $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\right)^{1/k}$$
 
-<img width="1440" height="864" alt="image" src="https://github.com/user-attachments/assets/77651f93-f498-4e01-b33b-fc2dbfc7780e" />
+![Effective Rate vs Stiffness Ratio](effective_rate_vs_ratio.png)
 
-The figure above demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ is very low for gradient descent, and decreases as the stiffness ratio increases. However, for conjugate gradient descent, that energy error removed stays high and relatively constant.
+The figure above demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ is very low for gradient descent, and decreases as the stiffness ratio increases. However, for conjugate gradient, that energy error removed stays high and relatively constant.
 
-<img width="1440" height="864" alt="image" src="https://github.com/user-attachments/assets/485c8f6a-aa12-461f-b8e2-8f05557a4d2b" />
+![Optimizer Convergence](optimizer_convergence.png)
 
-From the figure above, it is evident that the conjugate gradient descent converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
+From the figure above, it is evident that the conjugate gradient converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
 
 | <i>r<i> | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
 |---:|---:|---:|---:|---:|---:|
@@ -319,7 +319,7 @@ From the figure above, it is evident that the conjugate gradient descent converg
 | 10,000 | 11,871,364 | 32 | 370,980 | 0.999998 | 0.464702 |
 
 
-It is important to note that Newton's method could have been used for this solution as well, as that would remedy the ill-constrained Hessian. However, for larger structures or finite element meshes, that Hessian may grow large, and so it may not be desired to calculate or store that Hessian. 
+It is important to note that Newton's method could have been used for this solution as well, as that would remedy the ill-conditioned Hessian. However, for larger structures or finite element meshes, that Hessian may grow large, and so it may not be desired to calculate or store that Hessian. 
 
 ## 6. Assumptions, verification, and limitations
 
@@ -336,9 +336,8 @@ The model makes these assumptions:
 
 ## 7. Results from Solver
 
-Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys Mechanical analysis, as Ansys Mechanical is the definitive tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 for this model, compared to a displacement magnitude of 12.0147 from Ansys. 
-<img width="1980" height="684" alt="image" src="https://github.com/user-attachments/assets/4ac67252-7113-41e6-b4b6-0cb5e5b2ac66" />
-Deformation from CG
+Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys Mechanical is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
+![Deformation from CG](deformed_truss_r10000.png)
 
 <img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
 Deformation from Ansys
@@ -350,6 +349,7 @@ Deformation from Ansys
 Use Python 3.10 or newer. From the project directory, run:
 
 ```bash
+cd Project2_CodeandMisc
 python -m pip install -r requirements.txt
 python project2_truss.py
 python -m unittest discover -s tests -v
