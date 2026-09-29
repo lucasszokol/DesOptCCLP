@@ -45,7 +45,7 @@ $$
 u=[u_{1x},u_{1y},u_{2x},u_{2y},\ldots]^T, -\infty \lt u_i \lt \infty
 $$
 
-the vector of unknown nodal displacements. Each of the 14 nodes has two displacement components, giving 28 degrees of freedom. Fixing both root nodes prescribes four of these components as zero, leaving 24 unknown displacements. Therefore, $u\in\mathbb{R}^{24}$, and each candidate vector represents one possible deformed configuration of the truss. The 24 decision variables are continuous real-valued displacements. Under the ANSYS comparison convention, their units are millimeters, and they have no explicit upper or lower bounds.
+the vector of unknown nodal displacements. Each of the 14 nodes has two displacement components, giving 28 degrees of freedom. Fixing both root nodes prescribes four of these components as zero, leaving 24 unknown displacements. Therefore, $u\in\mathbb{R}^{24}$, and each candidate vector represents one possible deformed configuration of the truss. The 24 decision variables are continuous real-valued displacements. Under the Ansys comparison convention, their units are millimeters, and they have no explicit upper or lower bounds.
 
 Material properties and member dimensions are prescribed inputs. This problem determines structural displacements; it does not optimize material selection or member sizing.
 
@@ -183,15 +183,15 @@ r=\frac{k_{\max}}{k_{\min}}.
 \end{gather*}
 $$
 
-A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix is assembled from all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
+A member has a specific Young's Mmdulus $E$, cross-sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix is assembled from all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
-The eigenvalues of $K$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
+The eigenvalues of $K$ measure maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
 $$
 \kappa=\frac{\lambda_{\max}}{\lambda_{\min}},
 $$
 
-The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main structural feature of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the Hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
+The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members having the same stiffness. This means that the main structural feature of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the Hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
 
 ### D2: Intrinsic test using diagonal rescaling
 
@@ -221,10 +221,10 @@ The rescaled condition number still grows by nearly three orders of magnitude. T
 Gradient descent (GD) has the following update step for nodal displacement:
 
 $$
-u_{k+1}=u_k-\alpha(Ku_k-f),
+u_{k+1}=u_k-\alpha(Ku_k-f).
 $$
 
-the method starts with $u_0=0$ and uses the fixed step size
+The method starts with $u_0=0$ and uses the fixed step size
 
 $$
 \alpha=\frac{2}{\lambda_{\max}+\lambda_{\min}},
@@ -258,7 +258,7 @@ $$
 \frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}.
 $$
 
-Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, eigenvector components have a known contraction factor, meaning that relative potential energy error can be evaluated at any iteration. This avoids performing millions of unnecessary Python loop operations.
+Instead of calculating each gradient-descent iterate individually, the code uses the known contraction factor of each eigenvector component. This allows direct evaluation of the relative potential energy error at any iteration.
 
 | $r$ | Gradient descent iterations to 10<sup>-8</sup> |
 |---:|---:|
@@ -272,7 +272,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient (CG) method is chosen. After the fixed-root degrees of freedom are removed, the reduced stiffness matrix is symmetric positive definite because the boundary conditions eliminate rigid-body motion, the member layout has no internal mechanism, and every member has positive stiffness. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is method that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKp_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) method is chosen. After the fixed-root degrees of freedom are removed, the reduced stiffness matrix is symmetric positive definite because the boundary conditions eliminate rigid-body motion, the member layout has no internal mechanism, and every member has positive stiffness. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a method that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKp_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
@@ -295,9 +295,6 @@ $$
 
 ### D4: The fix
 
-Plot of convergence curves is shown later in this section.
-From the convergence curves, it is clear that the conjugate gradient converges quicker across all stiffness ratios
-
 The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the kth iteration where the tolerance of $10^{-8}$ is reached. 
 
 $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\right)^{1/k}$$
@@ -319,7 +316,7 @@ From the figure above, it is evident that the conjugate gradient converges much 
 | 10,000 | 11,871,364 | 32 | 370,980 | 0.999998 | 0.464702 |
 
 
-Newton's method could have been used for this solution as well, but it requiers a matrix factorization. 
+Newton's method could have been used for this solution as well, but it requires a matrix factorization. 
 
 ## 6. Assumptions, verification, and limitations
 
