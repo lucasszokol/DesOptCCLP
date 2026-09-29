@@ -218,28 +218,45 @@ The rescaled condition number still grows by nearly three orders of magnitude. T
 
 ## 4. Effect on gradient descent
 
-Gradient descent uses the negative gradient as its search direction:
+Gradient descent has the following update step for nodal displacement:
 
 $$
-u_{k+1}=u_k-\alpha(Ku_k-f).
+u_{k+1}=u_k-\alpha(Ku_k-f),
 $$
 
-The implementation starts from $u_0=0$ and uses
+where $\alpha$ at $u_0=0$ is calculated as
 
 $$
 \alpha=\frac{2}{\lambda_{\max}+\lambda_{\min}},
 $$
 
-the best fixed step size based on the two extreme eigenvalues. The common convergence measure is the relative potential-energy error
+the optimal fixed step size based on the extreme eigenvalues for a symmetric positive definite matrix such as $K$. Even with this favorable choice, the worst-direction error is reduced by a factor of
 
 $$
-E_k=\frac{\Pi(u_k)-\Pi(u^\star)}
-{\Pi(u_0)-\Pi(u^\star)}.
+\rho=\frac{\kappa-1}{\kappa+1}.
 $$
 
-The target is $E_k\leq10^{-8}$. The gradient-descent recurrence is evaluated exactly in the eigenvector basis. This gives the same mathematical iterates as a step-by-step loop but avoids millions of slow Python loop operations.
+When the condition number is large, $\rho$ approaches one, so each iteration removes only a small fraction of the remaining error. A large condition number means that the quadratic potential energy surface has very different curvature in different displacement directions, producing a long, narrow valley around the minimum. This makes gradient descent converge slowly.
 
-| $r$ | Gradient descent iterations to $10^{-8}$ |
+### D1
+The eigenvalue spectrum  is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presence of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
+
+![D1](Project2_CodeandMisc/figures/eigenvalue_spectrum.png)
+
+### D3
+The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\sim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow. This agrees with what we know about the eigenvalue spectrum and the effects of a large condition number.   
+
+![D3](Project2_CodeandMisc/figures/optimizer_convergence.png)
+
+The convergence measure is the fraction of the initial potential energy error that remains:
+
+$$
+\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}.
+$$
+
+Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, the code uses the eigenvectors of $K$ to calculate these displacement vectors directly. This avoids performing millions of unnecessary Python loop operations.
+
+| <i>r<i> | Gradient descent iterations to 10<sup>-8</sup> |
 |---:|---:|
 | 1 | 15,168 |
 | 10 | 22,272 |
@@ -247,7 +264,7 @@ The target is $E_k\leq10^{-8}$. The gradient-descent recurrence is evaluated exa
 | 1,000 | 1,195,856 |
 | 10,000 | 11,871,364 |
 
-The iteration count increases by nearly three orders of magnitude. Gradient descent repeatedly corrects coupled stiff and soft deformation directions, so a large condition number makes progress very slow.
+The iteration count increases by nearly three orders of magnitude over the tested stiffness ratios. This is the practical effect of the growing condition number.
 
 ## 5. Proposed Solution and Demonstration
 
