@@ -205,7 +205,7 @@ This gives each displacement coordinate a unit diagonal stiffness and tests whet
 
 ![Condition number versus stiffness ratio](figures/condition_number_vs_ratio.png)
 
-| r | $\kappa(K)$ | $\kappa(\widehat K)$ |
+| <i>r<i> | $\kappa(K)$ | $\kappa(\widehat K)$ |
 |---:|---:|---:|
 | 1 | $3.30\times10^3$ | $2.01\times10^3$ |
 | 10 | $4.86\times10^3$ | $2.63\times10^3$ |
@@ -291,22 +291,22 @@ $$
 
 ## D4
 
-Plot of convergence curves.
+Plot of convergence curves is shown later in this section.
 From the convergence curves, it is clear that the conjugate gradient descent converges quicker across all stiffness ratios
 
-The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the kth iteration where the tolerance of 10-8 is reached. 
+The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the $k$th iteration where the tolerance of $10^{-8}$ is reached. 
 
 $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\right)^{1/k}$$
 
 <img width="1440" height="864" alt="image" src="https://github.com/user-attachments/assets/77651f93-f498-4e01-b33b-fc2dbfc7780e" />
 
-This graph demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ is very low for gradient descent, and decreases as the stiffness ratio increases. However, for conjugate gradient descent, that energy error removed stays high and relatively constant.
+The figure above demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ is very low for gradient descent, and decreases as the stiffness ratio increases. However, for conjugate gradient descent, that energy error removed stays high and relatively constant.
 
 <img width="1440" height="864" alt="image" src="https://github.com/user-attachments/assets/485c8f6a-aa12-461f-b8e2-8f05557a4d2b" />
 
-From this graph, it is evident that the conjugate gradient descent converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
+From the figure above, it is evident that the conjugate gradient descent converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
 
-| $r$ | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
+| <i>r<i> | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
 |---:|---:|---:|---:|---:|---:|
 | 1 | 15,168 | 24 | 632 | 0.998786 | 0.297460 |
 | 10 | 22,272 | 24 | 928 | 0.999173 | 0.405690 |
