@@ -302,11 +302,11 @@ The effective rate is defined below, which is the average fraction of energy err
 
 $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\right)^{1/k}$$
 
-![Effective Rate vs Stiffness Ratio](effective_rate_vs_ratio.png)
+![Effective Rate vs Stiffness Ratio](figures/effective_rate_vs_ratio.png)
 
 The figure above demonstrates that the energy error removed $(1-\rho_{\mathrm{eff}})$ is very low for gradient descent, and decreases as the stiffness ratio increases. However, for conjugate gradient, that energy error removed stays high and relatively constant.
 
-![Optimizer Convergence](optimizer_convergence.png)
+![Optimizer Convergence](figures/optimizer_convergence.png)
 
 From the figure above, it is evident that the conjugate gradient converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
 
@@ -337,7 +337,7 @@ The model makes these assumptions:
 ## 7. Results from Solver
 
 Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys Mechanical is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
-![Deformation from CG](deformed_truss_r10000.png)
+![Deformation from CG](figures/deformed_truss_r10000.png)
 
 <img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
 Deformation from Ansys
