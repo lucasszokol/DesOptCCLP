@@ -53,9 +53,11 @@ It is important to note that Newton's method could have been used for this solut
 
 ## 7. Results from Solver
 
+Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys Mechanical analysis, as Ansys Mechanical is the definitive tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 for this model, compared to a displacement magnitude of 12.0147 from Ansys. 
+<img width="1980" height="684" alt="image" src="https://github.com/user-attachments/assets/4ac67252-7113-41e6-b4b6-0cb5e5b2ac66" />
+Deformation from CG
 
 <img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
-
-
+Deformation from Ansys
 
 
