@@ -203,7 +203,7 @@ $$
 
 This gives each displacement coordinate a unit diagonal stiffness and tests whether the large condition number is caused only by different coordinate scales or units. It is also called Jacobi rescaling.
 
-![Condition number versus stiffness ratio](Project2_CodeandMisc/figures/condition_number_vs_ratio.png)
+![Condition number versus stiffness ratio](figures/condition_number_vs_ratio.png)
 
 | r | $\kappa(K)$ | $\kappa(\widehat K)$ |
 |---:|---:|---:|
@@ -241,12 +241,12 @@ When the condition number is large, $\rho$ approaches one, so each iteration rem
 ### D1
 The eigenvalue spectrum  is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presence of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
 
-![D1](Project2_CodeandMisc/figures/eigenvalue_spectrum.png)
+![D1](figures/eigenvalue_spectrum.png)
 
 ### D3
 The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\sim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow. This agrees with what we know about the eigenvalue spectrum and the effects of a large condition number.   
 
-![D3](Project2_CodeandMisc/figures/optimizer_convergence.png)
+![D3](figures/optimizer_convergence.png)
 
 The convergence measure is the fraction of the initial potential energy error that remains:
 
