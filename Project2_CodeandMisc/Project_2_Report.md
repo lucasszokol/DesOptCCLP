@@ -4,7 +4,7 @@
 
 This report studies a simplified aircraft spar as both a finite element analysis (FEA) problem and an optimization problem. The purpose is not to design a flight-ready spar. The purpose is to isolate one structural feature, a large difference between member stiffnesses, and show how it creates an ill-conditioned optimization problem.
 
-The assignment requires four diagnostics: an eigenvalue spectrum and condition number (D1), evidence that the ill-conditioning is intrinsic (D2), its effect on a baseline method (D3), and a demonstrated solution (D4). The complete, commented implementation is in [`project2_truss.py`](project2_truss.py). The editable model data is in [`truss_config.py`](truss_config.py).
+For more information about the code of this project, please see ['README.md'](README.md). The complete, commented implementation is in [`project2_truss.py`](project2_truss.py). The editable model data is in [`truss_config.py`](truss_config.py). 
 
 ## 1. Problem identification and motivation
 
@@ -16,7 +16,7 @@ $$
 
 where $E$ is Young's modulus, $A$ is cross-sectional area, and $L$ is member length. Young's modulus measures how strongly a material resists elastic stretching. A large difference in $E$, $A$, or $L$ can create a large difference in member stiffness.
 
-The documented example is a 2D Warren-style truss with 14 nodes. The upper and lower chords and the vertical posts form the **stiff member group**. The alternating diagonal braces form the **soft member group**. Both root nodes are fixed. A downward tip load is divided equally between the upper and lower tip nodes.
+The documented example is a 2D Warren-style truss with 14 nodes. The upper and lower chords and the vertical posts form the stiff member group. The alternating diagonal braces form the soft member group. Both root nodes are fixed. A downward tip load is divided equally between the upper and lower tip nodes.
 
 ![Warren truss model](figures/warren_spar.png)
 
