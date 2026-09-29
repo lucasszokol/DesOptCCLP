@@ -258,9 +258,9 @@ $$
 \frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}.
 $$
 
-Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, the code uses the eigenvectors of $K$ to calculate these displacement vectors directly. This avoids performing millions of unnecessary Python loop operations.
+Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, because eigenvector components have a known contraction factor, relative potential energy error can be evaluated at any iteration. This avoids performing millions of unnecessary Python loop operations.
 
-| <i>r<i> | Gradient descent iterations to 10<sup>-8</sup> |
+| $r$ | Gradient descent iterations to 10<sup>-8</sup> |
 |---:|---:|
 | 1 | 15,168 |
 | 10 | 22,272 |
