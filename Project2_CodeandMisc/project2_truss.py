@@ -594,12 +594,12 @@ def plot_deformed_structure(
     # Use the largest node displacement to choose a visible plotting scale.
     displacement_magnitudes = np.linalg.norm(nodal_displacement, axis=1)
     maximum_displacement = float(np.max(displacement_magnitudes))
-    # Measure the geometry so the deformation occupies about 15% of its size.
+    # Match the ANSYS AUTO display seen here: maximum motion is 5% of the span.
     x_range = float(np.ptp(original_coordinates[:, 0]))
     y_range = float(np.ptp(original_coordinates[:, 1]))
     geometry_size = max(x_range, y_range, 1.0)
     deformation_scale = (
-        0.15 * geometry_size / maximum_displacement
+        0.05 * geometry_size / maximum_displacement
         if maximum_displacement > 0.0
         else 1.0
     )

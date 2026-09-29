@@ -121,7 +121,7 @@ Their horizontal sum is zero, and their vertical sum balances the $-1$ N applied
 
 ## 6. Compare the deformed shape
 
-In MAPDL postprocessing, display the deformed and undeformed shapes together. The overall bending direction and relative node movement should match `figures/deformed_truss_r10000.png`. The Python figure uses the same millimeter geometry as ANSYS and reports its displacement magnification in the title. ANSYS can choose a different display magnification, so compare the shape or set a matching scale before comparing the plotted distance between the two shapes.
+In MAPDL postprocessing, display the deformed and undeformed shapes together. The overall bending direction and relative node movement should match `figures/deformed_truss_r10000.png`. The Python figure uses the same millimeter geometry as ANSYS and magnifies the maximum displacement to 5% of the 6000 mm span. For this solution, that is a factor of approximately 24.97, which matches the ANSYS automatic display shown during verification. The factor affects only the display; `DMX = 12.0147` mm remains the actual maximum displacement.
 
 The Python figure uses the visual scale stored in `results/u_r10000.json`. This factor adjusts displacement only for plotting. Compare numerical displacement values rather than measuring distances from the image.
 
