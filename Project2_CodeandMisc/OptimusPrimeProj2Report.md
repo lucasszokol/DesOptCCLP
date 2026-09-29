@@ -183,7 +183,7 @@ r=\frac{k_{\max}}{k_{\min}}.
 \end{gather*}
 $$
 
-A member has a specific Young's Mmdulus $E$, cross-sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix is assembled from all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
+A member has a specific Young's modulus $E$, cross-sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix is assembled from all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
 The eigenvalues of $K$ measure maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
