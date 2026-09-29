@@ -183,7 +183,7 @@ r=\frac{k_{\max}}{k_{\min}}.
 \end{gather*}
 $$
 
-A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix shows all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
+A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix is assembled from all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
 The eigenvalues of $K$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
@@ -191,7 +191,7 @@ $$
 \kappa=\frac{\lambda_{\max}}{\lambda_{\min}},
 $$
 
-The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main structural feature of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
+The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main structural feature of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the Hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
 
 ### D2: Intrinsic test using diagonal rescaling
 
@@ -258,7 +258,7 @@ $$
 \frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}.
 $$
 
-Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, because eigenvector components have a known contraction factor, relative potential energy error can be evaluated at any iteration. This avoids performing millions of unnecessary Python loop operations.
+Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, eigenvector components have a known contraction factor, meaning that relative potential energy error can be evaluated at any iteration. This avoids performing millions of unnecessary Python loop operations.
 
 | $r$ | Gradient descent iterations to 10<sup>-8</sup> |
 |---:|---:|
@@ -272,7 +272,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient (CG) method is chosen. This reduced stiffness matrix, when fixed-root degrees of freedom are removed, is symmetric positive definite because the supports remove rigid-body motion, the member layout has no remaining mechanism, and all member stiffnesses are positive. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKP_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) method is chosen. This supported reduced stiffness matrix, when fixed-root degrees of freedom are removed, is symmetric positive definite because the supports remove rigid-body motion, the member layout has no remaining mechanism, and all member stiffnesses are positive. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKP_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
@@ -308,9 +308,9 @@ The figure above demonstrates that the energy error removed $(1-\rho_{\mathrm{ef
 
 ![Optimizer Convergence](figures/optimizer_convergence.png)
 
-From the figure above, it is evident that the conjugate gradient converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. 
+From the figure above, it is evident that the conjugate gradient converges much quicker than the gradient descent. This is due to the solver not undoing its progress every step, and instead taking a route that is more "continuous" down to the minimum. K-conjugate directions preserve progress made along earlier search directions.
 
-| <i>r<i> | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
+| $r$ | GD iterations | CG iterations | Iteration speedup | GD $\rho_{\mathrm{eff}}$ | CG $\rho_{\mathrm{eff}}$ |
 |---:|---:|---:|---:|---:|---:|
 | 1 | 15,168 | 24 | 632 | 0.998786 | 0.297460 |
 | 10 | 22,272 | 24 | 928 | 0.999173 | 0.405690 |
@@ -319,7 +319,7 @@ From the figure above, it is evident that the conjugate gradient converges much 
 | 10,000 | 11,871,364 | 32 | 370,980 | 0.999998 | 0.464702 |
 
 
-It is important to note that Newton's method could have been used for this solution as well, as that would remedy the ill-conditioned Hessian. However, for larger structures or finite element meshes, that Hessian may grow large, and so it may not be desired to calculate or store that Hessian. 
+Newton's method could have been used for this solution as well, but it requiers a matrix factorization. 
 
 ## 6. Assumptions, verification, and limitations
 
@@ -336,17 +336,17 @@ The model makes these assumptions:
 
 ## 7. Results from Solver
 
-Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys MAPDL is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
+Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys MAPDL is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. The conjugate gradient solution has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
 ![Deformation from CG](figures/deformed_truss_r10000.png)
 
 <img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
-Deformation from Ansys
+Deformation from Ansys MAPDL
 
 
 
 ## Reproducibility
 
-Use Python 3.10 or newer. From the project directory, run:
+Use Python 3.10 or newer. From the repository root, run:
 
 ```bash
 cd Project2_CodeandMisc
