@@ -89,7 +89,7 @@ $$
 \delta_e=c(u_{jx}-u_{ix})+s(u_{jy}-u_{iy}).
 $$
 
-Positive $(\delta_e)$ indicates elongation, while negative $(\delta_e)$ indicates shortening. If both endpoints move by the same amount in the same direction, their relative displacement is zero and the member does not stretch.
+Positive $\delta_e$ indicates elongation, while negative $\delta_e$ indicates shortening. If both endpoints move by the same amount in the same direction, their relative displacement is zero and the member does not stretch.
 
 #### Element strain energy and stiffness matrix
 
