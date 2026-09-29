@@ -18,15 +18,15 @@ $$
 \rho=\frac{\kappa-1}{\kappa+1}.
 $$
 
-When the condition number is large, $\rho$ approaches one, so each iteration removes only a small fraction of the remaining error. This is why gradient descent converges slowly when the quadratic potential energy surface has a long, narrow shape.
+When the condition number is large, $\rho$ approaches one, so each iteration removes only a small fraction of the remaining error. A large condition number means that the quadratic potential energy surface has very different curvature in different displacement directions, producing a long, narrow valley around the minimum. This makes gradient descent converge slowly.
 
 ### D1
-The eigenvalue spectrum  is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presents of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
+The eigenvalue spectrum  is shown in the figure below. From the definition of $\kappa$, at $r=10000$, the original condition number is $2.60\times10^6$. The large spread in eigenvalues resulting in such high $\kappa$ highlights the presence of ill-conditioning. After diagonal rescaling, the condition number decreases to approximately $1.38\times10^6$, but remains large, so the ill-conditioning is not eliminated.
 
 ![D1](Project2_CodeandMisc/figures/eigenvalue_spectrum.png)
 
 ### D3
-The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\sim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow.  
+The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\sim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow. This agrees with what we know about the eigenvalue spectrum and the effects of a large condition number.   
 
 ![D3](Project2_CodeandMisc/figures/optimizer_convergence.png)
 
