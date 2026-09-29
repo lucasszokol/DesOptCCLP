@@ -6,7 +6,7 @@ This report studies a simplified aircraft spar as both a finite element analysis
 
 For more information about the code of this project, please see [`README.md`](README.md). The complete, commented implementation is in [`project2_truss.py`](project2_truss.py). The editable model data is in [`truss_config.py`](truss_config.py). 
 
-## 1. Problem identification and motivation
+## 1. Problem Identification and Motivation
 
 Aircraft spars carry bending and shear loads along a wing. A straight truss member has axial stiffness
 
@@ -31,7 +31,7 @@ The model is configurable. A student edits four readable lists in `truss_config.
 
 Node numbers are zero-based list positions. For example, node 0 is the first coordinate in `NODES`. A 7-to-14-node model is recommended for a manually traced picture because it preserves the main load paths without requiring the user to enter and debug approximately 100 nodes and many more connections. The stiffness matrix is assembled from these structural inputs. The user does not enter the stiffness matrix directly.
 
-## 2. Mathematical formulation
+## 2. Mathematical Formulation
 
 We seek the horizontal and vertical displacements of the truss nodes under a prescribed load. Although this is a structural equilibrium problem, it can also be formulated as a total potential energy minimization problem. This formulation allows us to study how differences in member stiffness affect the behavior of optimization algorithms.
 
@@ -172,7 +172,7 @@ $$
 
 Each element stiffness matrix $K_e$ is symmetric, and assembly and reduction preserve this symmetry. For this supported truss, the computed eigenvalues of the reduced matrix $K$ are all positive, confirming that no rigid-body modes or internal mechanisms remain in the linearized model. Therefore, $K$ is symmetric positive definite, meaning $x^TKx>0$ for every nonzero vector $x$. The objective is consequently an unconstrained strictly convex quadratic, and $u^\star$ is its unique global minimizer.
 
-## 3. Ill-conditioning mechanism
+## 3. Ill-Conditioning Mechanism
 
 The structural knob of this project is the axial-rigidity/spring stiffness equivalent ratio
 
@@ -183,7 +183,7 @@ r=\frac{k_{\max}}{k_{\min}}.
 \end{gather*}
 $$
 
-A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $k$ matrix shows all equivalent spring stiffnesses, which will become more varied as more structural members are added as shown by an increase of the ratio $r$. The tested values are $r$ = 1, 10, 100, 1000, 10000.
+A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $k$ matrix shows all equivalent spring stiffnesses, which will become more varied as more structural members are added as shown by an increase of the ratio $r$. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
 The eigenvalues of $k$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
@@ -195,7 +195,7 @@ The mechanism primer for this project is 'Family A', Multi-scale Physical Parame
 
 ### D2: Intrinsic test using diagonal rescaling
 
-**Diagonal rescaling** uses the diagonal matrix of K and forms
+**Diagonal rescaling** uses the diagonal matrix of $K$ and forms
 
 $$
 \widehat K=D^{-1/2}KD^{-1/2}.
@@ -216,9 +216,9 @@ This gives each displacement coordinate a unit diagonal stiffness and tests whet
 The rescaled condition number still grows by nearly three orders of magnitude. The reason is structural. After rescaling, stiff-member terms are order one and soft-diagonal terms are order (1/r). The stiff-member network still has shear-like mechanism directions, so the smallest eigenvalues are controlled by the (1/r) soft terms while the largest eigenvalues remain order one. Therefore, diagonal rescaling does not remove the dependence on (r). This satisfies the intrinsic ill-conditioning test.
 
 
-## 4. Effect on gradient descent
+## 4. Effect of Ill-Conditioning on Gradient Descent
 
-Gradient descent has the following update step for nodal displacement:
+Gradient descent (GD) has the following update step for nodal displacement:
 
 $$
 u_{k+1}=u_k-\alpha(Ku_k-f),
@@ -268,7 +268,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient descent method is chosen. This family of problems is inherently positive definite because of the argument of the minimum function is a positive curvature quadratic. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient descent. Conjugate gradient descent is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient descent ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) descent method is chosen. This family of problems is inherently positive definite because of the argument of the minimum function is a positive curvature quadratic. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient descent. Conjugate gradient descent is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient descent ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
