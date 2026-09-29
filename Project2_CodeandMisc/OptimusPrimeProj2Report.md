@@ -248,7 +248,7 @@ The eigenvalue spectrum  is shown in the figure below. From the definition of $\
 
 ### D3: Baseline convergence
 
-The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\sim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow. This agrees with what we know about the eigenvalue spectrum and the effects of a large condition number.   
+The convergence behavior of the baseline method – gradient descent – is shown in the figure below. Gradient descent requires $\gtrsim 10^7$ iterations to converge to the desired tolerance of $10^{-8}$, which is very slow. This agrees with what we know about the eigenvalue spectrum and the effects of a large condition number.   
 
 ![D3](figures/optimizer_convergence.png)
 
