@@ -1,9 +1,8 @@
 # Ill-Conditioned Aircraft Spar Truss
 
-This repository contains Team Optimus Prime's Project 2 report and reproducible finite element analysis.
+This repository contains Team Optimus Prime's Project 2 report and reproducible finite element analysis. The report is the submission for this assignment, but this document goes through the steps for replicating results or using the software for a different analysis. 
 
-- Open [`Project_2_Report.ipynb`](Project_2_Report.ipynb) for the runnable submission notebook.
-- Read [`Project_2_Report.md`](Project_2_Report.md) for the same report as plain Markdown.
+- Read [`Project_2_Report.md`](Project_2_Report.md) for the submission report. 
 - Edit [`truss_config.py`](truss_config.py) to enter node coordinates, member connections, supports, and loads.
 - Follow [`ANSYS_Verification.md`](ANSYS_Verification.md) to reproduce the $r=10{,}000$ displacement solution in ANSYS MAPDL.
 - Run `project2_truss.py` to regenerate all numerical results and figures.
