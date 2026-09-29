@@ -45,7 +45,7 @@ $$
 u=[u_{1x},u_{1y},u_{2x},u_{2y},\ldots]^T, -\infty \lt u_i \lt \infty
 $$
 
-the vector of unknown nodal displacements. Each of the 14 nodes has two displacement components, giving 28 degrees of freedom. Fixing both root nodes prescribes four of these components as zero, leaving 24 unknown displacements. Therefore, $u\in\mathbb{R}^{24}$, and each candidate vector represents one possible deformed configuration of the truss.
+the vector of unknown nodal displacements. Each of the 14 nodes has two displacement components, giving 28 degrees of freedom. Fixing both root nodes prescribes four of these components as zero, leaving 24 unknown displacements. Therefore, $u\in\mathbb{R}^{24}$, and each candidate vector represents one possible deformed configuration of the truss. The 24 decision variables are continuous real-valued displacements. Under the ANSYS comparison convention, their units are millimeters, and they have no explicit upper or lower bounds.
 
 Material properties and member dimensions are prescribed inputs. This problem determines structural displacements; it does not optimize material selection or member sizing.
 
@@ -185,13 +185,13 @@ $$
 
 A member has a specific Young's Modulus $E$, cross sectional area $A$, and length $L$. The equivalent spring stiffness $k$ is found for each member through the equation above. The $K$ matrix shows all equivalent spring stiffnesses, which will become more varied as stiffness is varied, resulting in the stiffness ratio $r$ changing. The tested values are $r = 1, 10, 100, 1000, 10000$.
 
-The eigenvalues of $k$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
+The eigenvalues of $K$ measures maximum and minimum stiffness in certain directions. The condition number $\kappa$ is the ratio of these eigenvalues, as shown:
 
 $$
 \kappa=\frac{\lambda_{\max}}{\lambda_{\min}},
 $$
 
-The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main constraint of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
+The mechanism primer for this project is 'Family A', Multi-scale Physical Parameters. This project is solving for the deflection of a truss structure with not all members have the same stiffness. This means that the main structural feature of the system is inbuilt as having both stiff and soft members in the full system. Because of this, the hessian eigenvalues span the stiffness ratio. The largest eigenvalue grows in proportion to $r$, while the smallest eigenvalue does not.
 
 ### D2: Intrinsic test using diagonal rescaling
 
@@ -205,7 +205,7 @@ This gives each displacement coordinate a unit diagonal stiffness and tests whet
 
 ![Condition number versus stiffness ratio](figures/condition_number_vs_ratio.png)
 
-| <i>r<i> | $\kappa(K)$ | $\kappa(\widehat K)$ |
+| $r$ | $\kappa(K)$ | $\kappa(\widehat K)$ |
 |---:|---:|---:|
 | 1 | $3.30\times10^3$ | $2.01\times10^3$ |
 | 10 | $4.86\times10^3$ | $2.63\times10^3$ |
@@ -272,7 +272,7 @@ The iteration count increases by nearly three orders of magnitude over the teste
 
 ## 5. Proposed Solution and Demonstration
 
-To remedy the high convergence times, the conjugate gradient (CG) descent method is chosen. This reduced stiffness matrix is symmetric positive definite because the supports remove rigid-body motion, the member layout has no remaining mechanism, and all member stiffnesses are positive. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
+To remedy the high convergence times, the conjugate gradient (CG) descent method is chosen. This reduced stiffness matrix, when fixed-root degrees of freedom are removed, is symmetric positive definite because the supports remove rigid-body motion, the member layout has no remaining mechanism, and all member stiffnesses are positive. Because every non-zero displacement stores energy in the strain of the structure, the stiffness matrix (and also reduced stiffness matrix) is positive definite, making the Hessian of the original function positive definite. This family of problems is a perfect fit for conjugate gradient. Conjugate gradient is a type of gradient descent that combines both the current negative gradient with its previous search direction, which produces K-conjugate directions. Explicitly, the search directions satisfy $p_i^TKP_j = 0 (i\neq j)$. While a standard gradient descent search may zigzag or turn around when descending a high curvature function, effectively undoing a lot of its progress, conjugate gradient ensures that this zigzag does not occur, which helps the solver not undo progress. To keep comparison fair, Both the gradient descent solver and the conjugate gradient solver will not use Jacobi rescaling for their solution, as it was not used for the initial gradient descent solution for the baseline convergence. Traditional CG starts with residual $r_0=f-Ku_0$ and search direction $p_0=r_0$. It then uses
 
 $$
 \alpha_k=\frac{r_k^Tr_k}{p_k^TKp_k},
@@ -336,7 +336,7 @@ The model makes these assumptions:
 
 ## 7. Results from Solver
 
-Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys Mechanical is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
+Improving the convergence of a solver is necessary to make the solver practical for use. However, the most important aspect of a solver is whether it actually solves the problem accurately. To ensure accuracy, displacement results for this Warren Truss structure are compared to Ansys MAPDL analysis, as Ansys MAPDL is an independent tool for structural FEA. Below is the result from the conjugate gradient solution, and below that is the result from Ansys. It has a displacement magnitude of 12.01465 mm for this model, compared to a displacement magnitude of 12.0147 mm from Ansys. 
 ![Deformation from CG](figures/deformed_truss_r10000.png)
 
 <img width="1150" height="875" alt="image" src="https://github.com/user-attachments/assets/0798b383-47d8-4ed0-ae8f-120b2eb905d2" />
