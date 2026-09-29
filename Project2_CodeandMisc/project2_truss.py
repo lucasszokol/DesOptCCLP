@@ -761,32 +761,63 @@ def plot_convergence(model: TrussModel, ratio: float, path: Path) -> None:
 
     # Values below this floor are visually identical for the report purpose.
     plot_floor = 1.0e-12
-    # Logarithmic axes display tens of CG steps and millions of GD steps together.
-    fig, ax = plt.subplots(figsize=(8, 4.8))
-    ax.loglog(
-        gd_samples + 1,
+    # A second panel makes the short CG history visible on a linear x-axis.
+    early_limit = len(cg_gaps) - 1
+    early_iterations = np.arange(early_limit + 1, dtype=int)
+    _, gd_early_gaps, _ = gradient_descent_diagnostics(
+        stiffness, load, early_iterations
+    )
+    # Both panels use a linear iteration axis and a logarithmic error axis.
+    fig, (full_ax, early_ax) = plt.subplots(
+        1, 2, figsize=(11, 4.8), sharey=True, gridspec_kw={"width_ratios": [1.35, 1.0]}
+    )
+    full_ax.semilogy(
+        gd_samples,
         np.maximum(gd_gaps, plot_floor),
         color="#176B87",
         linewidth=2.2,
         label="Gradient descent",
     )
-    ax.loglog(
-        np.arange(len(cg_gaps)) + 1,
+    full_ax.semilogy(
+        np.arange(len(cg_gaps)),
         np.maximum(cg_gaps, plot_floor),
         "o-",
         color="#E09F3E",
         label="Conjugate gradient",
     )
+    early_ax.semilogy(
+        early_iterations,
+        np.maximum(gd_early_gaps, plot_floor),
+        color="#176B87",
+        linewidth=2.2,
+    )
+    early_ax.semilogy(
+        np.arange(len(cg_gaps)),
+        np.maximum(cg_gaps, plot_floor),
+        "o-",
+        color="#E09F3E",
+    )
     # The dashed line marks the common energy-error target used in D4.
-    ax.axhline(1.0e-8, color="#555555", linestyle="--", linewidth=1, label=r"$10^{-8}$ energy tolerance")
-    ax.set_xlabel("Iteration number + 1 (log scale)")
-    ax.set_ylabel("Relative potential-energy error")
-    ax.set_ylim(plot_floor, 2.0)
-    ax.set_title(f"D3-D4: Optimizer convergence at r = {ratio:,.0f}")
-    ax.grid(True, which="both", alpha=0.25)
-    ax.legend(frameon=False, fontsize=9)
+    for axis in (full_ax, early_ax):
+        axis.axhline(
+            1.0e-8,
+            color="#555555",
+            linestyle="--",
+            linewidth=1,
+            label=r"$10^{-8}$ energy tolerance" if axis is full_ax else None,
+        )
+        axis.set_xlabel("Iteration number")
+        axis.set_ylim(plot_floor, 2.0)
+        axis.grid(True, which="both", alpha=0.25)
+    full_ax.set_ylabel("Relative potential-energy error")
+    full_ax.set_title("Full iteration range")
+    full_ax.ticklabel_format(axis="x", style="sci", scilimits=(0, 0))
+    early_ax.set_title("First CG iterations")
+    early_ax.set_xlim(0, early_limit)
+    full_ax.legend(frameon=False, fontsize=9)
+    fig.suptitle(f"D3-D4: Optimizer convergence at r = {ratio:,.0f}")
     # Fit labels, save the image, and release its memory.
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
     fig.savefig(path, dpi=180)
     plt.close(fig)
 
