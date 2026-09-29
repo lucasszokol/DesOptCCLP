@@ -298,7 +298,7 @@ $$
 Plot of convergence curves is shown later in this section.
 From the convergence curves, it is clear that the conjugate gradient descent converges quicker across all stiffness ratios
 
-The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the $k$th iteration where the tolerance of $10^{-8}$ is reached. 
+The effective rate is defined below, which is the average fraction of energy error retained per iteration. Larger values of this mean that more error is retained per iteration, meaning that smaller values correspond to faster convergence. 1 minus this is the fraction of energy error removed. This value is taken at the kth iteration where the tolerance of $10^{-8}$ is reached. 
 
 $$\rho_{\mathrm{eff}}=\left(\frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}\right)^{1/k}$$
 
