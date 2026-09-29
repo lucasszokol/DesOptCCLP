@@ -585,31 +585,33 @@ def plot_deformed_structure(
     stiffness_ratio: float,
     path: Path,
 ) -> float:
-    """Plot undeformed and visually scaled deformed geometry and return the scale."""
+    """Plot ANSYS-scale geometry with magnified displacement and return the scale."""
 
     # Convert the flat u vector into one [u_x,u_y] row for each node.
     nodal_displacement = full_displacement.reshape((-1, 2))
+    # Use the same millimeter coordinates as the exported ANSYS model.
+    original_coordinates = ANSYS_COORDINATE_SCALE_MM * model.coordinates
     # Use the largest node displacement to choose a visible plotting scale.
     displacement_magnitudes = np.linalg.norm(nodal_displacement, axis=1)
     maximum_displacement = float(np.max(displacement_magnitudes))
     # Measure the geometry so the deformation occupies about 15% of its size.
-    x_range = float(np.ptp(model.coordinates[:, 0]))
-    y_range = float(np.ptp(model.coordinates[:, 1]))
+    x_range = float(np.ptp(original_coordinates[:, 0]))
+    y_range = float(np.ptp(original_coordinates[:, 1]))
     geometry_size = max(x_range, y_range, 1.0)
     deformation_scale = (
         0.15 * geometry_size / maximum_displacement
         if maximum_displacement > 0.0
         else 1.0
     )
-    # The plot scale adjusts displacement visibility but does not change saved u.
-    deformed_coordinates = model.coordinates + deformation_scale * nodal_displacement
+    # ANSYS-style magnification affects only the picture, never the saved solution.
+    deformed_coordinates = original_coordinates + deformation_scale * nodal_displacement
 
     # Draw the original shape as a dashed reference and the deformed shape by group.
     fig, ax = plt.subplots(figsize=(11, 3.8))
     colors = {"stiff": "#176B87", "soft": "#D1495B"}
     labels_drawn: set[str] = set()
     for node_i, node_j, group in model.members:
-        original_points = model.coordinates[[node_i, node_j]]
+        original_points = original_coordinates[[node_i, node_j]]
         deformed_points = deformed_coordinates[[node_i, node_j]]
         # Only one original member creates the undeformed legend entry.
         original_label = "Undeformed" if "undeformed" not in labels_drawn else None
@@ -636,8 +638,8 @@ def plot_deformed_structure(
         labels_drawn.add(group)
     # Mark undeformed and deformed node locations for direct visual comparison.
     ax.scatter(
-        model.coordinates[:, 0],
-        model.coordinates[:, 1],
+        original_coordinates[:, 0],
+        original_coordinates[:, 1],
         s=20,
         facecolors="white",
         edgecolors="#666666",
@@ -651,19 +653,26 @@ def plot_deformed_structure(
         zorder=4,
     )
     # Label the deformed nodes with the same zero-based numbers as truss_config.py.
+    label_x_offset = 0.007 * geometry_size
+    label_y_offset = 0.009 * geometry_size
     for node, (x_coordinate, y_coordinate) in enumerate(deformed_coordinates):
-        ax.text(x_coordinate + 0.04, y_coordinate + 0.05, str(node), fontsize=8)
+        ax.text(
+            x_coordinate + label_x_offset,
+            y_coordinate + label_y_offset,
+            str(node),
+            fontsize=8,
+        )
     # Include both shapes when calculating plot limits.
-    all_coordinates = np.vstack((model.coordinates, deformed_coordinates))
+    all_coordinates = np.vstack((original_coordinates, deformed_coordinates))
     margin = 0.12 * geometry_size
     ax.set_xlim(all_coordinates[:, 0].min() - margin, all_coordinates[:, 0].max() + margin)
     ax.set_ylim(all_coordinates[:, 1].min() - margin, all_coordinates[:, 1].max() + margin)
     ax.set_aspect("equal")
-    ax.set_xlabel("Spanwise position")
-    ax.set_ylabel("Spar height")
+    ax.set_xlabel("Spanwise position (mm)")
+    ax.set_ylabel("Spar height (mm)")
     ax.set_title(
         f"Equilibrium displacement at r = {stiffness_ratio:,.0f} "
-        f"(visual scale = {deformation_scale:.3g})"
+        f"(displacement magnification = {deformation_scale:.3g}x)"
     )
     ax.legend(loc="best", frameon=False)
     ax.spines[["top", "right"]].set_visible(False)
