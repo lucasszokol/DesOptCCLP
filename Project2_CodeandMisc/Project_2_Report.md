@@ -4,7 +4,7 @@
 
 This report studies a simplified aircraft spar as both a finite element analysis (FEA) problem and an optimization problem. The purpose is not to design a flight-ready spar. The purpose is to isolate one structural feature, a large difference between member stiffnesses, and show how it creates an ill-conditioned optimization problem.
 
-For more information about the code of this project, please see ['README.md'](README.md). The complete, commented implementation is in [`project2_truss.py`](project2_truss.py). The editable model data is in [`truss_config.py`](truss_config.py). 
+For more information about the code of this project, please see [`README.md`](README.md). The complete, commented implementation is in [`project2_truss.py`](project2_truss.py). The editable model data is in [`truss_config.py`](truss_config.py). 
 
 ## 1. Problem identification and motivation
 
