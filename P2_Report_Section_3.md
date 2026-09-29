@@ -29,8 +29,7 @@ $$
 
 This gives each displacement coordinate a unit diagonal stiffness and tests whether the large condition number is caused only by different coordinate scales or units. It is also called Jacobi rescaling.
 
-![Condition number versus stiffness ratio]()
-**Condition Number v Stiffness Ratio Placeholder**
+![Condition number versus stiffness ratio](Project2_CodeandMisc/figures/condition_number_vs_ratio.png)
 
 | r | $\kappa(K)$ | $\kappa(\widehat K)$ |
 |---:|---:|---:|
