@@ -247,7 +247,7 @@ $$
 u=[u_{0x},u_{0y},u_{1x},u_{1y},\ldots]^T.
 $$
 
-The full vector includes zero entries at fixed displacement coordinates. Exact values, the load vector, and the reaction vector are written to `results/u_r10000.json`. A node-by-node table is written to `results/displacements_r10000.csv`. The maximum nodal displacement is 12.01465 normalized displacement units at upper tip node 13.
+The full vector includes zero entries at fixed displacement coordinates. Exact values, the load vector, and the reaction vector are written to `results/u_r10000.json`. A node-by-node table is written to `results/displacements_r10000.csv`. Its ANSYS-coordinate columns use millimeters, and its deformed-coordinate columns add the unscaled displacement to those coordinates. The maximum nodal displacement is 12.01465 mm under this comparison convention at upper tip node 13.
 
 ![Undeformed and deformed truss](figures/deformed_truss_r10000.png)
 

@@ -72,7 +72,7 @@ The corresponding ANSYS loads are $FY=-0.5$ N at nodes 13 and 14.
 
 ## 4. Compare displacements
 
-Open `results/displacements_r10000.csv`. For every node, compare its `u_x` and `u_y` values with the $UX$ and $UY$ columns in `ansys_nodal_displacements.txt`.
+Open `results/displacements_r10000.csv`. The `x_ansys_mm` and `y_ansys_mm` columns use the same 6000 mm geometry as ANSYS. The `u_x_mm` and `u_y_mm` columns are the unscaled solver displacements to compare with the ANSYS $UX$ and $UY$ columns. The `x_deformed_mm` and `y_deformed_mm` columns equal original ANSYS coordinates plus actual displacement, with no visual scale factor.
 
 Use these tip values as a quick check before comparing every node:
 
