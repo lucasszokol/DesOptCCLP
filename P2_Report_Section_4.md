@@ -23,14 +23,12 @@ When the condition number is large, $\rho$ approaches one, so each iteration rem
 ### D1
 The eigenvalue spectrum  is shown below. At $r=10000$, the original condition number is $2.60\times10^6$. The plot shows separated groups of small and large eigenvalues rather than a single uniform stiffness scale.
 
-![D1 figure]()
-**Eigenvalue spectrum placeholder**
+![D1 figure](eigenvalue_spectrum.png)
 
 ### D3
 The convergence behavior of the baseline method is shown below. The convergence curve when gradient descent is used requires $\sim 10^7$ iterations to reach the desired tolerance.  
 
-![D3 figure]()
-**Baseline convergence curves placeholder**
+![D3 figure](optimizer_convergence.png)
 
 The convergence measure is the fraction of the initial potential energy error that remains:
 
@@ -38,7 +36,7 @@ $$
 \frac{\Pi(u_k)-\Pi(u^\star)}{\Pi(u_0)-\Pi(u^\star)}.
 $$
 
-The tolerance is set to $10^{-8}$. Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, the code uses the eigenvectors of $K$ to calculate these displacement vectors directly. This avoids performing millions of unnecessary Python loop operations.
+As seen in figure for D3, the tolerance was set to $10^{-8}$. Instead of calculating each displacement ($u_0,u_1,u_2,\ldots$) from gradient descent one at a time, the code uses the eigenvectors of $K$ to calculate these displacement vectors directly. This avoids performing millions of unnecessary Python loop operations.
 
 | <i>r<i> | Gradient descent iterations to 10<sup>-8</sup> |
 |---:|---:|
