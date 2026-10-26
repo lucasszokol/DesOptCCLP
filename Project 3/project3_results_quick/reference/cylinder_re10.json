@@ -1,0 +1,59 @@
+{
+  "reynolds": 10,
+  "runtime_seconds": 1.5346026000006532,
+  "steps": 600,
+  "converged": false,
+  "tau": 0.62,
+  "mass_imbalance": 0.03564609144618346,
+  "mass_imbalance_tolerance": 0.01,
+  "velocity_change": 0.06668837124463342,
+  "reference_adequate": false,
+  "drag_coefficient": 12.077783184173539,
+  "recirculation_length": 0.0,
+  "grid": {
+    "nx": 177,
+    "ny": 34,
+    "nodes_per_diameter": 8
+  },
+  "history": [
+    {
+      "step": 100,
+      "velocity_change": 0.21530286434294113,
+      "mass_imbalance": 0.05190585498669373
+    },
+    {
+      "step": 200,
+      "velocity_change": 0.12668964039990063,
+      "mass_imbalance": 0.09239590292137069
+    },
+    {
+      "step": 300,
+      "velocity_change": 0.0830832663074856,
+      "mass_imbalance": 0.12295703434228947
+    },
+    {
+      "step": 400,
+      "velocity_change": 0.06578174112153388,
+      "mass_imbalance": 0.029775943581210433
+    },
+    {
+      "step": 500,
+      "velocity_change": 0.07642001539512178,
+      "mass_imbalance": 0.0012050525194818073
+    },
+    {
+      "step": 600,
+      "velocity_change": 0.06668837124463342,
+      "mass_imbalance": 0.03564609144618346
+    }
+  ],
+  "config": {
+    "nodes_per_diameter": 8,
+    "lattice_mean_velocity": 0.05,
+    "max_steps": 600,
+    "min_steps": 100,
+    "check_every": 100,
+    "convergence_tolerance": 0.0001,
+    "mass_imbalance_tolerance": 0.01
+  }
+}

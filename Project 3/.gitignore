@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv*/
+tmp/
+
+# Production runs can be regenerated and may become large.
+project3_results/runs/
+project3_results/figures/
+

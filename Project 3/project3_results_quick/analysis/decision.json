@@ -1,0 +1,9 @@
+{
+  "reynolds": 10,
+  "references_adequate": false,
+  "balanced_error_improvement_fraction": 0.00011797830424919997,
+  "meaningful_improvement_threshold": 0.25,
+  "adaptive_balancing_helped_meaningfully": false,
+  "optimization_not_capacity_supported": false,
+  "interpretation": "No scientific decision: at least one conventional reference failed its adequacy checks."
+}
