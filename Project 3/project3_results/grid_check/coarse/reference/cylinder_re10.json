@@ -1,0 +1,225 @@
+{
+  "reynolds": 10,
+  "runtime_seconds": 21.300499500001024,
+  "steps": 9750,
+  "converged": true,
+  "tau": 0.62,
+  "mass_imbalance": 2.693923515632937e-16,
+  "mass_imbalance_tolerance": 0.01,
+  "velocity_change": 0.0005145985895251574,
+  "reference_adequate": true,
+  "drag_coefficient": 9.319686141583128,
+  "recirculation_length": 0.125,
+  "grid": {
+    "nx": 177,
+    "ny": 34,
+    "nodes_per_diameter": 8
+  },
+  "history": [
+    {
+      "step": 250,
+      "velocity_change": 0.21584339845609515,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 500,
+      "velocity_change": 0.09152375238440259,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 750,
+      "velocity_change": 0.08462796974252773,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 1000,
+      "velocity_change": 0.0680483878731302,
+      "mass_imbalance": 2.693923515632936e-16
+    },
+    {
+      "step": 1250,
+      "velocity_change": 0.032654615570247396,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 1500,
+      "velocity_change": 0.01653497345122042,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 1750,
+      "velocity_change": 0.03152117903153549,
+      "mass_imbalance": 1.346961757816468e-16
+    },
+    {
+      "step": 2000,
+      "velocity_change": 0.040236720151063665,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 2250,
+      "velocity_change": 0.028138968308397058,
+      "mass_imbalance": 2.693923515632937e-16
+    },
+    {
+      "step": 2500,
+      "velocity_change": 0.010299931121871919,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 2750,
+      "velocity_change": 0.0126189936831371,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 3000,
+      "velocity_change": 0.01971816661194511,
+      "mass_imbalance": 2.693923515632937e-16
+    },
+    {
+      "step": 3250,
+      "velocity_change": 0.019295489881350426,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 3500,
+      "velocity_change": 0.010660328297795056,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 3750,
+      "velocity_change": 0.0038333575361675595,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 4000,
+      "velocity_change": 0.009372240852884236,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 4250,
+      "velocity_change": 0.011336853545208006,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 4500,
+      "velocity_change": 0.008516110030253172,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 4750,
+      "velocity_change": 0.0030871807553975003,
+      "mass_imbalance": 2.693923515632937e-16
+    },
+    {
+      "step": 5000,
+      "velocity_change": 0.0032584623662333372,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 5250,
+      "velocity_change": 0.006066140823736335,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 5500,
+      "velocity_change": 0.005848324208919602,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 5750,
+      "velocity_change": 0.0033243485395185353,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 6000,
+      "velocity_change": 0.0006746129123601089,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 6250,
+      "velocity_change": 0.0026057001730337105,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 6500,
+      "velocity_change": 0.0034775064509178703,
+      "mass_imbalance": 1.3469617578164684e-16
+    },
+    {
+      "step": 6750,
+      "velocity_change": 0.002715171893079646,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 7000,
+      "velocity_change": 0.0010461108599420712,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 7250,
+      "velocity_change": 0.0008045841180627019,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 7500,
+      "velocity_change": 0.001747766417806617,
+      "mass_imbalance": 1.346961757816468e-16
+    },
+    {
+      "step": 7750,
+      "velocity_change": 0.0018039276372601941,
+      "mass_imbalance": 2.693923515632936e-16
+    },
+    {
+      "step": 8000,
+      "velocity_change": 0.0011086283740940756,
+      "mass_imbalance": 1.346961757816468e-16
+    },
+    {
+      "step": 8250,
+      "velocity_change": 0.00024284153194801793,
+      "mass_imbalance": 4.040885273449405e-16
+    },
+    {
+      "step": 8500,
+      "velocity_change": 0.0007353693947006093,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 8750,
+      "velocity_change": 0.0010318133065006382,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 9000,
+      "velocity_change": 0.0008484230288596656,
+      "mass_imbalance": 2.693923515632937e-16
+    },
+    {
+      "step": 9250,
+      "velocity_change": 0.00037046112766893607,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 9500,
+      "velocity_change": 0.00021532849506746926,
+      "mass_imbalance": 1.3469617578164682e-16
+    },
+    {
+      "step": 9750,
+      "velocity_change": 0.0005145985895251574,
+      "mass_imbalance": 2.693923515632937e-16
+    }
+  ],
+  "config": {
+    "nodes_per_diameter": 8,
+    "lattice_mean_velocity": 0.05,
+    "max_steps": 15000,
+    "min_steps": 1000,
+    "check_every": 250,
+    "convergence_tolerance": 0.001,
+    "consecutive_convergence_checks": 4,
+    "mass_imbalance_tolerance": 0.01
+  }
+}

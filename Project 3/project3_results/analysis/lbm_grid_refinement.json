@@ -1,0 +1,8 @@
+{
+  "reynolds": 10,
+  "fine_nodes_per_diameter": 16,
+  "coarse_nodes_per_diameter": 8,
+  "relative_velocity_difference": 0.024098548674635872,
+  "compared_points": 5605,
+  "interpretation": "Reference discretization check; this is not a PINN error metric."
+}
