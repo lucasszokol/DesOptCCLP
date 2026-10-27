@@ -241,7 +241,7 @@ No environments, caches, temporary experiments, production results, or productio
 
 Local clone attempts failed: first workspace directory access, then GitHub DNS from a writable temporary directory. The connected GitHub plugin read the immutable tree and file content, including NPZs via base64. This is a **materialized snapshot audit**, not a successful local clone/pull. Branch: **project3/kellen-reference-validation**, based on the reviewed main SHA. Repository writes and PR use the connector.
 
-Runtime: Python 3.12.14, NumPy 2.3.5. SciPy and PyTorch are absent. SciPy interpolation was independently reproduced using NumPy, not mocked. No full production reference was regenerated; one- and two-step tests used unique temporary directories.
+Initial audit runtime: Python 3.12.14, NumPy 2.3.5. SciPy and PyTorch were absent. SciPy interpolation was independently reproduced using NumPy, not mocked. No full production reference was regenerated; one- and two-step tests used unique temporary directories.
 
 Commands, from Project 3:
 
@@ -265,7 +265,23 @@ Each command used that executable via PowerShell &. Initial complete-suite invoc
 - Independent suite: **6 passed**, no failures/errors/skips.
 - Field checker: completed; grid comparison reproduces to roundoff.
 
-The skipped tests are PyTorch manufactured-field autodiff and all-15-gradient-cosines checks. A dependency-equipped run remains necessary before claiming all project checks were exercised.
+The initially skipped tests were PyTorch manufactured-field autodiff and all-15-gradient-cosines checks.
+
+### Follow-up verification with PyTorch installed
+
+The user installed an isolated environment at C:\Users\kelle\AppData\Local\Temp\DesOptCCLP-review\.venv. Verified imports: PyTorch 2.7.0+cpu, NumPy 2.5.4, SciPy 1.18.1, Python 3.12.14.
+
+Using that environment's Scripts\python.exe, from the same Project 3 working directory, with the same permitted process-local TEMP/TMP:
+
+~~~powershell
+python -m unittest tests.test_project3_pinn tests.test_reference_solver_validation -v
+~~~
+
+**All 16 tests passed, with no skips or failures**, including both previously skipped PyTorch tests. These were CPU tests; CUDA/GPU execution was not tested. No production-source changes were needed.
+
+Also executed the original SciPy-based grid_refinement_check(ExperimentConfig with reynolds_numbers=(10,), reynolds=10) using the existing fine/coarse fields, without forcing regeneration. It returned **0.024098548674635872 on 5,605 points**, agreeing with the stored result and the independent NumPy implementation. Only the temporary snapshot's analysis JSON was rewritten; no production result changes were committed.
+
+This follow-up resolves the missing-test-dependency limitation. It does not resolve the independent conservation, geometry, or external-validation concerns above.
 
 ### Primary sources used
 
