@@ -273,15 +273,52 @@ def _train_model_impl(
     optimizer = torch.optim.Adam(model.parameters(), lr=config.pinn.adam_learning_rate)
     weights = {name: 1.0 for name in LOSS_NAMES}
     history: list[dict[str, float]] = []
-    start = time.perf_counter()
     generator = torch.Generator(device=device)
     generator.manual_seed(seed + 31_337)
+    progress_path = run_dir / "in_progress.pt"
+    start_step = 0
+    elapsed_before_resume = 0.0
+    adam_complete = False
+    if force and progress_path.exists():
+        progress_path.unlink()
+    if progress_path.exists() and not force:
+        progress = torch.load(progress_path, map_location=device, weights_only=False)
+        if progress.get("method") != method or int(progress.get("reynolds")) != reynolds:
+            raise ValueError(f"Incompatible progress checkpoint: {progress_path}")
+        model.load_state_dict(progress["state_dict"])
+        optimizer.load_state_dict(progress["optimizer_state_dict"])
+        weights = progress["weights"]
+        history = progress["history"]
+        start_step = int(progress["step"])
+        elapsed_before_resume = float(progress.get("elapsed_seconds", 0.0))
+        adam_complete = bool(progress.get("adam_complete", False))
+        generator.set_state(progress["generator_state"])
+    start = time.perf_counter()
+
+    def save_progress(step: int, *, complete: bool = False) -> None:
+        torch.save(
+            {
+                "state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "weights": weights,
+                "history": history,
+                "step": step,
+                "adam_complete": complete,
+                "generator_state": generator.get_state(),
+                "elapsed_seconds": elapsed_before_resume + time.perf_counter() - start,
+                "method": method,
+                "reynolds": reynolds,
+                "seed": seed,
+            },
+            progress_path,
+        )
+        _write_history(run_dir / "history.csv", history)
 
     if method == "supervised":
         inputs_np, targets_np = _load_reference_samples(config, reynolds, seed)
         inputs = _tensor(inputs_np, device)
         targets = _tensor(targets_np, device)
-        for step in range(1, config.pinn.adam_steps + 1):
+        for step in range(start_step + 1, config.pinn.adam_steps + 1) if not adam_complete else ():
             count = min(config.pinn.interior_batch, inputs.shape[0])
             indices = torch.randint(inputs.shape[0], (count,), generator=generator, device=device)
             optimizer.zero_grad(set_to_none=True)
@@ -290,8 +327,16 @@ def _train_model_impl(
             optimizer.step()
             if step == 1 or step % config.pinn.log_every == 0:
                 history.append({"step": step, "total": float(loss.detach().cpu()), "data": float(loss.detach().cpu())})
+                _write_history(run_dir / "history.csv", history)
             if not bool(torch.isfinite(loss)):
                 raise FloatingPointError(f"Non-finite supervised loss at Adam step {step}")
+            if step % config.pinn.checkpoint_every == 0:
+                save_progress(step)
+
+        if not adam_complete:
+            start_step = config.pinn.adam_steps
+            adam_complete = True
+            save_progress(start_step, complete=True)
 
         if config.pinn.lbfgs_steps > 0:
             optimizer_lbfgs = torch.optim.LBFGS(
@@ -312,7 +357,7 @@ def _train_model_impl(
     else:
         sampled = sample_training_points(config.geometry, config.pinn, seed)
         points = _prepare_points(sampled, device)
-        for step in range(1, config.pinn.adam_steps + 1):
+        for step in range(start_step + 1, config.pinn.adam_steps + 1) if not adam_complete else ():
             batch = dict(points)
             batch["interior"] = _sample_batch(
                 points["interior"], config.pinn.interior_batch, generator
@@ -345,6 +390,14 @@ def _train_model_impl(
                     row[f"weight_{name}"] = weights[name]
                     row[f"grad_{name}"] = norms[name]
                 history.append(row)
+                _write_history(run_dir / "history.csv", history)
+            if step % config.pinn.checkpoint_every == 0:
+                save_progress(step)
+
+        if not adam_complete:
+            start_step = config.pinn.adam_steps
+            adam_complete = True
+            save_progress(start_step, complete=True)
 
         if config.pinn.lbfgs_steps > 0:
             optimizer_lbfgs = torch.optim.LBFGS(
@@ -364,7 +417,7 @@ def _train_model_impl(
 
             optimizer_lbfgs.step(closure)
 
-    training_seconds = time.perf_counter() - start
+    training_seconds = elapsed_before_resume + time.perf_counter() - start
     torch.save(
         {
             "state_dict": model.state_dict(),
@@ -394,6 +447,8 @@ def _train_model_impl(
         encoding="utf-8",
     )
     evaluate_model(config, checkpoint_path)
+    if progress_path.exists():
+        progress_path.unlink()
     return checkpoint_path
 
 
@@ -420,7 +475,8 @@ def evaluate_model(config: ExperimentConfig, checkpoint_path: Path) -> dict[str,
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
     reynolds = int(checkpoint["reynolds"])
-    reference = np.load(config.output_dir / "reference" / f"cylinder_re{reynolds}.npz")
+    with np.load(config.output_dir / "reference" / f"cylinder_re{reynolds}.npz") as archive:
+        reference = {name: archive[name] for name in archive.files}
     xx, yy = np.meshgrid(reference["x"], reference["y"])
     fluid = ~reference["solid"]
     inputs = np.column_stack((xx[fluid], yy[fluid])).astype(np.float32)
@@ -470,7 +526,9 @@ def evaluate_model(config: ExperimentConfig, checkpoint_path: Path) -> dict[str,
         / reynolds
     )
     ds = config.geometry.cylinder_radius * (2.0 * np.pi / theta.size)
-    drag_coefficient = float((-2.0 * ds * torch.sum(traction_x)).detach().cpu())
+    # The radial normal points out of the solid into the fluid, so integrating
+    # this traction directly gives the streamwise force exerted on the body.
+    drag_coefficient = float((2.0 * ds * torch.sum(traction_x)).detach().cpu())
 
     center_x = np.linspace(
         config.geometry.cylinder_x + config.geometry.cylinder_radius + 1.0e-3,

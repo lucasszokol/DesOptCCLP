@@ -45,9 +45,9 @@ The inlet has a parabolic profile with unit mean velocity. The channel walls and
 
 ## 3. Conventional reference
 
-A D2Q9 lattice-Boltzmann method supplies reference velocity and pressure fields. The solver uses BGK collision, bounce-back on the walls and cylinder, a prescribed parabolic inlet, and a developed-flow outlet that preserves the penultimate-column profile while enforcing the inlet volume flux. The arbitrary pressure constant is shifted so the mean outlet pressure is zero. Steady convergence requires four consecutive 250-step checks below a relative velocity-change tolerance of (10^{-3}). It records convergence history, mass imbalance, runtime, drag, and recirculation length.
+A D2Q9 lattice-Boltzmann method supplies reference velocity and pressure fields. The solver uses BGK collision, bounce-back on the walls and cylinder, a prescribed parabolic inlet, and a developed-flow outlet that preserves the penultimate-column profile while enforcing the inlet volume flux. The arbitrary pressure constant is shifted so the mean outlet pressure is zero. Steady convergence requires four consecutive 250-step checks below a relative velocity-change tolerance of \(10^{-3}\). It records convergence history, mass imbalance, runtime, drag, and recirculation length.
 
-Reference fields are withheld from the vanilla and balanced PINNs. They are used only for evaluation and for the supervised capacity control.
+Reference fields are withheld from the vanilla and balanced PINNs. They are used only for evaluation and for the supervised capacity control. A reference is accepted only when it passes steady convergence, one-percent global flow-balance, and a five-percent coarse/fine velocity-difference threshold.
 
 ## 4. Controlled PINN experiment
 
@@ -97,15 +97,49 @@ It also reports pressure error after gauge alignment, divergence RMS, no-slip RM
 
 ## 7. Results and interpretation
 
-The production results must be generated with:
+All 27 production runs completed without a rejected seed. The three LBM references passed the steady-state and one-percent flow-balance gates. At the hardest condition, the 16-versus-24-nodes-per-diameter comparison gave a 1.37% velocity difference, below the predeclared 5% reference threshold.
 
-```powershell
-python project3.py all
-```
+| Re | Reference steps | Reference runtime | Reference drag | Recirculation length |
+|---:|---:|---:|---:|---:|
+| 10 | 15,750 | 289.4 s | 9.06 | 0.188 D |
+| 20 | 20,500 | 357.8 s | 5.98 | 0.813 D |
+| 40 | 26,500 | 370.8 s | 4.35 | 1.875 D |
 
-Quick-mode results are pipeline checks and must not be quoted as scientific evidence. The final presentation should insert the generated P1–P5 figures here and report the predeclared decision without changing its threshold after seeing the data.
+### Primary field error
 
-If the balanced error improvement at \(Re=40\) is at least 25%, the result supports component-wise imbalance as one important mechanism. If not, the correct Path B/C result is that adaptive weighting alone did not repair the convergence failure.
+Values below are three-seed medians, with the seed minimum and maximum in parentheses.
+
+| Re | Vanilla PINN | Component-balanced PINN | Supervised control |
+|---:|---:|---:|---:|
+| 10 | 0.1708 (0.1377–0.2272) | 0.6915 (0.6792–0.7835) | 0.00518 (0.00498–0.00554) |
+| 20 | 0.1886 (0.1260–0.2432) | 0.7005 (0.6853–0.7988) | 0.00523 (0.00497–0.00573) |
+| 40 | 0.2238 (0.2193–0.2686) | 0.7277 (0.6919–0.8537) | 0.00562 (0.00526–0.00630) |
+
+The vanilla median error increases from 17.1% to 22.4% as Reynolds number increases. The same architecture trained on direct field data stays near 0.5% error at every Reynolds number. At \(Re=40\), the supervised error is about forty times smaller than the vanilla error. This satisfies the predeclared capacity control and supports optimization—not representation capacity—as the main reason the loss-based PINN fails.
+
+### Adaptive-balancing decision
+
+At \(Re=40\), the balanced median error is 0.7277 versus 0.2238 for vanilla. The predeclared improvement is
+
+\[
+1-\frac{0.7277}{0.2238}=-2.251.
+\]
+
+Thus balancing does not produce the required 25% reduction. It increases median velocity error by approximately 225%, increases median divergence RMS from 0.0412 to 0.1045, and increases median no-slip RMS from 0.0115 to 0.0341. The remedy therefore fails every practical part of the decision rule.
+
+The mechanism is more informative than the aggregate failure. At \(Re=40\), balancing reduces the median largest-to-smallest **weighted** component-gradient ratio from about 19.4 for vanilla to about 7.2, so it does partially accomplish magnitude equalization. However, the most conflicting pairwise gradient cosine remains approximately -0.995. Scalar reweighting changes the strength of incompatible objectives but cannot rotate their directions. Several terms also approach the weight floor, allowing continuity and no-slip errors to worsen. The evidence therefore identifies directional conflict and weight saturation—not magnitude imbalance alone—as the more plausible remaining root cause.
+
+### Required figures
+
+![P1 reference accuracy and convergence](project3_results/figures/p1_reference.png)
+
+![P2 loss, gradient, weight, and alignment histories](project3_results/figures/p2_training_diagnostics.png)
+
+![P3 field error versus Reynolds number](project3_results/figures/p3_error_vs_reynolds.png)
+
+![P4 spatial and spectral wake error](project3_results/figures/p4_error_location.png)
+
+![P5 training, inference, and conventional-solver cost](project3_results/figures/p5_cost.png)
 
 ## 8. Recommendation to Professor Ma
 

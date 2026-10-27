@@ -1,3 +1,4 @@
+import csv
 import json
 import tempfile
 import unittest
@@ -7,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from project3_pinn.config import ExperimentConfig, LBMConfig, PINNConfig
+from project3_pinn.analysis import generate_analysis
 from project3_pinn.geometry import LOSS_NAMES, is_inside_cylinder, sample_training_points
 from project3_pinn.lbm import equilibrium, run_lbm
 from project3_pinn.pinn import gradient_diagnostics, train_model, update_adaptive_weights
@@ -87,6 +89,63 @@ class DiagnosticTests(unittest.TestCase):
             self.assertTrue(failure.exists())
             payload = json.loads(failure.read_text(encoding="utf-8"))
             self.assertEqual(payload["exception_type"], "ValueError")
+
+
+class AnalysisTests(unittest.TestCase):
+    def test_all_five_report_figures_regenerate_from_saved_results(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = ExperimentConfig.quick(root)
+            reference_dir = root / "reference"
+            reference_dir.mkdir(parents=True)
+            x = np.linspace(0.0, config.geometry.length, 8)
+            y = np.linspace(0.0, config.geometry.height, 5)
+            xx, yy = np.meshgrid(x, y)
+            solid = np.zeros_like(xx, dtype=bool)
+            u = np.broadcast_to(6 * yy * (config.geometry.height - yy) / config.geometry.height**2, xx.shape)
+            v = np.zeros_like(u)
+            p = 1.0 - xx / config.geometry.length
+            np.savez_compressed(reference_dir / "cylinder_re10.npz", x=x, y=y, u=u, v=v, p=p, solid=solid)
+            (reference_dir / "cylinder_re10.json").write_text(json.dumps({
+                "runtime_seconds": 1.0,
+                "reference_adequate": True,
+                "history": [{"step": 1, "velocity_change": 1e-4, "mass_imbalance": 1e-5}],
+            }), encoding="utf-8")
+            analysis_dir = root / "analysis"
+            analysis_dir.mkdir()
+            (analysis_dir / "lbm_grid_refinement.json").write_text(
+                json.dumps({"grid_adequate": True}), encoding="utf-8"
+            )
+            for method in config.methods:
+                run_dir = root / "runs" / f"re10_{method}_seed0"
+                run_dir.mkdir(parents=True)
+                evaluation = {
+                    "method": method, "reynolds": 10, "seed": 0,
+                    "velocity_relative_l2": 0.2, "pressure_relative_l2": 0.3,
+                    "divergence_rms": 0.01, "wall_velocity_rms": 0.01,
+                    "drag_coefficient": 1.0, "recirculation_length": 0.1,
+                    "inference_seconds": 0.01, "evaluation_points": int(u.size),
+                }
+                (run_dir / "evaluation.json").write_text(json.dumps(evaluation), encoding="utf-8")
+                (run_dir / "training.json").write_text(json.dumps({"training_seconds": 1.0}), encoding="utf-8")
+                if method != "supervised":
+                    row = {"step": 1, "total": 1.0, "cosine_min": -0.5, "cosine_mean": 0.1}
+                    for name in LOSS_NAMES:
+                        row[f"loss_{name}"] = 1.0
+                        row[f"weight_{name}"] = 1.0
+                        row[f"grad_{name}"] = 1.0
+                    with (run_dir / "history.csv").open("w", newline="", encoding="utf-8") as handle:
+                        writer = csv.DictWriter(handle, fieldnames=list(row))
+                        writer.writeheader()
+                        writer.writerow(row)
+                np.savez_compressed(
+                    run_dir / "evaluation_fields.npz",
+                    pred_u=u, pred_v=v, pred_p=p, error_speed=np.full_like(u, 0.01),
+                )
+            generated = generate_analysis(config)
+            self.assertEqual(len(generated["figures"]), 5)
+            self.assertTrue(all(Path(path).exists() for path in generated["figures"]))
+            self.assertTrue(generated["decision"]["references_adequate"])
 
 
 class LBMTests(unittest.TestCase):

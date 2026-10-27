@@ -1,0 +1,10 @@
+{
+  "reynolds": 40,
+  "references_adequate": true,
+  "grid_adequate": true,
+  "balanced_error_improvement_fraction": -2.2508290707317635,
+  "meaningful_improvement_threshold": 0.25,
+  "adaptive_balancing_helped_meaningfully": false,
+  "optimization_not_capacity_supported": true,
+  "interpretation": "Adaptive balancing did not meet the predefined improvement threshold."
+}

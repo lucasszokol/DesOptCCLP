@@ -1,8 +1,10 @@
 {
-  "reynolds": 10,
-  "fine_nodes_per_diameter": 16,
-  "coarse_nodes_per_diameter": 8,
-  "relative_velocity_difference": 0.024098548674635872,
-  "compared_points": 5605,
+  "reynolds": 40,
+  "fine_nodes_per_diameter": 24,
+  "coarse_nodes_per_diameter": 16,
+  "relative_velocity_difference": 0.013702575470544482,
+  "grid_difference_tolerance": 0.05,
+  "grid_adequate": true,
+  "compared_points": 22721,
   "interpretation": "Reference discretization check; this is not a PINN error metric."
 }

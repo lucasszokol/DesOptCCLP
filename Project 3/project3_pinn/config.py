@@ -24,6 +24,7 @@ class LBMConfig:
     convergence_tolerance: float = 1.0e-3
     consecutive_convergence_checks: int = 4
     mass_imbalance_tolerance: float = 1.0e-2
+    grid_difference_tolerance: float = 5.0e-2
 
 
 @dataclass(frozen=True)
@@ -38,6 +39,7 @@ class PINNConfig:
     lbfgs_steps: int = 300
     log_every: int = 100
     balance_every: int = 100
+    checkpoint_every: int = 1_000
     weight_ema: float = 0.9
     min_weight: float = 0.1
     max_weight: float = 10.0
@@ -85,6 +87,7 @@ class ExperimentConfig:
                 lbfgs_steps=0,
                 log_every=5,
                 balance_every=5,
+                checkpoint_every=10,
                 supervised_points=1_000,
                 evaluation_batch=2_048,
             ),

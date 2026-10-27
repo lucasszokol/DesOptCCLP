@@ -31,6 +31,32 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _assert_reference_adequacy(config: ExperimentConfig, grid_path: Path) -> None:
+    failures: list[str] = []
+    for reynolds in config.reynolds_numbers:
+        metadata_path = config.output_dir / "reference" / f"cylinder_re{reynolds}.json"
+        if not metadata_path.exists():
+            failures.append(f"Re={reynolds}: missing metadata")
+            continue
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        if not metadata.get("reference_adequate", False):
+            failures.append(
+                f"Re={reynolds}: converged={metadata.get('converged')}, "
+                f"mass_imbalance={metadata.get('mass_imbalance')}"
+            )
+    grid = json.loads(grid_path.read_text(encoding="utf-8"))
+    if not grid.get("grid_adequate", False):
+        failures.append(
+            "grid refinement: relative velocity difference="
+            f"{grid.get('relative_velocity_difference')}"
+        )
+    if failures:
+        raise RuntimeError(
+            "Reference adequacy gate failed; PINN training was not started:\n- "
+            + "\n- ".join(failures)
+        )
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     config = _config(args)
@@ -42,7 +68,10 @@ def main(argv: list[str] | None = None) -> int:
         paths = generate_references(config, force=args.force)
         print("Generated references:", *(str(path) for path in paths), sep="\n  ")
         if not args.quick:
-            print("Grid refinement:", grid_refinement_check(config, force=args.force))
+            grid_path = grid_refinement_check(config, force=args.force)
+            print("Grid refinement:", grid_path)
+            if args.command == "all":
+                _assert_reference_adequacy(config, grid_path)
     if args.command in {"train", "all"}:
         if args.command == "train":
             for reynolds in config.reynolds_numbers:

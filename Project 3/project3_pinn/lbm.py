@@ -247,22 +247,24 @@ def grid_refinement_check(
         raise RuntimeError("SciPy is required for the grid-refinement check") from exc
 
     reynolds = max(config.reynolds_numbers) if reynolds is None else reynolds
-    # The caller may have just forced generation of the fine reference. Reuse
-    # it here; only the separate coarse reference follows the force flag.
-    fine_path = run_lbm(config, reynolds, force=False)
-    coarse_lbm = replace(
+    # Under-resolving Re=40 drives the BGK relaxation time too close to 0.5.
+    # Treat the production grid as the coarse member and compare it with a
+    # 50%-finer, more stable grid instead.
+    coarse_path = run_lbm(config, reynolds, force=False)
+    fine_nodes = int(round(1.5 * config.lbm.nodes_per_diameter))
+    fine_lbm = replace(
         config.lbm,
-        nodes_per_diameter=max(6, config.lbm.nodes_per_diameter // 2),
-        max_steps=max(2_000, config.lbm.max_steps // 2),
-        min_steps=max(500, config.lbm.min_steps // 2),
+        nodes_per_diameter=fine_nodes,
+        max_steps=max(config.lbm.max_steps, 40_000),
+        min_steps=max(config.lbm.min_steps, 3_000),
     )
-    coarse_config = replace(
+    fine_config = replace(
         config,
-        lbm=coarse_lbm,
-        output_dir=config.output_dir / "grid_check" / "coarse",
+        lbm=fine_lbm,
+        output_dir=config.output_dir / "grid_check" / "fine",
         reynolds_numbers=(reynolds,),
     )
-    coarse_path = run_lbm(coarse_config, reynolds, force=force)
+    fine_path = run_lbm(fine_config, reynolds, force=force)
     with np.load(fine_path) as fine, np.load(coarse_path) as coarse:
         coarse_xx, coarse_yy = np.meshgrid(coarse["x"], coarse["y"])
         points = np.column_stack((coarse_yy.ravel(), coarse_xx.ravel()))
@@ -281,9 +283,11 @@ def grid_refinement_check(
         compared_points = int(np.sum(valid))
     result = {
         "reynolds": reynolds,
-        "fine_nodes_per_diameter": config.lbm.nodes_per_diameter,
-        "coarse_nodes_per_diameter": coarse_lbm.nodes_per_diameter,
+        "fine_nodes_per_diameter": fine_lbm.nodes_per_diameter,
+        "coarse_nodes_per_diameter": config.lbm.nodes_per_diameter,
         "relative_velocity_difference": relative_difference,
+        "grid_difference_tolerance": config.lbm.grid_difference_tolerance,
+        "grid_adequate": relative_difference <= config.lbm.grid_difference_tolerance,
         "compared_points": compared_points,
         "interpretation": "Reference discretization check; this is not a PINN error metric.",
     }

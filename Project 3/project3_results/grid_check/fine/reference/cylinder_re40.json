@@ -1,0 +1,741 @@
+{
+  "reynolds": 40,
+  "runtime_seconds": 1059.6040931000025,
+  "steps": 35500,
+  "converged": true,
+  "tau": 0.5900000000000001,
+  "mass_imbalance": 1.8127977742495988e-16,
+  "mass_imbalance_tolerance": 0.01,
+  "velocity_change": 0.0009504673527613085,
+  "reference_adequate": true,
+  "drag_coefficient": 4.25454079701309,
+  "recirculation_length": 1.875,
+  "grid": {
+    "nx": 529,
+    "ny": 99,
+    "nodes_per_diameter": 24
+  },
+  "history": [
+    {
+      "step": 250,
+      "velocity_change": 0.1669336263999643,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 500,
+      "velocity_change": 0.12689952082424732,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 750,
+      "velocity_change": 0.11647782835176,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 1000,
+      "velocity_change": 0.0649085784966883,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 1250,
+      "velocity_change": 0.08681013317203491,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 1500,
+      "velocity_change": 0.08182138825359096,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 1750,
+      "velocity_change": 0.08174147476039291,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 2000,
+      "velocity_change": 0.04803637878963235,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 2250,
+      "velocity_change": 0.06396491773043614,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 2500,
+      "velocity_change": 0.06632832972526692,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 2750,
+      "velocity_change": 0.06469515543213057,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 3000,
+      "velocity_change": 0.06709235467544535,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 3250,
+      "velocity_change": 0.05058065788264422,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 3500,
+      "velocity_change": 0.05050755436194414,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 3750,
+      "velocity_change": 0.047156054927731186,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 4000,
+      "velocity_change": 0.04970961585344615,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 4250,
+      "velocity_change": 0.042730371830814476,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 4500,
+      "velocity_change": 0.04345997216040836,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 4750,
+      "velocity_change": 0.03572468669126261,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 5000,
+      "velocity_change": 0.03907823090328898,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 5250,
+      "velocity_change": 0.03588273453353571,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 5500,
+      "velocity_change": 0.034204527645990274,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 5750,
+      "velocity_change": 0.031985439021462066,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 6000,
+      "velocity_change": 0.034038646258370345,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 6250,
+      "velocity_change": 0.03153356415985054,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 6500,
+      "velocity_change": 0.0297935279323035,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 6750,
+      "velocity_change": 0.02363897585996068,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 7000,
+      "velocity_change": 0.020453438444552656,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 7250,
+      "velocity_change": 0.0241160531934326,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 7500,
+      "velocity_change": 0.023329674758165254,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 7750,
+      "velocity_change": 0.016914780797561594,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 8000,
+      "velocity_change": 0.017204824420764674,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 8250,
+      "velocity_change": 0.021788441439002007,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 8500,
+      "velocity_change": 0.019913035781975234,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 8750,
+      "velocity_change": 0.02388263040374948,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 9000,
+      "velocity_change": 0.01891821459443383,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 9250,
+      "velocity_change": 0.017657951550660005,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 9500,
+      "velocity_change": 0.017026326573536192,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 9750,
+      "velocity_change": 0.020467976884987416,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 10000,
+      "velocity_change": 0.017180246796366778,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 10250,
+      "velocity_change": 0.01660255577424505,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 10500,
+      "velocity_change": 0.010340487618887994,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 10750,
+      "velocity_change": 0.009033623901157455,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 11000,
+      "velocity_change": 0.013144584451258984,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 11250,
+      "velocity_change": 0.013585245876260931,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 11500,
+      "velocity_change": 0.008553196814984378,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 11750,
+      "velocity_change": 0.0078813909048655,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 12000,
+      "velocity_change": 0.012688226130326555,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 12250,
+      "velocity_change": 0.010147787165743176,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 12500,
+      "velocity_change": 0.013617483748360772,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 12750,
+      "velocity_change": 0.009836261313072666,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 13000,
+      "velocity_change": 0.010076384346658956,
+      "mass_imbalance": 3.625595548499198e-16
+    },
+    {
+      "step": 13250,
+      "velocity_change": 0.008279384699406325,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 13500,
+      "velocity_change": 0.010995308830567554,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 13750,
+      "velocity_change": 0.009249805783219824,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 14000,
+      "velocity_change": 0.009365930342898466,
+      "mass_imbalance": 3.625595548499198e-16
+    },
+    {
+      "step": 14250,
+      "velocity_change": 0.0061079040984844705,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 14500,
+      "velocity_change": 0.005757510952734436,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 14750,
+      "velocity_change": 0.008260831543470036,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 15000,
+      "velocity_change": 0.007988387785781573,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 15250,
+      "velocity_change": 0.00563322012044671,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 15500,
+      "velocity_change": 0.005324079082061895,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 15750,
+      "velocity_change": 0.008093426290345604,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 16000,
+      "velocity_change": 0.005573359337529809,
+      "mass_imbalance": 3.625595548499199e-16
+    },
+    {
+      "step": 16250,
+      "velocity_change": 0.00755276299423381,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 16500,
+      "velocity_change": 0.004819733765586917,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 16750,
+      "velocity_change": 0.0060967454324613625,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 17000,
+      "velocity_change": 0.004597419592715163,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 17250,
+      "velocity_change": 0.00586272284046218,
+      "mass_imbalance": 3.625595548499198e-16
+    },
+    {
+      "step": 17500,
+      "velocity_change": 0.005030598053644863,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 17750,
+      "velocity_change": 0.00545674868180249,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 18000,
+      "velocity_change": 0.00376450998890857,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 18250,
+      "velocity_change": 0.004063674935186163,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 18500,
+      "velocity_change": 0.005466276439608685,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 18750,
+      "velocity_change": 0.004808378731694664,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 19000,
+      "velocity_change": 0.0034705747607466394,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 19250,
+      "velocity_change": 0.003695542087183833,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 19500,
+      "velocity_change": 0.005303981727373748,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 19750,
+      "velocity_change": 0.0032603586096839844,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 20000,
+      "velocity_change": 0.004357088951919173,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 20250,
+      "velocity_change": 0.002494191334263078,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 20500,
+      "velocity_change": 0.003950343395555151,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 20750,
+      "velocity_change": 0.0028728555366301705,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 21000,
+      "velocity_change": 0.003382964599784692,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 21250,
+      "velocity_change": 0.003051918330690984,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 21500,
+      "velocity_change": 0.003415140350737037,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 21750,
+      "velocity_change": 0.002335402427690763,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 22000,
+      "velocity_change": 0.0027099616937193483,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 22250,
+      "velocity_change": 0.003563572769851952,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 22500,
+      "velocity_change": 0.002967689018770011,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 22750,
+      "velocity_change": 0.0020637209106277787,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 23000,
+      "velocity_change": 0.002425088726406712,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 23250,
+      "velocity_change": 0.003473992756407114,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 23500,
+      "velocity_change": 0.0019287876833730983,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 23750,
+      "velocity_change": 0.002610910659605252,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 24000,
+      "velocity_change": 0.0015582299621679531,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 24250,
+      "velocity_change": 0.0027254894418916385,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 24500,
+      "velocity_change": 0.0018739079028764923,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 24750,
+      "velocity_change": 0.002056749825470518,
+      "mass_imbalance": 3.625595548499198e-16
+    },
+    {
+      "step": 25000,
+      "velocity_change": 0.002069267511418208,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 25250,
+      "velocity_change": 0.0022905267117485444,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 25500,
+      "velocity_change": 0.0015041028778823727,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 25750,
+      "velocity_change": 0.0017549399356139438,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 26000,
+      "velocity_change": 0.002317445505784571,
+      "mass_imbalance": 3.625595548499198e-16
+    },
+    {
+      "step": 26250,
+      "velocity_change": 0.001884900021930069,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 26500,
+      "velocity_change": 0.0012619571790218093,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 26750,
+      "velocity_change": 0.001588634371513408,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 27000,
+      "velocity_change": 0.0022886321240744773,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 27250,
+      "velocity_change": 0.0011648457617379666,
+      "mass_imbalance": 3.625595548499199e-16
+    },
+    {
+      "step": 27500,
+      "velocity_change": 0.001603649492250501,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 27750,
+      "velocity_change": 0.0011088407430127115,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 28000,
+      "velocity_change": 0.001917306709867676,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 28250,
+      "velocity_change": 0.0012302870872890528,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 28500,
+      "velocity_change": 0.0012672332895207446,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 28750,
+      "velocity_change": 0.0014660220457306198,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 29000,
+      "velocity_change": 0.001579782691191198,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 29250,
+      "velocity_change": 0.000979690735629302,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 29500,
+      "velocity_change": 0.0011356984210702942,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 29750,
+      "velocity_change": 0.0015422239755913992,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 30000,
+      "velocity_change": 0.0012481397007959067,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 30250,
+      "velocity_change": 0.0008073990650194294,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 30500,
+      "velocity_change": 0.0010727347441709355,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 30750,
+      "velocity_change": 0.0015371193375006663,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 31000,
+      "velocity_change": 0.0007527585590385345,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 31250,
+      "velocity_change": 0.0010100348637499818,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 31500,
+      "velocity_change": 0.0008208524130148109,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 31750,
+      "velocity_change": 0.0013493422023250806,
+      "mass_imbalance": 3.6255955484991975e-16
+    },
+    {
+      "step": 32000,
+      "velocity_change": 0.0008056305566417471,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 32250,
+      "velocity_change": 0.0007897971155036264,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 32500,
+      "velocity_change": 0.001054744514751782,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 32750,
+      "velocity_change": 0.0010946073204673313,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 33000,
+      "velocity_change": 0.0006329540992551871,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 33250,
+      "velocity_change": 0.0007466054493247296,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 33500,
+      "velocity_change": 0.0010579823998098812,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 33750,
+      "velocity_change": 0.0008612409526065548,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 34000,
+      "velocity_change": 0.0005296399332700652,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 34250,
+      "velocity_change": 0.0007453999951805408,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 34500,
+      "velocity_change": 0.0010580089600659114,
+      "mass_imbalance": 0.0
+    },
+    {
+      "step": 34750,
+      "velocity_change": 0.0005223627929256794,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 35000,
+      "velocity_change": 0.0006489083487253524,
+      "mass_imbalance": 1.812797774249599e-16
+    },
+    {
+      "step": 35250,
+      "velocity_change": 0.0006133022904004467,
+      "mass_imbalance": 1.8127977742495988e-16
+    },
+    {
+      "step": 35500,
+      "velocity_change": 0.0009504673527613085,
+      "mass_imbalance": 1.8127977742495988e-16
+    }
+  ],
+  "config": {
+    "nodes_per_diameter": 24,
+    "lattice_mean_velocity": 0.05,
+    "max_steps": 40000,
+    "min_steps": 3000,
+    "check_every": 250,
+    "convergence_tolerance": 0.001,
+    "consecutive_convergence_checks": 4,
+    "mass_imbalance_tolerance": 0.01,
+    "grid_difference_tolerance": 0.05
+  }
+}

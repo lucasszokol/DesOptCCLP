@@ -16,7 +16,7 @@ The difficulty knob is Reynolds number: 10, 20, and 40. The primary target is to
 
 ## Setup
 
-Use Python 3.11 or 3.12. Install the stable CUDA-enabled PyTorch 2.7 build for the computer, then install the remaining dependencies. The complete CPU smoke test was verified with Python 3.12 and PyTorch 2.7. The CUDA 12.8 production environment must still pass the verification command below on this machine:
+Use Python 3.11 or 3.12. Install the stable CUDA-enabled PyTorch 2.7 build for the computer, then install the remaining dependencies. This workspace is verified with Python 3.12, PyTorch 2.7.0+cu128, and an NVIDIA RTX 4070 Laptop GPU, including second-derivative automatic differentiation:
 
 ```powershell
 py -3.11 -m venv .venv-project3
@@ -72,5 +72,7 @@ python -m unittest tests.test_project3_pinn -v
 - `project3_results/figures/`: required P1–P5 diagnostic figures.
 - `project3_results/analysis/summary.csv`: all run metrics.
 - `project3_results/analysis/decision.json`: the predeclared 25% improvement decision.
+
+Long runs save `in_progress.pt` every 1,000 Adam steps and update `history.csv` incrementally. Repeating the same command without `--force` resumes an interrupted run. `failure.json` records numerical or software failures; failed runs are never silently restarted.
 
 Training data from the conventional solver are used only by the supervised capacity control. The vanilla and balanced PINNs use the equations and boundary conditions without reference-field labels.

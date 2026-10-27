@@ -44,12 +44,20 @@ def collect_results(config: ExperimentConfig) -> list[dict[str, object]]:
         if history_path.exists() and evaluation["method"] != "supervised":
             history = _read_csv(history_path)
             ratios = []
+            weighted_ratios = []
             for row in history:
-                norms = [row.get(f"grad_{name}", np.nan) for name in LOSS_NAMES]
-                norms = [value for value in norms if np.isfinite(value) and value > 0]
-                if norms:
+                norms = np.array([row.get(f"grad_{name}", np.nan) for name in LOSS_NAMES])
+                weights = np.array([row.get(f"weight_{name}", 1.0) for name in LOSS_NAMES])
+                valid = np.isfinite(norms) & (norms > 0)
+                norms = norms[valid]
+                if norms.size:
                     ratios.append(max(norms) / min(norms))
+                    weighted = (weights[valid] * norms)
+                    weighted_ratios.append(max(weighted) / min(weighted))
             evaluation["median_gradient_norm_ratio"] = float(np.median(ratios)) if ratios else np.nan
+            evaluation["median_weighted_gradient_norm_ratio"] = (
+                float(np.median(weighted_ratios)) if weighted_ratios else np.nan
+            )
             evaluation["minimum_gradient_cosine"] = float(
                 np.nanmin([row.get("cosine_min", np.nan) for row in history])
             )
@@ -77,7 +85,8 @@ def _p1_reference(config: ExperimentConfig) -> Path | None:
     metadata_path = path.with_suffix(".json")
     if not path.exists():
         return None
-    data = np.load(path)
+    with np.load(path) as archive:
+        data = {name: archive[name] for name in archive.files}
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     speed = np.sqrt(data["u"] ** 2 + data["v"] ** 2)
     figure, axes = plt.subplots(2, 1, figsize=(10, 6), constrained_layout=True)
@@ -116,11 +125,14 @@ def _p2_training(config: ExperimentConfig) -> Path | None:
         ratios = []
         for row in history:
             norms = np.array([row[f"grad_{name}"] for name in LOSS_NAMES])
+            weights = np.array([row.get(f"weight_{name}", 1.0) for name in LOSS_NAMES])
             finite = norms[np.isfinite(norms) & (norms > 0)]
-            ratios.append(np.nan if not finite.size else np.max(finite) / np.min(finite))
+            valid = np.isfinite(norms) & (norms > 0)
+            weighted = norms[valid] * weights[valid]
+            ratios.append(np.nan if not finite.size else np.max(weighted) / np.min(weighted))
         axes[0, 1].semilogy(steps, ratios, label=method)
     axes[0, 0].set_title("Total weighted loss")
-    axes[0, 1].set_title("Largest / smallest component gradient norm")
+    axes[0, 1].set_title("Largest / smallest weighted component gradient norm")
     for name in LOSS_NAMES:
         if "vanilla" in histories:
             history = histories["vanilla"]
@@ -200,7 +212,8 @@ def _p4_error(config: ExperimentConfig) -> Path | None:
     reference_path = config.output_dir / "reference" / f"cylinder_re{reynolds}.npz"
     if not reference_path.exists():
         return None
-    reference = np.load(reference_path)
+    with np.load(reference_path) as archive:
+        reference = {name: archive[name] for name in archive.files}
     figure, axes = plt.subplots(2, 2, figsize=(12, 6), constrained_layout=True)
     found = False
     for column, method in enumerate(("vanilla", "balanced")):
@@ -208,7 +221,8 @@ def _p4_error(config: ExperimentConfig) -> Path | None:
         if not field_path.exists():
             continue
         found = True
-        fields = np.load(field_path)
+        with np.load(field_path) as archive:
+            fields = {name: archive[name] for name in archive.files}
         image = axes[0, column].pcolormesh(
             reference["x"], reference["y"], fields["error_speed"], shading="auto", cmap="magma"
         )
@@ -284,7 +298,13 @@ def _decision(config: ExperimentConfig, results: list[dict[str, object]]) -> dic
             reference_status.append(bool(metadata.get("reference_adequate", False)))
         else:
             reference_status.append(False)
-    references_adequate = bool(reference_status) and all(reference_status)
+    grid_path = config.output_dir / "analysis" / "lbm_grid_refinement.json"
+    grid_adequate = False
+    if grid_path.exists():
+        grid_adequate = bool(
+            json.loads(grid_path.read_text(encoding="utf-8")).get("grid_adequate", False)
+        )
+    references_adequate = bool(reference_status) and all(reference_status) and grid_adequate
     helped = references_adequate and improvement is not None and improvement >= 0.25
     if not references_adequate:
         interpretation = "No scientific decision: at least one conventional reference failed its adequacy checks."
@@ -295,6 +315,7 @@ def _decision(config: ExperimentConfig, results: list[dict[str, object]]) -> dic
     return {
         "reynolds": max_re,
         "references_adequate": references_adequate,
+        "grid_adequate": grid_adequate,
         "balanced_error_improvement_fraction": improvement,
         "meaningful_improvement_threshold": 0.25,
         "adaptive_balancing_helped_meaningfully": helped,
