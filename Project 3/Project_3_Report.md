@@ -24,7 +24,7 @@ The nondimensional channel is
 
 $$
 \Omega=[0,22]\times[0,4.1]\setminus
-\left\{(x,y):(x-2)^2+(y-2)^2\le0.5^2\right\}.
+\{(x,y):(x-2)^2+(y-2)^2\le0.5^2\}.
 $$
 
 The steady incompressible Navier–Stokes equations are
@@ -41,7 +41,7 @@ $$
 uv_x+vv_y=-p_y+\frac{1}{Re}(v_{xx}+v_{yy}).
 $$
 
-The inlet has a parabolic profile with unit mean velocity. The channel walls and cylinder use no-slip conditions. The outlet fixes the pressure gauge with \(p=0\) and uses zero streamwise velocity gradients. Reynolds number \(Re\in\{10,20,40\}\) is the difficulty knob.
+The inlet has a parabolic profile with unit mean velocity. The channel walls and cylinder use no-slip conditions. The outlet fixes the pressure gauge with $p=0$ and uses zero streamwise velocity gradients. Reynolds number $Re\in\{10,20,40\}$ is the difficulty knob.
 
 ## 3. Conventional reference
 
