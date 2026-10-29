@@ -28,7 +28,7 @@ Our team conducted researcher outreach by email, beginning with Dr. Jeonglae Kim
 
 During the interview, Professor Ma explained that large-scale finite-element and finite-volume simulations, particularly fluid–structure interaction problems, can require millions of computational nodes and several hours even on supercomputers. She also described PINN convergence and accuracy problems for systems involving multiple PDEs and geometric nonlinearities.
 
-The follow-up interview with Vivian Oletty, which served as **confirmation of our problem brief**, allowed to identify fluid flow around a stationary circular cylinder as an appropriate starting point, with a moving cylinder and coupled fluid–structure interactions as potential extensions. He also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
+The follow-up interview with Vivian Oletty, which served as confirmation of our problem brief, allowed to identify fluid flow around a stationary circular cylinder as an appropriate starting point, with a moving cylinder and coupled fluid–structure interactions as potential extensions. He also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
 
 ### Selected interview questions and answers
 
@@ -40,13 +40,12 @@ The follow-up interview with Vivian Oletty, which served as **confirmation of ou
 | How long might a simulation of the simplified problem take? | Vivian indicated approximately one to two hours, potentially less than one hour depending on the setup. |
 | What alternative machine-learning approaches have been explored? | Vivian discussed MeshParamNet, graph neural networks, FFT-based representations, and supervised finite-element data for structural-deformation prediction. |
 
-The outreach record establishes the contact method, referral, interviews, decline, non-response, and problem-brief confirmation. The repository still does not document whether Professor Ma approved public attribution or whether the final recommendation memo has been delivered.
 
 ## 2. Problem brief
 
 ### Scientific problem and real-world value
 
-According to the team's interview notes, Professor Ma's work uses finite-element and finite-volume solvers on models with millions of nodes; individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
+Professor Ma's work uses finite-element and finite-volume solvers on models with millions of nodes. Individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
 
 High-fidelity fluid–structure interaction combines Navier–Stokes flow, nonlinear structural dynamics, moving interfaces, and sometimes remeshing or turbulence closures. The governing physics therefore include fluid momentum and incompressibility, structural dynamics, and kinematic and dynamic coupling conditions at the fluid–structure interface. At high Reynolds numbers, turbulence approximations can introduce additional modeled physics.
 
@@ -58,9 +57,7 @@ Professor Ma reported using finite-element and finite-volume methods for structu
 
 The interview notes report that standard loss-based PINNs were difficult to converge and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
 
-MeshODENet has been demonstrated on structural mechanics problems, not on the cylinder-flow problem studied here. Therefore, this report treats it as an architectural direction for repeated design evaluations, not as a measured competitor or a demonstrated CFD solution.
-
-Vivian Oletty also discussed MeshParamNet, graph neural networks, and frequency-domain representations as related supervised approaches. These alternatives use conventional-solver data and do not remove the need to validate generalization, long-term stability, and physical constraints.
+MeshODENet has been demonstrated on structural mechanics problems, not on the cylinder-flow problem studied here. Therefore, this report treats it as an architectural direction for repeated design evaluations, not as a measured competitor or a demonstrated CFD solution. Vivian Oletty also discussed MeshParamNet, graph neural networks, and frequency-domain representations as related supervised approaches. 
 
 ### Researcher review status
 
@@ -264,9 +261,8 @@ We recommend against replacing a mature forward solver with this per-instance PI
 
 The smallest useful next PINN study is a controlled \(Re=40\) experiment that changes one suspected mechanism at a time: conflict-aware gradient projection, independent near-cylinder residual sampling, or additional optimization time. It should use a better-validated conventional reference and retain the supervised label-fitting control. A successful follow-up must improve the field error without degrading separate cylinder and channel-wall boundary metrics.
 
-The standalone one-page version is available in [`Leixin_Ma_Recommendation_Memo.md`](Leixin_Ma_Recommendation_Memo.md). It should be reconciled with this qualified wording before it is sent.
+The standalone one-page version is available in [`Leixin_Ma_Recommendation_Memo.md`](Leixin_Ma_Recommendation_Memo.md). 
 
-The repository does not document whether this memo has been sent to Professor Ma or whether she has responded. The team must add the delivery date and include or summarize her response if one is received.
 
 ## 6. Assumptions and limitations
 
