@@ -1,0 +1,13 @@
+{
+  "method": "vanilla",
+  "reynolds": 10,
+  "seed": 2,
+  "velocity_relative_l2": 0.17079937559260813,
+  "pressure_relative_l2": 0.21010477248412068,
+  "divergence_rms": 0.030416907742619514,
+  "wall_velocity_rms": 0.008429634384810925,
+  "drag_coefficient": 7.262363433837891,
+  "recirculation_length": 0.21483445167541504,
+  "inference_seconds": 0.0024588999986008275,
+  "evaluation_points": 22745
+}

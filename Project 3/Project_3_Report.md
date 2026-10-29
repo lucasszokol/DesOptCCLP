@@ -106,9 +106,10 @@ An independent reference audit reached a more limited conclusion:
 - only $u$ enters the stopping rule, so stationarity of $v$, density, pressure, drag, and total mass was not established;
 - the saved $x$-coordinate and $y$-coordinate spacings differ by about 0.606%, and stair-step bounce-back does not establish accuracy on the true circular boundary;
 - a recomputed $Re=10$ section-volume-flux departure reaches about 1.05%, despite near-zero endpoint imbalance;
-- no matched external solution establishes the absolute accuracy of the reported pressure, drag, or recirculation length.
+- the closest external comparison is the official DFG 2D-1 $Re=20$ benchmark. After matching the nondimensional geometry and inlet, the LBM drag coefficient is 5.9839 versus 5.5795 (7.25% high), and the nondimensional front-to-rear pressure difference is 3.1229 versus 2.9380 (6.29% high);
+- the DFG case uses a do-nothing traction outlet, whereas this LBM uses a rescaled developed-velocity outlet. The LBM also represents the cylinder with stair-step bounce-back.
 
-Accordingly, the reference fields are adequate for a provisional internal comparison under the team's implemented gates, but full physical reference adequacy remains unresolved. All errors below should be read as errors relative to this numerical reference.
+The DFG comparison supports physical plausibility, but it is not an exact validation because the outlet and cylinder discretizations differ. Accordingly, the reference fields remain provisional comparison fields, and all neural errors below are measured relative to them.
 
 Reported reference outputs are:
 
@@ -118,7 +119,7 @@ Reported reference outputs are:
 | 20 | 20,500 | 357.8 s | 5.98 | 0.813 D |
 | 40 | 26,500 | 370.8 s | 4.35 | 1.875 D |
 
-The drag and recirculation values are diagnostics from the current discretization, not externally validated benchmark values.
+The $Re=20$ drag has the limited DFG comparison described above. The other drag values and all recirculation lengths remain diagnostics from the current discretization rather than externally validated benchmark values.
 
 ### 4.2 Controlled neural-network design and P2 method
 
@@ -164,7 +165,7 @@ Three seeds provide a descriptive median and observed minimum–maximum range. T
 
 ### 4.4 Path B results
 
-The committed summary contains all 27 expected $(Re,\text{method},\text{seed})$ rows with finite primary error values. The production histories, per-run configurations, predictions, checkpoints, and failure records are not committed, so the complete execution and restart provenance cannot be independently reconstructed from the repository.
+The committed summary contains all 27 expected $(Re,\text{method},\text{seed})$ rows with finite primary error values. This update adds all production history, evaluation, and training records, plus the two representative $Re=40$, seed-0 field archives required to regenerate P4. Large checkpoints and the other field archives remain excluded, so exact restart state and arbitrary new field plots are not preserved.
 
 #### Primary velocity error
 
@@ -198,7 +199,7 @@ The balanced model increases median velocity error by approximately 225%, increa
 
 The balanced method partially accomplishes its immediate numerical purpose. In the $Re=40$ median-error runs, the temporal median largest-to-smallest weighted component-gradient ratio is about 19.4 for vanilla and 7.2 for balanced. Nevertheless, field and boundary errors worsen. Gradient-magnitude imbalance is therefore not a sufficient explanation or remedy for the recorded failure.
 
-The minimum observed pairwise gradient cosine reaches approximately $-0.995$ during logged Adam training, and several adaptive weights approach the lower bound. These observations are consistent with local gradient-direction conflict and weight saturation. They do not show that either effect persisted throughout both optimizer phases or uniquely caused the field error. Sampling, output scaling, optimizer time, spectral bias, the composite loss landscape, and reference error remain alternative or interacting explanations.
+The minimum observed pairwise gradient cosine reaches approximately $-0.995$ during logged Adam training, and several adaptive weights approach the lower bound. The complete histories show that some conflicts persist through Adam: in the representative $Re=40$, seed-0 runs, the continuity/inlet cosine is negative at 90% of vanilla and 97% of balanced logging points, while the momentum-x/inlet cosine is negative at 96% of balanced logging points. These observations support persistent gradient-direction conflict during Adam and weight saturation. They do not show that either effect continued through L-BFGS or uniquely caused the field error. Sampling, output scaling, optimizer time, spectral bias, the composite loss landscape, and reference error remain alternative or interacting explanations.
 
 The defensible finding is therefore:
 
@@ -210,13 +211,13 @@ The defensible finding is therefore:
 
 ![P1 reference accuracy and convergence](project3_results/figures/p1_reference.png)
 
-P1 displays the $Re=40$ reference speed and the implemented stopping and endpoint-flux diagnostics. The near-zero endpoint imbalance is partly a consequence of the outlet rescaling and should not be interpreted as independent local conservation. The 1.37% 16-versus-24-grid difference and the independent implementation tests provide limited numerical evidence, while the physical-validation concerns in Section 4 remain open.
+P1 displays the $Re=40$ reference speed and the implemented stopping and endpoint-flux diagnostics. The near-zero endpoint imbalance is partly a consequence of the outlet rescaling and should not be interpreted as independent local conservation. The right-hand panel adds the external $Re=20$ DFG comparison: the LBM-to-benchmark ratios are 1.072 for drag and 1.063 for pressure difference. The 1.37% 16-versus-24-grid difference, implementation tests, and DFG comparison provide limited numerical evidence, while the mismatched outlet and boundary discretization prevent this from being an exact benchmark validation.
 
 #### P2 — Loss and gradient diagnostics
 
 ![P2 loss, gradient, weight, and alignment histories](project3_results/figures/p2_training_diagnostics.png)
 
-P2 uses the fixed representative $Re=40$, seed-0 vanilla and balanced runs. It shows Adam histories only. The minimum cosine is an instantaneous worst pair among 15 component pairs; it is not a persistence statistic. Raw production histories are not committed, so the saved figure and summary cannot be fully regenerated from this checkout.
+P2 uses the fixed representative $Re=40$, seed-0 vanilla and balanced runs. It shows all six unweighted losses, all six weighted parameter-gradient norms, the largest-to-smallest weighted-gradient ratio, the six adaptive weights, and the complete set of 15 pairwise gradient-cosine histories. The full cosine heatmaps distinguish persistent conflict from a single worst event: the continuity/inlet cosine is negative in 90% of the logged vanilla points and 97% of the balanced points, while the momentum-x/inlet cosine is negative in 96% of the balanced points. Balancing reduces the typical magnitude spread, but it does not remove the direction conflicts and drives some weights to the lower bound. These histories cover Adam only; they do not diagnose the subsequent L-BFGS phase.
 
 #### P3 — Error versus Reynolds number
 
@@ -228,7 +229,7 @@ P3 shows the median and observed three-seed range, not a confidence interval. Va
 
 ![P4 spatial and spectral wake error](project3_results/figures/p4_error_location.png)
 
-P4 uses $Re=40$, seed 0. The maps show large errors in the accelerated shear layers and downstream flow; the balanced error is broader and larger. The two maps use separate automatic color scales, so their colors are not directly comparable. The lower panels are the magnitude of a two-dimensional FFT of wake error speed, with masked values replaced by zero and transverse-frequency magnitudes averaged. They are spatial diagnostic summaries, not temporal spectra or a controlled proof of spectral bias.
+P4 uses $Re=40$, seed 0. The two maps now share one fixed color scale, so the broader and larger balanced error can be compared directly with vanilla. The spectrum is computed over $x/D\ge2.75$ and $0.25\le y/D\le3.85$: each streamwise error row is mean-detrended, multiplied by a Hann window, transformed along $x$, and then averaged across $y$. The balanced run has more wake-error power, especially at low streamwise spatial frequencies. This is a spatial error spectrum, not a temporal spectrum or proof that spectral bias caused the failure.
 
 #### P5 — Cost
 
@@ -278,6 +279,8 @@ The standalone one-page version is available in [`Leixin_Ma_Recommendation_Memo.
 
 The minimal experiment chosen is a barebones fluid mechanics problem that does not encapsulate the complexities of 3D flow or fluid-structure interaction. Therefore, several assumptions were needed for this PINN analysis. The largest assumption is that the 2D fixed cylinder in flow is an adequate representation of fluid dynamics, and successes or failures with analyzing this flow can be extrapolated to more complicated scenarios given more training data and time. Another assumption is that the addition of structural mechanics, along with the interaction between those structural mechanics and fluid mechanics, is simply another layer of physics that a more refined PINN can handle while keeping the underlying theory and structure of the PINN used for the 2D fixed cylinder in flow. This leads to the largest limitation of this experiment: the findings are only as relevant as the correlation between the simplified experiment and more complicated experiments. More research would be required to find how transferrable this experiment is to more complex scenarios.
 
+The numerical conclusions also remain conditional on a provisional LBM reference. The $Re=20$ DFG comparison supports plausibility but does not exactly match the outlet or cylinder discretization. The gradient-direction histories cover Adam rather than L-BFGS, and P4 is a spatial error diagnostic rather than evidence that spectral bias caused the failure.
+
 ## Appendix A. Reproducibility and evidence record
 
 The implementation, configuration, commands, and primary tests are documented in [`PROJECT3_README.md`](PROJECT3_README.md). The literature basis is documented in [`Project_3_Literature_Review.md`](Project_3_Literature_Review.md).
@@ -288,7 +291,7 @@ The merged independent reviews are:
 - [`reviews/evidence_and_reporting_audit.md`](reviews/evidence_and_reporting_audit.md): result arithmetic, metric definitions, provenance, and claim limits;
 - [`reviews/meshodenet_vs_pinn.md`](reviews/meshodenet_vs_pinn.md): measured PINN costs versus an explicitly hypothetical MeshODENet-style fluid adaptation.
 
-The independent reference-validation suite reports all 16 tests passing in its documented CPU environment. These tests establish implementation properties, not complete physical validation. The relevant commands are:
+In the current analysis environment, 17 tests passed and two PyTorch-dependent checks were skipped because PyTorch was not installed in that lightweight environment. These tests establish implementation and regeneration properties, not complete physical validation. The relevant commands are:
 
 ```powershell
 python -m unittest tests.test_project3_pinn -v
@@ -296,7 +299,7 @@ python -m unittest tests.test_reference_solver_validation -v
 python reviews/check_reference_fields.py
 ```
 
-The committed `project3_results/analysis/summary.csv`, `decision.json`, reference metadata, and figures support the arithmetic in this report. The missing production run directories prevent a fresh end-to-end regeneration of every result from the repository alone.
+The saved `project3_results/analysis/summary.csv`, `decision.json`, `lbm_external_validation.json`, reference metadata, production run histories and metrics, representative evaluation fields, and figures provide the machine-readable record used by this report.
 
 ## Appendix B. References
 
@@ -304,3 +307,4 @@ The committed `project3_results/analysis/summary.csv`, `decision.json`, referenc
 2. S. Wang, Y. Teng, and P. Perdikaris, “Understanding and mitigating gradient pathologies in physics-informed neural networks,” 2020. [arXiv:2001.04536](https://arxiv.org/abs/2001.04536)
 3. A. Farea, S. Khan, R. Daryani, E. C. Ersan, and M. S. Celebi, “Learning Fluid-Structure Interaction with Physics-Informed Machine Learning and Immersed Boundary Methods,” 2025. [arXiv:2505.18565](https://arxiv.org/abs/2505.18565)
 4. Y. Ren, “Project 3: PINN/PINO in the Field,” *An Introduction to Optimization for Mechanical Engineers*, 2026. [Course project requirements](https://designinformaticslab.github.io/DesignOptimization2025/project3.html)
+5. M. Schäfer and S. Turek, “DFG benchmark 2D-1: steady cylinder flow at $Re=20$,” *DFG Flow Benchmarking*. [Official benchmark values and boundary conditions](https://wwwold.mathematik.tu-dortmund.de/~featflow/en/benchmarks/cfdbenchmarking/flow/dfg_benchmark1_re20.html)

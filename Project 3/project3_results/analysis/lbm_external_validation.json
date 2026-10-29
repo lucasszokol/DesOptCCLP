@@ -1,0 +1,23 @@
+{
+  "benchmark": "DFG 2D-1 steady cylinder, Re=20",
+  "source": "https://wwwold.mathematik.tu-dortmund.de/~featflow/en/benchmarks/cfdbenchmarking/flow/dfg_benchmark1_re20.html",
+  "geometry_scale_factor": 10.0,
+  "geometry_and_inlet_match_after_nondimensionalization": true,
+  "outlet_condition_match": false,
+  "outlet_note": "The DFG benchmark uses a do-nothing traction outlet; this LBM reference uses a rescaled developed-velocity outlet.",
+  "drag_coefficient": {
+    "lbm": 5.983921181987082,
+    "benchmark": 5.57953523384,
+    "relative_difference": 0.0724766367088199
+  },
+  "pressure_difference": {
+    "lbm_nondimensional": 3.1229407012790307,
+    "benchmark_dimensional": 0.11752016697,
+    "benchmark_nondimensional": 2.9380041742499996,
+    "relative_difference": 0.06294631187045227,
+    "lbm_sample_y": 1.9878787878787878,
+    "lbm_front_x": 1.5,
+    "lbm_rear_x": 2.5
+  },
+  "interpretation": "Both quantities are within 10% of the official values. This supports physical plausibility but is not an exact validation because the outlet conditions and boundary discretizations differ."
+}

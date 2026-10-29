@@ -4,6 +4,8 @@ Reviewer: Kellen Worthington / Teammate 1. October 26, 2026 (America/Phoenix).
 
 **Decision: FAIL the full reference-adequacy gate on current evidence.** This is a failure to establish an independently validated incompressible reference, not a finding that every operation is incorrect. Core D2Q9 operations pass implementation checks, both stored Re = 10 runs satisfy the programmed stopping rule, and the 2.41% comparison reproduces. However, enforced endpoint volume balance conceals a density-weighted flux mismatch. Local incompressibility, temporal stationarity of density/pressure/forces, curved-boundary accuracy, and external drag accuracy are not established. Treat the fields as provisional.
 
+**October 28 follow-up:** The current project now includes the production \(Re=20\) field and an automated comparison with the official DFG 2D-1 benchmark. The LBM gives \(C_D=5.9839\) versus 5.5795 (7.25% high) and nondimensional front-to-rear pressure difference 3.1229 versus 2.9380 (6.29% high). This changes the external evidence from absent to a limited plausibility check. It does not reverse the full-gate decision because the DFG case uses a do-nothing traction outlet while this LBM uses a rescaled velocity outlet, and the true-circle boundary is represented by stair-step bounce-back. The machine-readable comparison is in project3_results/analysis/lbm_external_validation.json.
+
 ## 1. Scope and adequacy findings
 
 Source of truth: main at commit **713111f54fe2d821ca19892394a7b7a276676bf2**. Source and stored-output claims refer to that immutable snapshot. Production source, reports, configurations, and outputs were not edited.
@@ -186,7 +188,7 @@ The stored recirculation lengths, 0.1875D fine and 0.125D coarse, are distances 
 | --- | --- | --- |
 | Perumal et al. (2012), circular-cylinder validation, Table 1 [2] | Re = 10 C_D = 3.21; H/D = 8 configuration | Weaker confinement than our H/D = 4.1 parabolic channel; not a matched acceptance target. |
 | Yousefifard et al. (2013), section 4/Table 1 [3] | Own Re = 10 wake lengths 0.260D, 0.262D; uniform inlet, H/D = 10, long domain | A short attached bubble of order 0.2D is plausible. Different confinement/profile prevent quantitative validation of our 0.230D. |
-| Official DFG 2D-1 benchmark [4] | Same nondimensional geometry, Re = 20: C_D = 5.57953523384, C_L = 0.010618948146 | Strong future solver cross-check, with do-nothing traction outlet rather than our rescaled velocity condition. Not a Re = 10 benchmark. |
+| Official DFG 2D-1 benchmark [4] | Same nondimensional geometry, Re = 20: C_D = 5.57953523384, C_L = 0.010618948146, pressure difference = 0.11752016697 | The follow-up LBM comparison is 7.25% high in drag and 6.29% high in nondimensional pressure difference. This supports plausibility, with do-nothing traction outlet rather than our rescaled velocity condition. |
 
 No retrieved source supplies matched Re = 10 drag/wake truth for the exact current boundaries. C_D near nine remains **unvalidated**; comparison with weakly confined/unconfined drag near three alone does not disprove it. The local inlet speed at y = 2 is 1.4991 times the mean; using that normalization changes C_D by a factor about 2.247 and also changes the associated Re. This illustrates why conventions cannot be mixed, not a correction that makes different cases equivalent.
 
@@ -291,6 +293,6 @@ This follow-up resolves the missing-test-dependency limitation. It does not reso
 
 [3] M. Yousefifard, P. Ghadimi, R. Zamanian, *Unstructured Grid Solutions for Incompressible Laminar Flow over a Circular Cylinder Using a Particular Finite Volume-Finite Element Method*, Journal of Engineering (2013), 795237, DOI 10.1155/2013/795237. Sections 4-5/Table 1 provide geometry, inlet, and own Re = 10 wake results. [Publisher full text](https://onlinelibrary.wiley.com/doi/10.1155/2013/795237). Its cited Ding results are not represented as separately read primary evidence.
 
-[4] TU Dortmund/FEATFLOW, *DFG flow around cylinder benchmark 2D-1, laminar case (Re = 20)*. [Official geometry, conditions, normalization and reference values](https://wwwold.mathematik.tu-dortmund.de/~featflow/en/benchmarks/cfdbenchmarking/flow/dfg_benchmark1_re20.html). A future matched-geometry check, not published Re = 10 truth.
+[4] TU Dortmund/FEATFLOW, *DFG flow around cylinder benchmark 2D-1, laminar case (Re = 20)*. [Official geometry, conditions, normalization and reference values](https://wwwold.mathematik.tu-dortmund.de/~featflow/en/benchmarks/cfdbenchmarking/flow/dfg_benchmark1_re20.html). Used for the limited current Re = 20 comparison; the outlet condition remains unmatched and it is not published Re = 10 truth.
 
 Accessed October 26, 2026 local time. Mismatched 3D finite-cylinder studies and secondary summaries surfaced in searches but were not used as validation evidence.

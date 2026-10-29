@@ -12,17 +12,17 @@
 
 **The committed summary records a negative performance result for this balancing implementation:** at Re=40, median relative velocity error rises from 0.22384254 to 0.72767383, a reduction of **−225.0829%** (error increases by 225.0829%, to 3.250829 times vanilla). The existing combined no-slip metric and divergence also worsen. This arithmetic is independently reproducible from the committed CSV. It does not establish a unique optimization mechanism or independently validated CFD accuracy.
 
-**Independent physical reference adequacy remains unresolved.** The code's adequacy flags pass its stopping, endpoint-volume-balance, and grid-disagreement checks. These are narrower than external validation and local conservation. Do not equate `references_adequate: true` with all scientific validation concerns being resolved.
+**Independent physical reference adequacy remains unresolved, although external plausibility evidence has improved.** The code's adequacy flags pass its stopping, endpoint-volume-balance, and grid-disagreement checks. The new DFG 2D-1 comparison places the Re=20 drag and pressure difference within 7.25% of official values, but the outlet and cylinder discretizations differ. Do not equate `references_adequate: true` with all scientific validation concerns being resolved.
 
 Sources inspected, relative to `Project 3/`:
 
 - `TEAMMATE_PROMPTS.md`, `PROJECT3_README.md`, `Project_3_Report.md`, `Project_3_Literature_Review.md`, `Leixin_Ma_Recommendation_Memo.md`, and `Leixin_Ma_Feedback_Email.md`.
 - `project3_pinn/{config,geometry,lbm,pinn,analysis,cli}.py`, `tests/test_project3_pinn.py`, and `build_project3_notebook.py`.
-- `project3_results/experiment_config.json`, `analysis/summary.csv`, `analysis/decision.json`, `analysis/lbm_grid_refinement.json`, and saved reference JSON/NPZ files.
-- `Project_3_Report.ipynb` structure: one Markdown cell, no executed cells or output blocks. This is a report copy, not execution evidence.
+- `project3_results/experiment_config.json`, `analysis/summary.csv`, `analysis/decision.json`, `analysis/lbm_grid_refinement.json`, `analysis/lbm_external_validation.json`, saved reference JSON/NPZ files, all production histories/metric JSONs, and the two representative Re=40, seed-0 evaluation-field archives used by P4.
+- `Project_3_Report.ipynb` structure: Markdown report cells plus one command cell, with no executed outputs. This is a report copy, not execution evidence.
 - [Teammate 1's open reference-validation PR #3](https://github.com/lucasszokol/DesOptCCLP/pull/3), reviewed as an unmerged teammate finding. Its audited main is `713111f54fe2d821ca19892394a7b7a276676bf2`, not this review's snapshot. The intervening `lbm.py` changes concern refinement selection and reporting; core solver/stopping logic is unchanged. Do not transplant the older 8-versus-16-node refinement conclusion onto the newer 16-versus-24-node comparison.
 
-The CSV contains 27 unique `(Re, method, seed)` entries: Re=10/20/40, vanilla/balanced/supervised, seeds 0/1/2. This verifies summary coverage, **not** every run's completion provenance. Production `runs/` histories, per-run configurations, checkpoints, field predictions, and failure records are absent from this checkout. Quick-mode run files exist but cannot substitute for production evidence. No production training or CFD sweep was launched during this audit. Interview claims remain team-attributed; no consent record or original transcript was independently verified.
+The CSV contains 27 unique `(Re, method, seed)` entries: Re=10/20/40, vanilla/balanced/supervised, seeds 0/1/2. The current project includes every run's history, evaluation JSON, and training JSON, plus the two representative field archives needed to regenerate P4. Large checkpoints and the other 25 field archives remain excluded, so exact retraining state and arbitrary new field plots are not preserved. No production training or CFD sweep was launched during this audit. Interview claims remain team-attributed; no consent record or original transcript was independently verified.
 
 The supplied October 26 draft was a useful proposed protocol. This revision replaces its outdated “all results pending” status, preserves useful proposed checks, and separates them from implemented measurements. New criteria proposed here are retrospective suggestions or future-run protocol; they were not frozen before these outcomes were inspected.
 
@@ -35,15 +35,15 @@ Statuses mean **verified artifact/code fact**, **reported but not independently 
 | P1 steady reference | JSON histories and stopping implementation for all three Re | Four consecutive checks concern changes in **u only**. Stationarity of v, density, pressure, and drag remains unverified. |
 | P1 conservation | Endpoint metric and saved velocity fields | Endpoint volume balance is imposed by the outlet. Independent local and density-weighted conservation remains unresolved. |
 | P1 grid adequacy | Re40 16/24-node comparison: 1.3702575%; configured tolerance 5% | Passes the implemented disagreement criterion; not absolute fine-grid error or matched external validation. No Re20 refinement artifact was found. |
-| P1 physical plausibility | Recorded drag/wake; PR #3 | Teammate 1 finds full independent adequacy unestablished. Matched boundary/geometry benchmarks and sensitivity checks remain needed. |
+| P1 physical plausibility | Recorded drag/wake; PR #3; DFG 2D-1 comparison | Re20 drag is 7.25% high and nondimensional pressure difference is 6.29% high. This supports plausibility, but the outlet and cylinder discretizations are not exactly matched. |
 | P1 costs | Reference runtime in JSON | Report machine/workload context; initialization is not fully included in the current solver timer. |
-| P2 losses, norms, cosines, weights | Logging source and summary statistics | Production histories are missing here. Cannot independently verify persistent conflicts, saturation duration, or matched training trajectories. |
+| P2 losses, norms, cosines, weights | Logging source and all 27 production histories | The revised figure shows six losses, six weighted norms, magnitude ratio, adaptive weights, and all 15 cosine histories. For Re40 seed 0, continuity/inlet is negative at 90% of vanilla and 97% of balanced logging points. Histories cover Adam, not L-BFGS. |
 | P3 error and seed variation | 27 summary rows, three seeds per cell | Arithmetic and coverage can be checked; raw prediction/error regeneration is blocked by missing production artifacts. |
 | P3 capacity control | Same architecture in source; low supervised velocity error | Supports ability to fit reference velocity with labels. Does not prove physical boundary accuracy or isolate optimization from every other loss/sampling issue. |
-| P4 spatial/wake analysis | Figure-generation source and saved figures | Raw production fields missing. Code uses seed 0, separately autoscaled maps, and a 2D FFT magnitude summary; proposed common scales/line spectra are not implemented. |
+| P4 spatial/wake analysis | Figure-generation source, representative seed-0 fields, and regenerated figure | Re40 vanilla/balanced maps now share one scale. The lower plot is a common streamwise error-power spectrum after row detrending and Hann windowing over the stated wake region. It remains a spatial diagnostic, not proof of spectral bias. |
 | P5 training/inference/memory | Summary timings, timer source | No separate optimizer-phase timings or peak-memory fields; inference is a synchronized single pass, not a warmed repeated benchmark. |
 | Decision integrity | CSV, decision JSON, analysis source | Error threshold fails. Decision code does not enforce paired seed completeness, no-slip, or comprehensive integrity checks. |
-| Reproducibility | Source, configuration, tests, reference artifacts | Production history/configuration provenance and initial failures/restarts cannot be reconstructed from the summary alone. |
+| Reproducibility | Source, configuration, tests, reference artifacts, run histories/metrics, representative P4 fields | P1–P5 regenerate from saved results. Large checkpoints, initial failures/restarts, and nonrepresentative field archives are not retained. |
 
 ### Reference diagnostics and threshold provenance
 

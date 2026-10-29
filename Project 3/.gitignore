@@ -4,6 +4,11 @@ __pycache__/
 .venv*/
 tmp/
 
-# Production runs can be regenerated and may become large.
-project3_results/runs/
+# Keep compact histories, metrics, and evaluation fields for figure regeneration.
+# Exclude only large/restart-specific checkpoints.
+project3_results/runs/**/model.pt
+project3_results/runs/**/in_progress.pt
+project3_results/runs/**/evaluation_fields.npz
+!project3_results/runs/re40_vanilla_seed0/evaluation_fields.npz
+!project3_results/runs/re40_balanced_seed0/evaluation_fields.npz
 

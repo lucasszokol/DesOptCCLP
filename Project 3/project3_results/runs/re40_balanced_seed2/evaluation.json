@@ -1,0 +1,13 @@
+{
+  "method": "balanced",
+  "reynolds": 40,
+  "seed": 2,
+  "velocity_relative_l2": 0.7276738307206625,
+  "pressure_relative_l2": 0.8701302399914047,
+  "divergence_rms": 0.10449162870645523,
+  "wall_velocity_rms": 0.034054916352033615,
+  "drag_coefficient": 0.24914497137069702,
+  "recirculation_length": 1.5168485641479492,
+  "inference_seconds": 0.007944599994516466,
+  "evaluation_points": 22745
+}

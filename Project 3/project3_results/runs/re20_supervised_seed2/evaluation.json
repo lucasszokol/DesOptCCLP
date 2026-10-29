@@ -1,0 +1,13 @@
+{
+  "method": "supervised",
+  "reynolds": 20,
+  "seed": 2,
+  "velocity_relative_l2": 0.005727292899887728,
+  "pressure_relative_l2": 0.017538926799762388,
+  "divergence_rms": 0.04181463643908501,
+  "wall_velocity_rms": 0.062250975519418716,
+  "drag_coefficient": 5.257510662078857,
+  "recirculation_length": 0.8896007537841797,
+  "inference_seconds": 0.002613600001495797,
+  "evaluation_points": 22745
+}

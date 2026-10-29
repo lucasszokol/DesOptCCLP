@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from project3_pinn.config import ExperimentConfig, LBMConfig, PINNConfig
-from project3_pinn.analysis import generate_analysis
+from project3_pinn.analysis import _external_lbm_validation, generate_analysis
 from project3_pinn.geometry import LOSS_NAMES, is_inside_cylinder, sample_training_points
 from project3_pinn.lbm import equilibrium, run_lbm
 from project3_pinn.pinn import gradient_diagnostics, train_model, update_adaptive_weights
@@ -92,6 +92,49 @@ class DiagnosticTests(unittest.TestCase):
 
 
 class AnalysisTests(unittest.TestCase):
+    def test_external_lbm_validation_uses_dfg_pressure_scaling(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            config = ExperimentConfig(output_dir=root)
+            reference_dir = root / "reference"
+            reference_dir.mkdir(parents=True)
+            x = np.array([0.0, 1.5, 2.0, 2.5, 22.0])
+            y = np.array([0.0, 2.0, 4.1])
+            solid = np.zeros((3, 5), dtype=bool)
+            solid[1, 2] = True
+            pressure = np.zeros((3, 5))
+            benchmark_pressure = 0.11752016697 / 0.2**2
+            pressure[1, 1] = benchmark_pressure
+            np.savez_compressed(
+                reference_dir / "cylinder_re20.npz",
+                x=x,
+                y=y,
+                u=np.zeros_like(pressure),
+                v=np.zeros_like(pressure),
+                p=pressure,
+                solid=solid,
+            )
+            (reference_dir / "cylinder_re20.json").write_text(
+                json.dumps({"drag_coefficient": 5.57953523384}), encoding="utf-8"
+            )
+
+            result = _external_lbm_validation(config)
+
+            self.assertIsNotNone(result)
+            self.assertAlmostEqual(result["drag_coefficient"]["relative_difference"], 0.0)
+            self.assertAlmostEqual(result["pressure_difference"]["relative_difference"], 0.0)
+            self.assertFalse(result["outlet_condition_match"])
+            self.assertTrue((root / "analysis" / "lbm_external_validation.json").exists())
+
+    def test_saved_lbm_drag_and_pressure_are_within_ten_percent_of_dfg(self):
+        result = _external_lbm_validation(
+            ExperimentConfig(output_dir=Path("project3_results"))
+        )
+        if result is None:
+            self.skipTest("Saved Re=20 production reference is not present")
+        self.assertLess(result["drag_coefficient"]["relative_difference"], 0.10)
+        self.assertLess(result["pressure_difference"]["relative_difference"], 0.10)
+
     def test_all_five_report_figures_regenerate_from_saved_results(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -72,6 +72,7 @@ python -m unittest tests.test_project3_pinn -v
 - `project3_results/figures/`: required P1–P5 diagnostic figures.
 - `project3_results/analysis/summary.csv`: all run metrics.
 - `project3_results/analysis/decision.json`: the predeclared 25% improvement decision.
+- `project3_results/analysis/lbm_external_validation.json`: the Re=20 comparison with the official DFG 2D-1 drag and pressure-difference values.
 
 Long runs save `in_progress.pt` every 1,000 Adam steps and update `history.csv` incrementally. Repeating the same command without `--force` resumes an interrupted run. `failure.json` records numerical or software failures; failed runs are never silently restarted.
 

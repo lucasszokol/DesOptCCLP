@@ -1,0 +1,71 @@
+{
+  "method": "supervised",
+  "reynolds": 40,
+  "seed": 0,
+  "training_seconds": 79.34216659999947,
+  "device": "cuda",
+  "cuda_name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "final_weights": {
+    "continuity": 1.0,
+    "momentum_x": 1.0,
+    "momentum_y": 1.0,
+    "inlet": 1.0,
+    "walls": 1.0,
+    "outlet": 1.0
+  },
+  "config": {
+    "reynolds_numbers": [
+      10,
+      20,
+      40
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "methods": [
+      "vanilla",
+      "balanced",
+      "supervised"
+    ],
+    "geometry": {
+      "length": 22.0,
+      "height": 4.1,
+      "cylinder_x": 2.0,
+      "cylinder_y": 2.0,
+      "cylinder_radius": 0.5
+    },
+    "lbm": {
+      "nodes_per_diameter": 16,
+      "lattice_mean_velocity": 0.05,
+      "max_steps": 30000,
+      "min_steps": 2000,
+      "check_every": 250,
+      "convergence_tolerance": 0.001,
+      "consecutive_convergence_checks": 4,
+      "mass_imbalance_tolerance": 0.01,
+      "grid_difference_tolerance": 0.05
+    },
+    "pinn": {
+      "hidden_layers": 5,
+      "hidden_width": 64,
+      "interior_pool": 30000,
+      "interior_batch": 4096,
+      "boundary_points": 768,
+      "adam_steps": 12000,
+      "adam_learning_rate": 0.001,
+      "lbfgs_steps": 300,
+      "log_every": 100,
+      "balance_every": 100,
+      "checkpoint_every": 1000,
+      "weight_ema": 0.9,
+      "min_weight": 0.1,
+      "max_weight": 10.0,
+      "supervised_points": 20000,
+      "evaluation_batch": 16384,
+      "dtype": "float32"
+    },
+    "output_dir": "project3_results"
+  }
+}
