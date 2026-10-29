@@ -143,10 +143,47 @@ The mechanism is more informative than the aggregate failure. At \(Re=40\), bala
 
 ## 8. Recommendation to Professor Ma
 
+# Recommendation memo
+
+**To:** Professor Leixin Ma  
+**From:** Team Optimus Prime  
+**Subject:** Diagnosing loss-based PINN convergence on a forward-flow precursor
+
+## Decision addressed
+
+You told us that standard PINNs were difficult to converge for forward multiphysics simulations and that supervised black-box models performed better. We built a controlled fixed-cylinder experiment to determine whether unequal optimization of equation and boundary losses is one cause.
+
+## Experiment
+
+We compare an equal-weight PINN with a component-balanced PINN for steady incompressible flow at Reynolds numbers 10, 20, and 40. The balanced version adjusts six individual losses using their parameter-gradient norms. Both methods use identical networks, points, seeds, and training budgets. A conventional lattice-Boltzmann solution measures actual field error, and a supervised copy of the same network tests whether it has enough representation capacity.
+
+## Result
+
+- Vanilla median velocity error at \(Re=40\): **22.4%**
+- Balanced median velocity error at \(Re=40\): **72.8%**
+- Supervised-control median velocity error at \(Re=40\): **0.56%**
+- Relative balanced improvement: **-225%**; balancing made the error about 3.25 times larger
+- Predeclared 25% threshold met: **No**
+- Evidence supports optimization rather than capacity failure: **Yes**
+
+All 27 network runs and all reference checks completed without a rejected seed. Magnitude balancing reduced the effective gradient-norm ratio, but gradient directions remained strongly opposed (minimum cosine near -0.995). It also worsened divergence and no-slip errors. The failure is therefore not explained by gradient magnitude alone.
+
+## Recommendation
+
+Do not add more equally weighted PDE-residual terms to the current forward-solver approach. Prioritize MeshODENet-style supervised graph learning for repeated design evaluations. If physics is added, use selective conservation or interface regularizers around supervised data rather than a fully residual-trained solver.
+
+For a follow-up PINN diagnosis, test a method that addresses gradient direction rather than only magnitude—for example gradient projection, conflict-aware multi-objective optimization, or a second-order method. Retain the conventional reference and supervised-capacity control.
+
+In either case, we do not recommend a per-instance PINN as a direct replacement for a mature forward solver. For repeated design optimization, a graph surrogate or neural operator has the more appropriate amortized structure.
+
 A PINN that solves one fixed forward instance should not be presented as a replacement for mature FEA or finite-volume solvers. Even successful balancing must include its training cost. For repeated design evaluations, a PINO, graph neural network, or MeshODENet-style surrogate remains the better architectural target.
 
 The practical next experiment would retain supervised trajectory learning while adding selected conservation, equilibrium, or interface penalties. Full moving-boundary FSI should be attempted only after the fixed-cylinder losses and gradients can be controlled. Recent Eulerian–Lagrangian PINN work provides one candidate architecture for that extension. [FSI study](https://arxiv.org/abs/2505.18565)
 
-## 9. Reproducibility
+## 9. Assumptions and Limitations
+
+The minimal experiment chosen is a barebones fluid mechanics problem that does not encapsulate the complexities of 3D flow or fluid-structure interaction. Therefore, several assumptions were needed for this PINN analysis. The largest assumption is that the 2D fixed cylinder in flow is an adequate representation of fluid dynamics, and successes or failures with analyzing this flow can be extrapolated to more complicated scenarios given more training data and time. Another assumption is that the addition of structural mechanics, along with the interaction between those structural mechanics and fluid mechanics, is simply another layer of physics that a more refined PINN can handle while keeping the underlying theory and structure of the PINN used for the 2D fixed cylinder in flow. This leads to the largest limitation of this experiment: the findings are only as relevant as the correlation between the simplified experiment and more complicated experiments. More research would be required to find how transferrable this experiment is to more complex scenarios.
+
+## 10. Reproducibility
 
 The implementation, commands, outputs, and tests are documented in [`PROJECT3_README.md`](PROJECT3_README.md). The literature basis and distinction between Professor Ma's physics-guided methods are documented in [`Project_3_Literature_Review.md`](Project_3_Literature_Review.md).
