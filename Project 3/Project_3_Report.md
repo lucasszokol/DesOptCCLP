@@ -1,6 +1,6 @@
 # Project 3: Diagnosing PINN Convergence for Cylinder Flow
 
-**Team Optimus Prime**
+**Team Optimus Prime**<br>
 **Path B: Diagnosis, with an unsuccessful attempted remedy**
 
 ## Executive summary
@@ -13,19 +13,68 @@ We then tested component-wise adaptive loss balancing as a remedy. It partially 
 
 The error comparison is conditional on the selected lattice-Boltzmann (LBM) reference. The references pass the implemented stopping, endpoint volume-flux, and grid-disagreement checks, but an independent audit found unresolved conservation, geometry, stationarity, and external-validation concerns. They should be treated as provisional numerical comparison fields, not validated CFD ground truth.
 
-## 1. Outreach and problem brief
+## 1. Outreach log
 
-Our team interviewed Professor Leixin Ma at Arizona State University about the cost of forward structural and fluid–structure simulation. According to the team's interview notes, her work uses finite-element and finite-volume solvers on models with millions of nodes; individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
+Our team conducted researcher outreach by email, beginning with Dr. Jeonglae Kim. A scheduling conflict led Dr. Kim to recommend Professor Leixin Ma, whom we subsequently interviewed by Zoom. The full outreach sequence, including the decline and non-response, is recorded below.
 
-The public repository does not currently record the outreach date and method, whether Professor Ma approved public attribution, or whether she reviewed this problem brief. The team must add those facts before submission rather than infer them.
+| Date | Contact and method | Outcome |
+|---|---|---|
+| October 12, 2026 | Emailed Dr. Jeonglae Kim | Initial outreach |
+| October 15, 2026 | Second response from Dr. Kim | He reported a scheduling conflict and recommended contacting Professor Leixin Ma |
+| October 16, 2026 | Emailed Professor Leixin Ma and Dr. Pedro Peralta | Dr. Peralta did not respond; Professor Ma responded the same day and confirmed a Zoom appointment |
+| October 19, 2026 | Zoom interview with Professor Ma | Discussed computational cost, FSI, prior PINN limitations, and machine-learning alternatives |
+| October 19, 2026 | Contacted Vivian Oletty in Professor Ma's group | Requested additional guidance on a suitable project problem |
+| October 20, 2026 | Follow-up interview with Vivian Oletty | Confirmed the problem brief and identified fixed-cylinder flow as the appropriate starting case |
 
-## 2. Scientific motivation
+During the interview, Professor Ma explained that large-scale finite-element and finite-volume simulations, particularly fluid–structure interaction problems, can require millions of computational nodes and several hours even on supercomputers. She also described PINN convergence and accuracy problems for systems involving multiple PDEs and geometric nonlinearities.
 
-High-fidelity fluid–structure interaction combines Navier–Stokes flow, nonlinear structural dynamics, moving interfaces, and sometimes remeshing or turbulence closures. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
+Vivian Oletty confirmed that stationary-cylinder flow was a suitable first problem, with moving-cylinder FSI as a possible extension. She also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
+
+### Selected interview questions and answers
+
+| Question | Interview response |
+|---|---|
+| What computational challenges limit conventional numerical solvers? | Professor Ma explained that large-scale finite-element and finite-volume simulations, especially FSI, can require millions of nodes and several hours even on supercomputers. |
+| Have PINNs successfully addressed these computational challenges? | Professor Ma indicated that PINNs have been investigated but often experience convergence and accuracy difficulties for multiple PDEs and geometric nonlinearities. |
+| What physical problem would provide a suitable starting point? | Vivian Oletty identified flow around a fixed cylinder, with a moving cylinder as a possible extension. |
+| How long might a simulation of the simplified problem take? | Vivian's meeting notes indicate approximately one to two hours, potentially less than one hour depending on the setup. |
+| What alternative machine-learning approaches have been explored? | Vivian discussed MeshParamNet, graph neural networks, FFT-based representations, and supervised finite-element data for structural-deformation prediction. |
+
+The outreach record establishes the contact method, referral, interviews, decline, non-response, and problem-brief confirmation. The repository still does not document whether Professor Ma approved public attribution or whether the final recommendation memo has been delivered.
+
+The teammate's standalone outreach and interview record is available in [`outreach_interview_problem_brief.md`](outreach_interview_problem_brief.md).
+
+## 2. Problem brief
+
+### Scientific problem and real-world value
+
+According to the team's interview notes, Professor Ma's work uses finite-element and finite-volume solvers on models with millions of nodes; individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
+
+High-fidelity fluid–structure interaction combines Navier–Stokes flow, nonlinear structural dynamics, moving interfaces, and sometimes remeshing or turbulence closures. The governing physics therefore include fluid momentum and incompressibility, structural dynamics, and kinematic and dynamic coupling conditions at the fluid–structure interface. At high Reynolds numbers, turbulence approximations can introduce additional modeled physics.
+
+### Current solver, cost, and specific challenges
+
+Professor Ma reported using finite-element and finite-volume methods for structural, fluid, and coupled fluid–structure problems. The main computational difficulties are multimillion-node meshes, large structural deformation, remeshing, coupled nonlinear PDEs, and repeated forward evaluations during design optimization. Individual simulations can require hours even on ASU supercomputers, making broad design searches or parameter studies expensive. For the simplified cylinder problem, Vivian Oletty's meeting notes estimate approximately one to two hours per conventional simulation, potentially less than one hour depending on the setup.
+
+### Prior PINN, surrogate, and neural-operator experience
+
+The interview notes report that standard loss-based PINNs were difficult to converge and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
 
 MeshODENet has been demonstrated on structural mechanics problems, not on the cylinder-flow problem studied here. Therefore, this report treats it as an architectural direction for repeated design evaluations, not as a measured competitor or a demonstrated CFD solution.
 
-## 3. Minimal mathematical model
+Vivian Oletty also discussed MeshParamNet, graph neural networks, and frequency-domain representations as related supervised approaches. These alternatives use conventional-solver data and do not remove the need to validate generalization, long-term stability, and physical constraints.
+
+### Researcher review status
+
+Vivian Oletty, a researcher in Professor Ma's group, reviewed and confirmed the problem brief during the October 20, 2026 follow-up interview. She identified flow around a stationary circular cylinder as an appropriate starting point and moving-cylinder FSI as a possible extension. A separate review of the written brief by Professor Ma is not documented.
+
+## 3. Minimal case formulation
+
+### Path selection and retained difficulty
+
+We selected **Path B: Diagnosis**, with an unsuccessful attempted remedy. The goal is to reproduce the reported forward-PINN training difficulty, separate representation capacity from physics-informed training behavior, and test whether component-wise gradient-magnitude balancing fixes the problem.
+
+### PDE, domain, boundary conditions, and difficulty knob
 
 The nondimensional channel is
 
@@ -48,11 +97,17 @@ uu_x+vu_y=-p_x+\frac{1}{Re}(u_{xx}+u_{yy}),
 uv_x+vv_y=-p_y+\frac{1}{Re}(v_{xx}+v_{yy}).
 \]
 
-The inlet has a parabolic velocity profile with unit mean velocity. The channel walls and cylinder use no-slip conditions. The PINN outlet imposes \(p=0\), \(u_x=0\), and \(v_x=0\). Reynolds number \(Re\in\{10,20,40\}\) is the difficulty knob.
+The inlet has a parabolic velocity profile with unit mean velocity. The channel walls and cylinder use no-slip conditions. The PINN outlet imposes \(p=0\), \(u_x=0\), and \(v_x=0\). Reynolds number \(Re\in\{10,20,40\}\) is the difficulty knob. Because the target PDE is steady, the PINN has no physical time coordinate or initial condition. The LBM reaches the steady field through pseudo-time iteration initialized with the parabolic velocity profile throughout the fluid and unit density.
+
+### What was simplified and why the hard part remains
 
 This is not a fluid–structure interaction simulation. It removes structural dynamics, interface motion, remeshing, three-dimensional flow, turbulence, and uncertain constitutive behavior. It retains nonlinear momentum, incompressibility, an immersed no-slip boundary, competing equation and boundary losses, and increasing convective influence. This makes it a controlled precursor, not a basis for directly extrapolating quantitative conclusions to moving-boundary FSI.
 
-## 4. Conventional reference and validation status
+## 4. Experiments
+
+The experiment follows the course [P1–P5 diagnostic kit](https://designinformaticslab.github.io/DesignOptimization2025/project3.html#anchor-pinn-diagnostic-kit) and the Path B requirement to reproduce a failure and separate competing explanations with controlled comparisons.
+
+### 4.1 P1 — Conventional reference and validation status
 
 A D2Q9 LBM supplies numerical comparison fields. The solver uses BGK collision, bounce-back on the walls and stair-step cylinder, a prescribed parabolic inlet, and a developed-flow outlet that copies and rescales the penultimate-column profile to enforce the inlet volume flux. The pressure reconstructed from density is shifted so that mean outlet pressure is zero.
 
@@ -63,8 +118,8 @@ An independent reference audit reached a more limited conclusion:
 - the D2Q9 equilibrium, collision, streaming, and stationary bounce-back operations pass implementation tests;
 - the recorded endpoint volume-flux balance is imposed by the outlet and is not an independent mass-conservation check;
 - only \(u\) enters the stopping rule, so stationarity of \(v\), density, pressure, drag, and total mass was not established;
-- the saved (x)- and (y)-coordinate spacings differ by about 0.606%, and stair-step bounce-back does not establish accuracy on the true circular boundary;
-- a recomputed Re=10 section-volume-flux departure reaches about 1.05%, despite near-zero endpoint imbalance;
+- the saved \(x\)- and \(y\)-coordinate spacings differ by about 0.606%, and stair-step bounce-back does not establish accuracy on the true circular boundary;
+- a recomputed \(Re=10\) section-volume-flux departure reaches about 1.05%, despite near-zero endpoint imbalance;
 - no matched external solution establishes the absolute accuracy of the reported pressure, drag, or recirculation length.
 
 Accordingly, the reference fields are adequate for a provisional internal comparison under the team's implemented gates, but full physical reference adequacy remains unresolved. All errors below should be read as errors relative to this numerical reference.
@@ -79,7 +134,7 @@ Reported reference outputs are:
 
 The drag and recirculation values are diagnostics from the current discretization, not externally validated benchmark values.
 
-## 5. Controlled neural-network experiment
+### 4.2 Controlled neural-network design and P2 method
 
 All neural comparisons use a five-hidden-layer multilayer perceptron with 64 `tanh` neurons per layer and outputs \(u,v,p\). Coordinates are normalized internally. The production configuration uses a fixed pool of 30,000 interior points, interior batches of 4,096 points, 768 points per boundary group, 12,000 Adam steps at learning rate \(10^{-3}\), and up to 300 L-BFGS iterations. Training uses 32-bit floating point. Three seeds are run for each method and Reynolds number.
 
@@ -105,7 +160,7 @@ The supervised control uses the same architecture and optimizer budgets but fits
 
 For a fixed Reynolds number and seed, vanilla and balanced runs use the same architecture, initialization rule, point pool, stochastic batch sequence, optimizer schedule, and budget. Only the component-weighting rule changes. Logged gradient diagnostics cover Adam; the subsequent L-BFGS phase is not represented in the P2 histories.
 
-## 6. Metrics and decision rules
+### 4.3 Metrics and decision rules
 
 The primary metric is relative velocity error on the reference fluid grid,
 
@@ -121,11 +176,11 @@ The team's declared practical criterion was a 25% reduction in median \(Re=40\) 
 
 Three seeds provide a descriptive median and observed minimum–maximum range. These ranges are not confidence intervals and do not establish population-level robustness or statistical significance.
 
-## 7. Results
+### 4.4 Path B results
 
 The committed summary contains all 27 expected \((Re,\text{method},\text{seed})\) rows with finite primary error values. The production histories, per-run configurations, predictions, checkpoints, and failure records are not committed, so the complete execution and restart provenance cannot be independently reconstructed from the repository.
 
-### 7.1 Primary velocity error
+#### Primary velocity error
 
 Values are three-seed medians, with the observed seed minimum and maximum in parentheses.
 
@@ -135,7 +190,7 @@ Values are three-seed medians, with the observed seed minimum and maximum in par
 | 20 | 0.1886 (0.1260–0.2432) | 0.7005 (0.6853–0.7988) | 0.00523 (0.00497–0.00573) |
 | 40 | 0.2238 (0.2193–0.2686) | 0.7277 (0.6919–0.8537) | 0.00562 (0.00526–0.00630) |
 
-### 7.2 Was the reported PINN difficulty reproduced?
+#### Was the reported PINN difficulty reproduced?
 
 Yes, in a limited comparative sense. The vanilla median error rises monotonically from 17.1% to 22.4% as Reynolds number increases. Every paired seed also has higher vanilla error at \(Re=40\) than at \(Re=10\). The supervised control fits the same reference velocity labels much more closely at all three Reynolds numbers.
 
@@ -143,7 +198,7 @@ This reproduces poor physics-informed field accuracy under the specified archite
 
 At \(Re=40\), the supervised velocity error is about forty times smaller than the vanilla error. This supports the ability of the architecture to fit the sampled velocity field. The conclusion must remain narrow: the supervised median no-slip component RMS is 0.0710 and its divergence RMS is 0.0603, compared with 0.0115 and 0.0412 for vanilla. It is therefore not uniformly more physically accurate.
 
-### 7.3 Did adaptive balancing solve the problem?
+#### Did adaptive balancing solve the problem?
 
 No. At \(Re=40\), the declared improvement is
 
@@ -153,43 +208,43 @@ No. At \(Re=40\), the declared improvement is
 
 The balanced model increases median velocity error by approximately 225%, increases median divergence RMS from 0.0412 to 0.1045, and increases median no-slip component RMS from 0.0115 to 0.0341. It fails both the velocity target and the no-slip guardrail.
 
-### 7.4 What mechanism is supported?
+#### What mechanism is supported?
 
 The balanced method partially accomplishes its immediate numerical purpose. In the \(Re=40\) median-error runs, the temporal median largest-to-smallest weighted component-gradient ratio is about 19.4 for vanilla and 7.2 for balanced. Nevertheless, field and boundary errors worsen. Gradient-magnitude imbalance is therefore not a sufficient explanation or remedy for the recorded failure.
 
-The minimum observed pairwise gradient cosine reaches approximately (-0.995) during logged Adam training, and several adaptive weights approach the lower bound. These observations are consistent with local gradient-direction conflict and weight saturation. They do not show that either effect persisted throughout both optimizer phases or uniquely caused the field error. Sampling, output scaling, optimizer time, spectral bias, the composite loss landscape, and reference error remain alternative or interacting explanations.
+The minimum observed pairwise gradient cosine reaches approximately \(-0.995\) during logged Adam training, and several adaptive weights approach the lower bound. These observations are consistent with local gradient-direction conflict and weight saturation. They do not show that either effect persisted throughout both optimizer phases or uniquely caused the field error. Sampling, output scaling, optimizer time, spectral bias, the composite loss landscape, and reference error remain alternative or interacting explanations.
 
 The defensible finding is therefore:
 
 > Under the tested objective and budget, inverse-gradient component weighting reduced a gradient-magnitude diagnostic but made the physical and reference-field metrics worse. Gradient-direction conflict is a follow-up hypothesis, not an experimentally verified solution.
 
-## 8. Required P1–P5 evidence
+### 4.5 P1–P5 diagnostic figures and interpretation
 
-### P1 — Conventional baseline
+#### P1 — Conventional baseline
 
 ![P1 reference accuracy and convergence](project3_results/figures/p1_reference.png)
 
 P1 displays the \(Re=40\) reference speed and the implemented stopping and endpoint-flux diagnostics. The near-zero endpoint imbalance is partly a consequence of the outlet rescaling and should not be interpreted as independent local conservation. The 1.37% 16-versus-24-grid difference and the independent implementation tests provide limited numerical evidence, while the physical-validation concerns in Section 4 remain open.
 
-### P2 — Loss and gradient diagnostics
+#### P2 — Loss and gradient diagnostics
 
 ![P2 loss, gradient, weight, and alignment histories](project3_results/figures/p2_training_diagnostics.png)
 
 P2 uses the fixed representative \(Re=40\), seed-0 vanilla and balanced runs. It shows Adam histories only. The minimum cosine is an instantaneous worst pair among 15 component pairs; it is not a persistence statistic. Raw production histories are not committed, so the saved figure and summary cannot be fully regenerated from this checkout.
 
-### P3 — Error versus Reynolds number
+#### P3 — Error versus Reynolds number
 
 ![P3 field error versus Reynolds number](project3_results/figures/p3_error_vs_reynolds.png)
 
 P3 shows the median and observed three-seed range, not a confidence interval. Vanilla error worsens with Reynolds number, balanced error is consistently much larger, and supervised label fitting remains near 0.5% relative velocity error.
 
-### P4 — Error location and spectrum
+#### P4 — Error location and spectrum
 
 ![P4 spatial and spectral wake error](project3_results/figures/p4_error_location.png)
 
 P4 uses \(Re=40\), seed 0. The maps show large errors in the accelerated shear layers and downstream flow; the balanced error is broader and larger. The two maps use separate automatic color scales, so their colors are not directly comparable. The lower panels are the magnitude of a two-dimensional FFT of wake error speed, with masked values replaced by zero and transverse-frequency magnitudes averaged. They are spatial diagnostic summaries, not temporal spectra or a controlled proof of spectral bias.
 
-### P5 — Cost
+#### P5 — Cost
 
 ![P5 training, inference, and conventional-solver cost](project3_results/figures/p5_cost.png)
 
@@ -197,11 +252,13 @@ At \(Re=40\), median recorded training times are approximately 478.4 s for vanil
 
 The neural runs used an NVIDIA RTX 4070 Laptop GPU. The LBM CPU model was not recorded. The existing timings do not separate setup, Adam, L-BFGS, or data-generation costs; inference is a synchronized single pass rather than a warmed repeated benchmark; peak memory was not recorded. Pointwise inference speed does not imply a design-sweep speedup because the PINN is retrained for each condition.
 
-## 9. Recommendation memo to Professor Ma
+## 5. Recommendation memo
 
-**To:** Professor Leixin Ma  
-**From:** Team Optimus Prime  
+**To:** Professor Leixin Ma<br>
+**From:** Team Optimus Prime<br>
 **Subject:** Diagnosing loss-based PINN convergence on a forward-flow precursor
+
+**Confidence:** We have moderate confidence in the recorded negative comparison between equal-weight and adaptively balanced training under the tested setup. We have lower confidence in the absolute CFD errors and in any unique causal explanation because the numerical reference and mechanism evidence remain incomplete.
 
 We reproduced worsening field accuracy for an equal-weight, per-instance forward PINN as Reynolds number increased. The same architecture fit numerical velocity labels much more closely, showing that label-field representation is not the primary limitation. However, inverse-gradient loss balancing made velocity, divergence, and no-slip metrics worse. It should not be adopted as a solution based on this experiment.
 
@@ -211,7 +268,9 @@ The smallest useful next PINN study is a controlled \(Re=40\) experiment that ch
 
 The standalone one-page version is available in [`Leixin_Ma_Recommendation_Memo.md`](Leixin_Ma_Recommendation_Memo.md). It should be reconciled with this qualified wording before it is sent.
 
-## 10. Assumptions and limitations
+The repository does not document whether this memo has been sent to Professor Ma or whether she has responded. The team must add the delivery date and include or summarize her response if one is received.
+
+## 6. Assumptions and limitations
 
 - **Simplified physics:** The case is steady, two-dimensional, laminar, and fixed-boundary. It omits structural dynamics, interface feedback, large deformation, remeshing, three-dimensional effects, turbulence, and uncertain closures.
 - **Transfer to Professor Ma's work:** The fixed cylinder retains nonlinear flow and competing losses, but its quantitative behavior cannot be assumed to transfer to coupled moving-boundary FSI.
@@ -222,9 +281,9 @@ The standalone one-page version is available in [`Leixin_Ma_Recommendation_Memo.
 - **Statistics:** Three seeds provide descriptive ranges only.
 - **Provenance:** Committed summaries contain 27 rows, but raw production histories and prediction fields are absent, limiting independent reconstruction.
 - **Cost:** Hardware context and timing boundaries are incomplete, and no reusable surrogate or many-query break-even experiment was performed.
-- **Interview evidence:** Claims attributed to Professor Ma come from team notes; public-attribution permission and researcher review are not documented in the repository.
+- **Interview evidence:** Claims attributed to Professor Ma come from team notes. Vivian Oletty confirmed the problem brief on October 20, 2026, but public-attribution permission and a separate review of the written brief by Professor Ma are not documented.
 
-## 11. Reproducibility and evidence record
+## Appendix A. Reproducibility and evidence record
 
 The implementation, configuration, commands, and primary tests are documented in [`PROJECT3_README.md`](PROJECT3_README.md). The literature basis is documented in [`Project_3_Literature_Review.md`](Project_3_Literature_Review.md).
 
@@ -244,7 +303,7 @@ python reviews/check_reference_fields.py
 
 The committed `project3_results/analysis/summary.csv`, `decision.json`, reference metadata, and figures support the arithmetic in this report. The missing production run directories prevent a fresh end-to-end regeneration of every result from the repository alone.
 
-## References
+## Appendix B. References
 
 1. K. Liu and L. Ma, “MeshODENet: A Graph-Informed Neural Ordinary Differential Equation Neural Network for Simulating Mesh-Based Physical Systems,” *Journal of Applied Mechanics*, 93(5), 051005, 2026. [arXiv:2509.18445](https://arxiv.org/abs/2509.18445)
 2. S. Wang, Y. Teng, and P. Perdikaris, “Understanding and mitigating gradient pathologies in physics-informed neural networks,” 2020. [arXiv:2001.04536](https://arxiv.org/abs/2001.04536)
