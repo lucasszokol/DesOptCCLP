@@ -270,16 +270,7 @@ The repository does not document whether this memo has been sent to Professor Ma
 
 ## 6. Assumptions and limitations
 
-- **Simplified physics:** The case is steady, two-dimensional, laminar, and fixed-boundary. It omits structural dynamics, interface feedback, large deformation, remeshing, three-dimensional effects, turbulence, and uncertain closures.
-- **Transfer to Professor Ma's work:** The fixed cylinder retains nonlinear flow and competing losses, but its quantitative behavior cannot be assumed to transfer to coupled moving-boundary FSI.
-- **Reference uncertainty:** Every neural error is conditional on a provisional LBM reference whose independent physical validation is incomplete.
-- **Method scope:** Only one network architecture, sampling scheme, optimizer budget, and adaptive-weighting rule were tested. The result does not establish categorical PINN failure.
-- **Control scope:** The supervised model demonstrates low label-fitting error, not automatic satisfaction of conservation or boundary conditions.
-- **Mechanism uncertainty:** A minimum negative cosine and weight saturation motivate follow-up tests but do not prove a unique root cause.
-- **Statistics:** Three seeds provide descriptive ranges only.
-- **Provenance:** Committed summaries contain 27 rows, but raw production histories and prediction fields are absent, limiting independent reconstruction.
-- **Cost:** Hardware context and timing boundaries are incomplete, and no reusable surrogate or many-query break-even experiment was performed.
-- **Interview evidence:** Claims attributed to Professor Ma come from team notes. Vivian Oletty confirmed the problem brief on October 20, 2026, but public-attribution permission and a separate review of the written brief by Professor Ma are not documented.
+The minimal experiment chosen is a barebones fluid mechanics problem that does not encapsulate the complexities of 3D flow or fluid-structure interaction. Therefore, several assumptions were needed for this PINN analysis. The largest assumption is that the 2D fixed cylinder in flow is an adequate representation of fluid dynamics, and successes or failures with analyzing this flow can be extrapolated to more complicated scenarios given more training data and time. Another assumption is that the addition of structural mechanics, along with the interaction between those structural mechanics and fluid mechanics, is simply another layer of physics that a more refined PINN can handle while keeping the underlying theory and structure of the PINN used for the 2D fixed cylinder in flow. This leads to the largest limitation of this experiment: the findings are only as relevant as the correlation between the simplified experiment and more complicated experiments. More research would be required to find how transferrable this experiment is to more complex scenarios.
 
 ## Appendix A. Reproducibility and evidence record
 
