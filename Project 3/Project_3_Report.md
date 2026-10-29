@@ -73,24 +73,24 @@ We selected **Path B: Diagnosis**, with an unsuccessful attempted remedy. The go
 
 The nondimensional channel is
 
-\[
+$$
 \Omega=[0,22]\times[0,4.1]\setminus
 \left\{(x,y):(x-2)^2+(y-2)^2\le0.5^2\right\}.
-\]
+$$
 
 The steady incompressible Navier–Stokes equations are
 
-\[
+$$
 u_x+v_y=0,
-\]
+$$
 
-\[
+$$
 uu_x+vu_y=-p_x+\frac{1}{Re}(u_{xx}+u_{yy}),
-\]
+$$
 
-\[
+$$
 uv_x+vv_y=-p_y+\frac{1}{Re}(v_{xx}+v_{yy}).
-\]
+$$
 
 The inlet has a parabolic velocity profile with unit mean velocity. The channel walls and cylinder use no-slip conditions. The PINN outlet imposes \(p=0\), \(u_x=0\), and \(v_x=0\). Reynolds number \(Re\in\{10,20,40\}\) is the difficulty knob. Because the target PDE is steady, the PINN has no physical time coordinate or initial condition. The LBM reaches the steady field through pseudo-time iteration initialized with the parabolic velocity profile throughout the fluid and unit density.
 
@@ -135,19 +135,19 @@ All neural comparisons use a five-hidden-layer multilayer perceptron with 64 `ta
 
 The vanilla objective is
 
-\[
+$$
 \mathcal L=\mathcal L_c+\mathcal L_x+\mathcal L_y+
 \mathcal L_{in}+\mathcal L_{wall}+\mathcal L_{out}.
-\]
+$$
 
 The balanced model uses
 
-\[
+$$
 \mathcal L=\sum_i w_i\mathcal L_i,
 \qquad
 w_i^*\propto\frac{\overline{\|g\|}}
 {\|\nabla_\theta\mathcal L_i\|+\epsilon}.
-\]
+$$
 
 Weights are updated every 100 Adam steps, smoothed with an exponential moving average coefficient of 0.9, bounded to \([0.1,10]\), and normalized to mean one. This procedure is motivated by the gradient-pathology diagnosis of Wang, Teng, and Perdikaris, but it is not an exact reproduction of their learning-rate annealing algorithm.
 
@@ -159,11 +159,11 @@ For a fixed Reynolds number and seed, vanilla and balanced runs use the same arc
 
 The primary metric is relative velocity error on the reference fluid grid,
 
-\[
+$$
 E_u=
 \frac{\left\|[\hat u-u_{ref},\hat v-v_{ref}]\right\|_2}
 {\left\|[u_{ref},v_{ref}]\right\|_2}.
-\]
+$$
 
 The study also records gauge-aligned pressure error, sampled divergence RMS, combined wall-and-cylinder component RMS velocity, drag, recirculation length, training time, inference time, six loss values, six parameter-gradient norms, six adaptive weights, and 15 pairwise gradient cosines.
 
@@ -197,9 +197,9 @@ At \(Re=40\), the supervised velocity error is about forty times smaller than th
 
 No. At \(Re=40\), the declared improvement is
 
-\[
+$$
 1-\frac{0.7277}{0.2238}=-2.251.
-\]
+$$
 
 The balanced model increases median velocity error by approximately 225%, increases median divergence RMS from 0.0412 to 0.1045, and increases median no-slip component RMS from 0.0115 to 0.0341. It fails both the velocity target and the no-slip guardrail.
 
