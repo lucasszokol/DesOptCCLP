@@ -3,30 +3,21 @@
 **Team Optimus Prime**<br>
 **Path B: Diagnosis, with an unsuccessful attempted remedy**
 
-## Executive summary
-
-Professor Leixin Ma studies machine-learning acceleration of computationally expensive structural and fluid–structure simulations. In our interview, she reported that standard loss-based physics-informed neural networks (PINNs) were difficult to train to convergence for forward problems and that supervised black-box models were more effective.
-
-We reproduced a related finite-budget training failure in a smaller problem: steady, two-dimensional incompressible flow around a fixed cylinder at Reynolds numbers \(Re=10,20,40\). The median relative velocity error of an equal-weight PINN increased from 17.1% at \(Re=10\) to 22.4% at \(Re=40\). The same network architecture trained directly on numerical field labels reached 0.56% median velocity error at \(Re=40\). This supports a narrow conclusion: the architecture can fit the reference velocity labels, while the tested physics-informed objective, sampling, conditioning, and optimization procedure do not reach comparable field accuracy under the fixed budget.
-
-We then tested component-wise adaptive loss balancing as a remedy. It partially reduced the imbalance among weighted component-gradient magnitudes but increased the \(Re=40\) median velocity error from 22.4% to 72.8%. Divergence and no-slip errors also worsened. Gradient-magnitude balancing was therefore insufficient in this experiment. Strongly negative pairwise gradient cosines and weights at their lower bounds make gradient-direction conflict and weight saturation useful follow-up hypotheses, but this experiment does not establish either as the unique cause.
-
-The error comparison is conditional on the selected lattice-Boltzmann (LBM) reference. The references pass the implemented stopping, endpoint volume-flux, and grid-disagreement checks, but an independent audit found unresolved conservation, geometry, stationarity, and external-validation concerns. They should be treated as provisional numerical comparison fields, not validated CFD ground truth.
-
 ## 1. Outreach log
 
-Our team conducted researcher outreach by email, beginning with Dr. Jeonglae Kim. A scheduling conflict led Dr. Kim to recommend Professor Leixin Ma, whom we subsequently interviewed by Zoom. The full outreach sequence, including the decline and non-response, is recorded below.
+Our team conducted researcher outreach by email, beginning with Dr. Jeonglae Kim. A scheduling conflict led Dr. Kim to recommend Dr. Leixin Ma, whom we subsequently interviewed by Zoom. The full outreach sequence, including the decline and non-response, is recorded below.
 
 | Date | Contact and method | Outcome |
 |---|---|---|
 | October 12, 2026 | Emailed Dr. Jeonglae Kim | Initial outreach |
-| October 15, 2026 | Second response from Dr. Kim | He reported a scheduling conflict and recommended contacting Professor Leixin Ma |
-| October 16, 2026 | Emailed Professor Leixin Ma and Dr. Pedro Peralta | Dr. Peralta did not respond; Professor Ma responded the same day and confirmed a Zoom appointment |
-| October 19, 2026 | Zoom interview with Professor Ma | Discussed computational cost, FSI, prior PINN limitations, and machine-learning alternatives |
-| October 19, 2026 | Contacted Vivian Oletty in Professor Ma's group | Requested additional guidance on a suitable project problem |
+| October 15, 2026 | Second response from Dr. Kim | He reported a scheduling conflict and recommended contacting Dr. Leixin Ma |
+| October 16, 2026 | Emailed Dr. Leixin Ma and Dr. Pedro Peralta | Dr. Peralta did not respond; Dr. Ma responded the same day and confirmed a Zoom appointment |
+| October 19, 2026 | Zoom interview with Dr. Ma | Discussed computational cost, FSI, prior PINN limitations, and machine-learning alternatives |
+| October 19, 2026 | Contacted Vivian Oletty in Dr. Ma's group | Requested additional guidance on a suitable project problem |
 | October 20, 2026 | Follow-up interview with Vivian Oletty | Confirmed the problem brief and identified fixed-cylinder flow as the appropriate starting case |
+| October 28, 2026 | Follow-up with Dr. Ma with results | Sent recommendation memo to Dr. Ma, no response as of project due date |
 
-During the interview, Professor Ma explained that large-scale finite-element and finite-volume simulations, particularly fluid–structure interaction problems, can require millions of computational nodes and several hours even on supercomputers. She also described PINN convergence and accuracy problems for systems involving multiple PDEs and geometric nonlinearities.
+During the interview, Dr. Ma explained that large-scale finite-element and finite-volume simulations, particularly fluid–structure interaction problems, can require millions of computational nodes and several hours even on supercomputers. She also described PINN convergence and accuracy problems for systems involving multiple PDEs and geometric nonlinearities.
 
 The follow-up interview with Vivian Oletty, which served as confirmation of our problem brief, allowed to identify fluid flow around a stationary circular cylinder as an appropriate starting point, with a moving cylinder and coupled fluid–structure interactions as potential extensions. He also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
 
@@ -34,8 +25,8 @@ The follow-up interview with Vivian Oletty, which served as confirmation of our 
 
 | Question | Interview response |
 |---|---|
-| What computational challenges limit conventional numerical solvers? | Professor Ma explained that large-scale finite-element and finite-volume simulations, especially FSI, can require millions of nodes and several hours even on supercomputers. |
-| Have PINNs successfully addressed these computational challenges? | Professor Ma indicated that PINNs have been investigated but often experience convergence and accuracy difficulties for multiple PDEs and geometric nonlinearities. |
+| What computational challenges limit conventional numerical solvers? | Dr. Ma explained that large-scale finite-element and finite-volume simulations, especially FSI, can require millions of nodes and several hours even on supercomputers. |
+| Have PINNs successfully addressed these computational challenges? | Dr. Ma indicated that PINNs have been investigated but often experience convergence and accuracy difficulties for multiple PDEs and geometric nonlinearities. |
 | What physical problem would provide a suitable starting point? | Vivian Oletty identified flow around a fixed cylinder, with a moving cylinder as a possible extension. |
 | How long might a simulation of the simplified problem take? | Vivian indicated approximately one to two hours, potentially less than one hour depending on the setup. |
 | What alternative machine-learning approaches have been explored? | Vivian discussed MeshParamNet, graph neural networks, FFT-based representations, and supervised finite-element data for structural-deformation prediction. |
@@ -45,23 +36,23 @@ The follow-up interview with Vivian Oletty, which served as confirmation of our 
 
 ### Scientific problem and real-world value
 
-Professor Ma's work uses finite-element and finite-volume solvers on models with millions of nodes. Individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
+Dr. Ma's work uses finite-element and finite-volume solvers on models with millions of nodes. Individual simulations can require hours even on ASU supercomputers. Design optimization makes this cost more consequential because it requires many forward evaluations. She described difficult PINN convergence, limited accuracy for coupled PDE systems, and stronger practical performance from supervised black-box surrogates.
 
 High-fidelity fluid–structure interaction combines Navier–Stokes flow, nonlinear structural dynamics, moving interfaces, and sometimes remeshing or turbulence closures. The governing physics therefore include fluid momentum and incompressibility, structural dynamics, and kinematic and dynamic coupling conditions at the fluid–structure interface. At high Reynolds numbers, turbulence approximations can introduce additional modeled physics.
 
 ### Current solver, cost, and specific challenges
 
-Professor Ma reported using finite-element and finite-volume methods for structural, fluid, and coupled fluid–structure problems. The main computational difficulties are multimillion-node meshes, large structural deformation, remeshing, coupled nonlinear PDEs, and repeated forward evaluations during design optimization. Individual simulations can require hours even on ASU supercomputers, making broad design searches or parameter studies expensive. For the simplified cylinder problem, Vivian Oletty's meeting notes estimate approximately one to two hours per conventional simulation, potentially less than one hour depending on the setup.
+Dr. Ma reported using finite-element and finite-volume methods for structural, fluid, and coupled fluid–structure problems. The main computational difficulties are multimillion-node meshes, large structural deformation, remeshing, coupled nonlinear PDEs, and repeated forward evaluations during design optimization. Individual simulations can require hours even on ASU supercomputers, making broad design searches or parameter studies expensive. For the simplified cylinder problem, Vivian Oletty's meeting notes estimate approximately one to two hours per conventional simulation, potentially less than one hour depending on the setup.
 
 ### Prior PINN, surrogate, and neural-operator experience
 
-The interview notes report that standard loss-based PINNs were difficult to converge and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
+The interview notes report that standard loss-based PINNs were difficult to converge and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Dr. Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
 
 MeshODENet has been demonstrated on structural mechanics problems, not on the cylinder-flow problem studied here. Therefore, this report treats it as an architectural direction for repeated design evaluations, not as a measured competitor or a demonstrated CFD solution. Vivian Oletty also discussed MeshParamNet, graph neural networks, and frequency-domain representations as related supervised approaches. 
 
 ### Researcher review status
 
-Vivian Oletty, a researcher in Professor Ma's group, reviewed and confirmed the problem brief during the October 20, 2026 follow-up interview. She identified flow around a stationary circular cylinder as an appropriate starting point and moving-cylinder FSI as a possible extension. A separate review of the written brief by Professor Ma is not documented.
+Vivian Oletty, a researcher in Professor Ma's group, reviewed and confirmed the problem brief during the October 20, 2026 follow-up interview. He identified flow around a stationary circular cylinder as an appropriate starting point and moving-cylinder FSI as a possible extension. A separate review of the written brief by Dr. Ma is not documented.
 
 ## 3. Minimal case formulation
 
