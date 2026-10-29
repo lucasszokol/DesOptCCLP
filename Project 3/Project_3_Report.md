@@ -28,7 +28,7 @@ Our team conducted researcher outreach by email, beginning with Dr. Jeonglae Kim
 
 During the interview, Professor Ma explained that large-scale finite-element and finite-volume simulations, particularly fluid–structure interaction problems, can require millions of computational nodes and several hours even on supercomputers. She also described PINN convergence and accuracy problems for systems involving multiple PDEs and geometric nonlinearities.
 
-Vivian Oletty confirmed that stationary-cylinder flow was a suitable first problem, with moving-cylinder FSI as a possible extension. She also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
+The follow-up interview with Vivian Oletty, which served as **confirmation of our problem brief**, allowed to identify fluid flow around a stationary circular cylinder as an appropriate starting point, with a moving cylinder and coupled fluid–structure interactions as potential extensions. He also discussed oscillatory dynamics, long-term prediction accuracy, graph neural networks, frequency-domain techniques, and MeshParamNet, which combines graph learning with FFT-based representations and finite-element simulation data to predict structural deformation.
 
 ### Selected interview questions and answers
 
@@ -37,12 +37,10 @@ Vivian Oletty confirmed that stationary-cylinder flow was a suitable first probl
 | What computational challenges limit conventional numerical solvers? | Professor Ma explained that large-scale finite-element and finite-volume simulations, especially FSI, can require millions of nodes and several hours even on supercomputers. |
 | Have PINNs successfully addressed these computational challenges? | Professor Ma indicated that PINNs have been investigated but often experience convergence and accuracy difficulties for multiple PDEs and geometric nonlinearities. |
 | What physical problem would provide a suitable starting point? | Vivian Oletty identified flow around a fixed cylinder, with a moving cylinder as a possible extension. |
-| How long might a simulation of the simplified problem take? | Vivian's meeting notes indicate approximately one to two hours, potentially less than one hour depending on the setup. |
+| How long might a simulation of the simplified problem take? | Vivian indicated approximately one to two hours, potentially less than one hour depending on the setup. |
 | What alternative machine-learning approaches have been explored? | Vivian discussed MeshParamNet, graph neural networks, FFT-based representations, and supervised finite-element data for structural-deformation prediction. |
 
 The outreach record establishes the contact method, referral, interviews, decline, non-response, and problem-brief confirmation. The repository still does not document whether Professor Ma approved public attribution or whether the final recommendation memo has been delivered.
-
-The teammate's standalone outreach and interview record is available in [`outreach_interview_problem_brief.md`](outreach_interview_problem_brief.md).
 
 ## 2. Problem brief
 
