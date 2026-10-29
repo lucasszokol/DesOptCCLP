@@ -41,11 +41,11 @@ High-fidelity fluid–structure interaction combines Navier–Stokes flow, nonli
 
 ### Current solver, cost, and specific challenges
 
-Professor Ma reported using finite-element and finite-volume methods for structural, fluid, and coupled fluid–structure problems. The main computational difficulties are multimillion-node meshes, large structural deformation, remeshing, coupled nonlinear PDEs, and repeated forward evaluations during design optimization. Individual simulations can require hours even on ASU supercomputers, making broad design searches or parameter studies expensive. For the simplified cylinder problem, Vivian Oletty estimates approximately one to two hours per conventional simulation, potentially less than one hour depending on the setup.
+Professor Ma reported using finite-element and finite-volume methods for structural, fluid, and coupled fluid–structure problems. The main computational difficulties are multimillion-node meshes, large structural deformation, remeshing, coupled nonlinear PDEs, and repeated forward evaluations during design optimization. Individual simulations can require hours even on ASU supercomputers, making broad design searches or parameter studies expensive. For the simplified cylinder problem, Vivian Oletty estimated approximately one to two hours per conventional simulation, potentially less than one hour depending on the setup.
 
 ### Prior PINN, surrogate, and neural-operator experience
 
-The interview notes report that standard loss-based PINNs were difficult to converge and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
+The interview notes report that standard loss-based PINNs were difficult to train to convergence and insufficiently accurate for her forward multiphysics applications. Her group therefore uses supervised black-box learning where it is more reliable. Professor Ma's [MeshODENet](https://arxiv.org/abs/2509.18445), developed with Kangzheng Liu, combines graph neural networks with neural ordinary differential equations for repeated structural simulations. It is a supervised, data-driven forward surrogate trained on conventional-solver trajectories, not a PDE-residual PINN.
 
 MeshODENet has been demonstrated on structural mechanics problems, not on the cylinder-flow problem studied here. Therefore, this report treats it as an architectural direction for repeated design evaluations, not as a measured competitor or a demonstrated CFD solution. Vivian Oletty also discussed MeshParamNet, graph neural networks, and frequency-domain representations as related supervised approaches.
 
@@ -88,7 +88,7 @@ $$
 u(0,y)=\frac{6y(4.1-y)}{4.1^2},\qquad v(0,y)=0,
 $$
 
-which give unit mean velocity. The channel walls and cylinder use no-slip conditions. The PINN outlet imposes $p=0$, $u_x=0$, and $v_x=0$. Reynolds number $Re\in\{10,20,40\}$ is the difficulty knob. Because the target PDE is steady, the PINN has no physical time coordinate or initial condition. The lattice-Boltzmann method (LBM) reaches the steady field through pseudo-time iteration initialized with the parabolic velocity profile throughout the fluid and unit density.
+which give unit mean velocity. The channel walls and cylinder use no-slip conditions. The PINN outlet imposes $p=0$, $u_x=0$, and $v_x=0$. Reynolds number $Re\in\{10,20,40\}$ is the difficulty knob. Because the target PDE is steady, the PINN has no physical time coordinate or initial condition. The lattice-Boltzmann method (LBM) is initialized throughout the fluid with the parabolic velocity profile and unit density, then advanced in pseudo-time to a steady field.
 
 ### What was simplified and why the hard part remains
 
@@ -246,7 +246,7 @@ The neural runs used an NVIDIA RTX 4070 Laptop GPU. The LBM CPU model was not re
 
 ### Decision addressed
 
-You told us that standard PINNs were difficult to converge for forward multiphysics simulations and that supervised black-box models performed better. We built a controlled fixed-cylinder experiment to determine whether unequal optimization of equation and boundary losses is one cause.
+You told us that standard PINNs were difficult to train to convergence for forward multiphysics simulations and that supervised black-box models performed better. We built a controlled fixed-cylinder experiment to determine whether unequal optimization of equation and boundary losses is one cause.
 
 ### Experiment
 
