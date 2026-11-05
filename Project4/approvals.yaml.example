@@ -1,0 +1,5 @@
+# Copy to approvals.yaml after a team member reviews SPECIFICATION.md.
+specification_approved: false
+approver: ""
+approval_date: ""
+notes: ""

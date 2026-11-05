@@ -1,0 +1,6 @@
+title: "Team Optimus Prime: Heat-Sink Optimization"
+markdown: kramdown
+kramdown:
+  input: GFM
+  math_engine: mathjax
+exclude: [README.md]

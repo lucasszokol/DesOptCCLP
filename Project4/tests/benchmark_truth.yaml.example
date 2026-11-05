@@ -1,0 +1,22 @@
+# Copy to benchmark_truth.yaml only after the team completes and returns
+# HUMAN_BENCHMARK_WORKSHEET.md. Do not ask an agent to fill these values.
+status: awaiting_student_derivation
+student_attestation: ""
+v1:
+  temperature_expression: ""
+  temperatures_k: []
+  outward_heat_rate_w: null
+v2:
+  excess_temperature_expression: ""
+  m_per_m: null
+  tip_temperature_k: null
+  base_heat_rate_w: null
+v3:
+  source_expression: ""
+  norm: ""
+  expected_slope: null
+v6:
+  equilibrium_temperature_k: null
+  residual_derivative_w_per_k: null
+  newton_iterates_k: []
+  convergence_explanation: ""

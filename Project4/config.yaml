@@ -1,0 +1,50 @@
+schema_version: 1
+project:
+  title: PDE-Constrained Heat-Sink Optimization
+  team: [Charles Green, Christian Miranda, Lucas Somoshegyi-Szokol, Polina Kondratiuk]
+geometry:
+  base_width_m: 0.060
+  extrusion_depth_m: 0.050
+  base_thickness_m: 0.005
+  chip_width_m: 0.020
+  candidate_fins: 20
+  fin_thickness_m: 0.001
+  fin_height_bounds_m: [0.010, 0.050]
+  density_bounds: [0.001, 1.0]
+  base_elements_x: 40
+  base_elements_z: 4
+  fin_elements: 8
+material:
+  name: Aluminum 6061-T6
+  conductivity_w_mk: 167.0
+  density_kg_m3: 2710.0
+  emissivity: 0.80
+physics:
+  stefan_boltzmann_w_m2k4: 5.670374419e-8
+  linear_h_w_m2k: 10.0
+  nonlinear_h_reference_w_m2k: 5.0
+  nonlinear_h_reference_delta_k: 20.0
+  ambient_smoothing_delta_k: 1.0e-6
+  ks_rho_per_k: 0.25
+load_cases:
+  nominal: {power_w: 50.0, ambient_k: 298.15, chip_limit_k: 358.15}
+  overload: {power_w: 60.0, ambient_k: 308.15, chip_limit_k: 373.15}
+solver:
+  newton_relative_tolerance: 1.0e-10
+  newton_absolute_tolerance: 1.0e-10
+  newton_max_iterations: 60
+  line_search_minimum: 1.0e-6
+optimization:
+  filter_radius_fins: 1.5
+  simp_density_floor: 0.001
+  simp_penalties: [1.0, 2.0, 3.0]
+  topology_threshold: 0.50
+  scaled_feasibility_tolerance: 1.0e-4
+verification:
+  truth_file: Project4/tests/benchmark_truth.yaml
+  gradient_relative_tolerance: 1.0e-5
+  energy_balance_relative_tolerance: 1.0e-8
+  taylor_slope_bounds: [1.8, 2.2]
+outputs:
+  results_json: Project4/site/assets/results.json
+  results_directory: Project4/results

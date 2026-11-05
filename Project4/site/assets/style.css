@@ -1,0 +1,22 @@
+:root { color-scheme: light dark; --accent:#d95f02; --ok:#16833b; --bad:#b42318; --panel:#eef3f8; }
+* { box-sizing:border-box; }
+body { margin:0; font:16px/1.55 system-ui,sans-serif; background:#fff; color:#18202a; }
+main { max-width:1100px; margin:auto; padding:1.2rem; }
+h1,h2,h3 { line-height:1.2; }
+a { color:#075aa6; }
+.gate { border-left:6px solid var(--accent); padding:.8rem 1rem; background:#fff3e5; }
+#viewer { height:560px; position:relative; border:1px solid #aeb9c5; border-radius:10px; overflow:hidden; background:#f6f8fb; }
+#viewer canvas { width:100%; height:100%; display:block; }
+.viewer-grid,.metrics { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.metric-card { background:var(--panel); padding:.8rem; border-radius:8px; }
+.pass { color:var(--ok); font-weight:700; } .fail { color:var(--bad); font-weight:700; }
+#tooltip { position:absolute; display:none; pointer-events:none; background:#111d; color:white; padding:.4rem .55rem; border-radius:5px; font-size:.85rem; }
+.viewer-labels { position:absolute; z-index:2; inset:.6rem 1rem auto; display:grid; grid-template-columns:1fr 1fr; text-align:center; pointer-events:none; }
+.colorbar { height:14px; background:linear-gradient(90deg,#173f8a,#2f9ed1,#f7e95c,#c93128); border-radius:4px; }
+.controls { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin:.6rem 0; }
+table { width:100%; border-collapse:collapse; } th,td { border:1px solid #aeb9c5; padding:.45rem; text-align:left; }
+.data-panel { border:1px solid #aeb9c5; border-radius:8px; padding:.8rem; background:var(--panel); }
+.report-plot { width:100%; height:auto; border:1px solid #aeb9c5; border-radius:8px; margin:.7rem 0; background:white; }
+code { overflow-wrap:anywhere; }
+@media (max-width:600px) { #viewer{height:430px}.viewer-grid,.metrics{grid-template-columns:1fr} main{padding:.7rem} }
+@media (prefers-color-scheme:dark) { body{background:#101419;color:#ecf2f8}.metric-card{background:#222b35}.gate{background:#392715}a{color:#7dbdff}#viewer{background:#121923} }

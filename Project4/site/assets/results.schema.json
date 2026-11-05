@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Project 4 heat-sink results",
+  "type": "object",
+  "required": ["schema_version", "status", "units", "geometry", "designs", "optimization_history", "verification"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["awaiting_human_gate", "verified", "final"]},
+    "units": {"type": "object"},
+    "geometry": {
+      "type": "object",
+      "required": ["base_width_m", "base_depth_m", "base_thickness_m", "fin_thickness_m", "fin_x_m"]
+    },
+    "designs": {
+      "type": "object",
+      "required": ["initial", "optimized"],
+      "properties": {
+        "initial": {"type": "object"},
+        "optimized": {"type": ["object", "null"]}
+      }
+    },
+    "optimization_history": {"type": "array"},
+    "verification": {"type": "object"}
+  }
+}

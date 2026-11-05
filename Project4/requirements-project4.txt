@@ -1,0 +1,7 @@
+numpy>=2.0,<3
+scipy>=1.14,<2
+matplotlib>=3.9,<4
+PyYAML>=6.0,<7
+pytest>=8.3,<9
+jsonschema>=4.23,<5
+Markdown>=3.7,<4
