@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -9,6 +10,7 @@ import numpy as np
 import yaml
 
 from .elements import line_conduction_matrix, quad4_conduction_matrix
+from .config import load_config
 from .model import HeatSinkModel
 
 
@@ -278,3 +280,39 @@ def write_evidence(evidence: dict, directory: Path) -> None:
                 f"{'PASS' if check['pass'] else 'FAIL'} |"
             )
     (directory / "verification.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Regenerate V1--V6 evidence without running optimization."""
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", default="Project4/config.yaml")
+    parser.add_argument("--truth")
+    parser.add_argument("--output")
+    arguments = parser.parse_args(argv)
+
+    config_path = Path(arguments.config).resolve()
+    project_directory = config_path.parent
+    config = load_config(config_path)
+    truth_path = (
+        Path(arguments.truth).resolve()
+        if arguments.truth
+        else project_directory / "tests" / "benchmark_truth.yaml"
+    )
+    output_directory = (
+        Path(arguments.output).resolve()
+        if arguments.output
+        else project_directory / "results" / "verification"
+    )
+    evidence = benchmark_verification(HeatSinkModel(config), load_truth(truth_path))
+    write_evidence(evidence, output_directory)
+    print(
+        f"V1-V6 verification {evidence['status']}: "
+        f"{evidence['passed_checks']}/{evidence['total_checks']} checks passed; "
+        f"evidence written to {output_directory}"
+    )
+    return 0 if evidence["status"] == "passed" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
