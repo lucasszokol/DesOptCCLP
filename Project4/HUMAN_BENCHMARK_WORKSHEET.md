@@ -44,7 +44,10 @@ source in `-div(k grad T) = q`.
 Provide:
 
 1. The exact source `q(x,z)` including its sign.
-2. The expected asymptotic slope for the nodal/energy error selected for
+
+   `q(x,z) = 2k(pi)^2 sin(pi*x) sin(pi*z)`
+   The sign is positive.
+3. The expected asymptotic slope for the nodal/energy error selected for
    bilinear quadrilateral elements; state which norm the slope applies to.
 
 ## V6 — Nonlinear single-surface balance
