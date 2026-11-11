@@ -30,3 +30,6 @@ def test_standalone_verification_command_regenerates_evidence(tmp_path: Path) ->
     assert exit_code == 0
     assert (tmp_path / "verification.json").is_file()
     assert (tmp_path / "verification.md").is_file()
+    rendered = (tmp_path / "verification.md").read_text(encoding="utf-8")
+    assert "Status: **PASSED** (20/20 checks passed)." in rendered
+    assert "Project4.heatsink.benchmark_verification" in rendered

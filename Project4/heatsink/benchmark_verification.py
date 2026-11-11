@@ -271,7 +271,21 @@ def benchmark_verification(model: HeatSinkModel, truth: dict) -> dict:
 def write_evidence(evidence: dict, directory: Path) -> None:
     directory.mkdir(parents=True, exist_ok=True)
     (directory / "verification.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
-    lines = ["# Verification evidence", "", "| ID | Quantity | Computed | Submitted/exact | Abs. error | Tolerance | Pass |", "|---|---|---:|---:|---:|---:|:---:|"]
+    lines = [
+        "# Verification evidence",
+        "",
+        f"Status: **{evidence['status'].upper()}** "
+        f"({evidence['passed_checks']}/{evidence['total_checks']} checks passed).",
+        "",
+        "Regenerate from the repository root:",
+        "",
+        "```powershell",
+        ".\\.venv\\Scripts\\python.exe -m Project4.heatsink.benchmark_verification --config Project4\\config.yaml",
+        "```",
+        "",
+        "| ID | Quantity | Computed | Submitted/exact | Abs. error | Tolerance | Pass |",
+        "|---|---|---:|---:|---:|---:|:---:|",
+    ]
     for group in evidence["groups"]:
         for check in group["checks"]:
             lines.append(
