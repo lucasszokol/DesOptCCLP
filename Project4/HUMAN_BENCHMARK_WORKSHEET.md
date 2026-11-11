@@ -65,10 +65,10 @@ Provide:
 
 1. The equilibrium temperature in kelvin.
 
-   `$T_{\eq}$ = 359.19 K`
+   `T = 359.19 K`
 2. The analytic derivative of the residual with respect to `T` at equilibrium.
 
-   `R'(T) = A\left[2.9554\left(T - T_{\infty}\right)^{1/4} + 4\epsilon\sigma T^3\right]`
+   R'(T) = A\left[2.9554\left(T - T_{\infty}\right)^{1/4} + 4\epsilon\sigma T^3\right]
 3. Three Newton iterates starting from `T0 = 350 K` without line search.
 
    `T1 = 359.4710 K`
