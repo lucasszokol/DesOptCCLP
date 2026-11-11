@@ -68,7 +68,7 @@ Provide:
 3. The expected asymptotic slope for the nodal/energy error selected for
    bilinear quadrilateral elements; state which norm the slope applies to.
 
-   No verified answer found. Approximate answer - +1 slope for the energy norm vs. mesh size.
+   No verified answer found. Approximate answer: +1 slope for the energy norm vs. mesh size.
 
 ## V6 — Nonlinear single-surface balance
 
