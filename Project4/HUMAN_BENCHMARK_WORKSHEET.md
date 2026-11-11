@@ -16,8 +16,26 @@ generation.
 Provide:
 
 1. The exact expression for `T(x)`.
-2. `T(L/4)`, `T(L/2)`, and `T(3L/4)` in kelvin.
-3. The signed heat rate at `x = L` using the outward-normal convention.
+
+\$$
+T(x) = T(0) + \frac{T(L) - T(0)}{L}\,x
+\$$
+
+3. `T(L/4)`, `T(L/2)`, and `T(3L/4)` in kelvin.
+
+\$$
+\begin{aligned}
+T\left(\frac{L}{4}\right) &= 353.15\,\mathrm{K}, \\
+T\left(\frac{L}{2}\right) &= 333.15\,\mathrm{K}, \\
+T\left(\frac{3L}{4}\right) &= 313.15\,\mathrm{K}.
+\end{aligned}
+\$$
+
+4. The signed heat rate at `x = L` using the outward-normal convention.
+
+\$$
+\dot{Q} = 16.7\ \mathrm{W}
+\$$
 
 ## V2 — Straight fin with convection
 
