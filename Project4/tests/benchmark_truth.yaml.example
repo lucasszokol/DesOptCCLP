@@ -17,6 +17,7 @@ v3:
   expected_slope: null
 v6:
   equilibrium_temperature_k: null
+  residual_derivative_expression: ""
   residual_derivative_w_per_k: null
   newton_iterates_k: []
   convergence_explanation: ""

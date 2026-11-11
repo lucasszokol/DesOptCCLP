@@ -10,7 +10,14 @@ from .gates import HumanGateError, require_human_approvals
 from .model import HeatSinkModel
 from .campaign import run_campaign
 from .serialize import final_payload, write_json
-from .verification import sensitivity_cost_comparison, student_truth_summary, taylor_checks
+from .verification import (
+    sensitivity_cost_comparison,
+    objective_gradient_checks,
+    student_truth_summary,
+    taylor_checks,
+    write_sensitivity_evidence,
+)
+from .benchmark_verification import benchmark_verification, write_evidence
 from .site import build_site
 
 
@@ -40,14 +47,28 @@ def main() -> int:
         print("Human gates passed.")
         return 0
     print("Human gates passed. Running adjoint verification and optimization campaign.")
-    start = model.initial_design(model.config.geometry.fin_height_bounds_m[1])
+    verification = benchmark_verification(model, truth)
+    verification_directory = project_directory / "results" / "verification"
+    write_evidence(verification, verification_directory)
+    if verification["status"] != "passed":
+        print(f"VERIFICATION FAILED: see {verification_directory / 'verification.md'}")
+        return 3
+    start = model.initial_design(0.030)
+    start[config.geometry.candidate_fins:] = 0.60
     gradients = taylor_checks(model, start)
     cost = sensitivity_cost_comparison(model, start)
+    objective_gradients = objective_gradient_checks(model, start)
+    sensitivity = write_sensitivity_evidence(
+        gradients, objective_gradients, cost, project_directory / "results" / "sensitivity"
+    )
+    if sensitivity["status"] != "passed":
+        print("V7 SENSITIVITY VERIFICATION FAILED")
+        return 4
     campaign = run_campaign(model)
     payload = final_payload(
         model,
         campaign,
-        student_truth_summary(truth),
+        {**student_truth_summary(truth), **verification},
         gradients,
         cost,
     )

@@ -1,0 +1,261 @@
+{
+  "status": "passed",
+  "student_attestation": "Charlie Green, Kellen Worthington, Polina Kondratiuk, Lucas Somoshegyi-Szokol, and Christian Miranda checked the work on 2026-11-11 using heat-transfer derivations.",
+  "groups": [
+    {
+      "id": "V1",
+      "name": "1D conduction bar",
+      "checks": [
+        {
+          "quantity": "T(1/4L)",
+          "computed": 353.15,
+          "exact": 353.15,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5e-09,
+          "pass": true
+        },
+        {
+          "quantity": "T(1/2L)",
+          "computed": 333.15000000000003,
+          "exact": 333.15,
+          "absolute_error": 5.684341886080802e-14,
+          "relative_error": 1.706240998373346e-16,
+          "tolerance": 5e-09,
+          "pass": true
+        },
+        {
+          "quantity": "T(3/4L)",
+          "computed": 313.15,
+          "exact": 313.15,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 5e-09,
+          "pass": true
+        },
+        {
+          "quantity": "outward heat rate",
+          "computed": 16.700000000000017,
+          "exact": 16.7,
+          "absolute_error": 1.7763568394002505e-14,
+          "relative_error": 1.0636867301797908e-15,
+          "tolerance": 5e-09,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "id": "V2",
+      "name": "straight fin",
+      "checks": [
+        {
+          "quantity": "m",
+          "computed": 11.052406462972419,
+          "exact": 11.052,
+          "absolute_error": 0.0004064629724194191,
+          "relative_error": 3.6777322875445086e-05,
+          "tolerance": 0.0005,
+          "pass": true
+        },
+        {
+          "quantity": "tip temperature",
+          "computed": 345.70233323637274,
+          "exact": 345.702,
+          "absolute_error": 0.00033323637273952045,
+          "relative_error": 9.6394111905491e-07,
+          "tolerance": 0.0005,
+          "pass": true
+        },
+        {
+          "quantity": "base heat rate",
+          "computed": 2.5505060195896476,
+          "exact": 2.551,
+          "absolute_error": 0.0004939804103525347,
+          "relative_error": 0.00019364186999315354,
+          "tolerance": 0.0005,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "id": "V3",
+      "name": "manufactured 2D solution",
+      "checks": [
+        {
+          "quantity": "energy-norm convergence slope",
+          "computed": 0.9946297068915348,
+          "exact": 1.0,
+          "absolute_error": 0.005370293108465152,
+          "relative_error": 0.005370293108465152,
+          "tolerance": 0.12,
+          "pass": true
+        },
+        {
+          "quantity": "L2 convergence slope",
+          "computed": 1.99536135035549,
+          "exact": 2.0,
+          "absolute_error": 0.004638649644510107,
+          "relative_error": 0.0023193248222550533,
+          "tolerance": 0.15,
+          "pass": true,
+          "exact_source": "Q1 theory"
+        }
+      ],
+      "mesh_history": [
+        {
+          "elements_per_side": 4,
+          "h": 0.25,
+          "l2_error": 0.025524693773096182,
+          "energy_error": 0.4996539444142491
+        },
+        {
+          "elements_per_side": 8,
+          "h": 0.125,
+          "l2_error": 0.006413119421132705,
+          "energy_error": 0.25129833101802407
+        },
+        {
+          "elements_per_side": 16,
+          "h": 0.0625,
+          "l2_error": 0.0016055850036826946,
+          "energy_error": 0.12584691318701746
+        }
+      ]
+    },
+    {
+      "id": "V4",
+      "name": "global heat balance",
+      "checks": [
+        {
+          "quantity": "nominal linear energy balance",
+          "computed": 1.2310863439779495e-12,
+          "exact": 0.0,
+          "absolute_error": 1.2310863439779495e-12,
+          "relative_error": 1.2310863439779495e-12,
+          "tolerance": 1e-08,
+          "pass": true
+        },
+        {
+          "quantity": "nominal nonlinear energy balance",
+          "computed": 1.2609291388798738e-12,
+          "exact": 0.0,
+          "absolute_error": 1.2609291388798738e-12,
+          "relative_error": 1.2609291388798738e-12,
+          "tolerance": 1e-08,
+          "pass": true
+        },
+        {
+          "quantity": "overload linear energy balance",
+          "computed": 1.1223022511330782e-12,
+          "exact": 0.0,
+          "absolute_error": 1.1223022511330782e-12,
+          "relative_error": 1.1223022511330782e-12,
+          "tolerance": 1e-08,
+          "pass": true
+        },
+        {
+          "quantity": "overload nonlinear energy balance",
+          "computed": 3.8305358884827e-12,
+          "exact": 0.0,
+          "absolute_error": 3.8305358884827e-12,
+          "relative_error": 3.8305358884827e-12,
+          "tolerance": 1e-08,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "id": "V5",
+      "name": "invariance and units",
+      "checks": [
+        {
+          "quantity": "reflection/permutation max error K",
+          "computed": 2.0406787371030077e-11,
+          "exact": 0.0,
+          "absolute_error": 2.0406787371030077e-11,
+          "relative_error": 20406.787371030077,
+          "tolerance": 2e-09,
+          "pass": true
+        },
+        {
+          "quantity": "SI/mm line-matrix max error W/K",
+          "computed": 0.0,
+          "exact": 0.0,
+          "absolute_error": 0.0,
+          "relative_error": 0.0,
+          "tolerance": 1e-12,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "id": "V6",
+      "name": "nonlinear scalar Newton benchmark",
+      "checks": [
+        {
+          "quantity": "equilibrium temperature",
+          "computed": 359.18851045045307,
+          "exact": 359.19,
+          "absolute_error": 0.001489549546931812,
+          "relative_error": 4.146968309061533e-06,
+          "tolerance": 0.005,
+          "pass": true
+        },
+        {
+          "quantity": "Newton T1",
+          "computed": 359.46936569655753,
+          "exact": 359.471,
+          "absolute_error": 0.0016343034424721736,
+          "relative_error": 4.5464124852134765e-06,
+          "tolerance": 0.002,
+          "pass": true
+        },
+        {
+          "quantity": "Newton T2",
+          "computed": 359.1887562258732,
+          "exact": 359.1903,
+          "absolute_error": 0.0015437741267874117,
+          "relative_error": 4.297928220186936e-06,
+          "tolerance": 0.002,
+          "pass": true
+        },
+        {
+          "quantity": "Newton T3",
+          "computed": 359.18851045045307,
+          "exact": 359.19,
+          "absolute_error": 0.001489549546931812,
+          "relative_error": 4.146968309061533e-06,
+          "tolerance": 0.002,
+          "pass": true
+        },
+        {
+          "quantity": "analytic tangent vs finite difference",
+          "computed": 0.1666952968610772,
+          "exact": 0.16669529682378226,
+          "absolute_error": 3.7294944910115646e-11,
+          "relative_error": 2.237312366979439e-10,
+          "tolerance": 1e-09,
+          "pass": true
+        }
+      ],
+      "computed_iterates_k": [
+        359.46936569655753,
+        359.1887562258732,
+        359.18851045045307
+      ],
+      "residual_sequence_w": [
+        0.04685829096922589,
+        4.0969669484525184e-05,
+        3.143441063002683e-11
+      ],
+      "residual_quadratic_ratios": [
+        0.018659051816040582,
+        0.0187275256831897
+      ],
+      "computed_derivative_w_per_k": 0.1666952968610772,
+      "submitted_derivative_w_per_k": null
+    }
+  ],
+  "passed_checks": 20,
+  "total_checks": 20
+}

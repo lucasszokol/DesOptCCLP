@@ -1,0 +1,27 @@
+status: student_verified
+student_attestation: >-
+  Charlie Green, Kellen Worthington, Polina Kondratiuk,
+  Lucas Somoshegyi-Szokol, and Christian Miranda checked the work on
+  2026-11-11 using heat-transfer derivations.
+v1:
+  temperature_expression: "T(x) = T(0) + (T(L) - T(0))*x/L"
+  temperatures_k: [353.15, 333.15, 313.15]
+  outward_heat_rate_w: 16.7
+v2:
+  excess_temperature_expression: "theta(x) = (T_b-T_inf)*cosh(m*(L-x))/cosh(m*L)"
+  m_per_m: 11.052
+  tip_temperature_k: 345.702
+  base_heat_rate_w: 2.551
+v3:
+  source_expression: "q(x,z) = 2*pi^2*sin(pi*x)*sin(pi*z)"
+  norm: "energy norm"
+  expected_slope: 1.0
+v6:
+  equilibrium_temperature_k: 359.19
+  residual_derivative_expression: >-
+    R'(T) = A*[2.9554*(T-T_inf)^(1/4) + 4*epsilon*sigma*T^3]
+  residual_derivative_w_per_k: null
+  newton_iterates_k: [359.4710, 359.1903, 359.1900]
+  convergence_explanation: >-
+    Near the solution, the next residual is proportional to the square of the
+    previous residual.
