@@ -66,18 +66,22 @@ Provide:
 1. The equilibrium temperature in kelvin.
 
    `T = 359.19 K`
-2. The analytic derivative of the residual with respect to `T` at equilibrium.
+   
+3. The analytic derivative of the residual with respect to `T` at equilibrium.
 
   $R'(T) = A\left[2.9554\left(T - T_{\infty}\right)^{1/4} + 4\epsilon\sigma T^3\right]$
+
 3. Three Newton iterates starting from `T0 = 350 K` without line search.
 
    `T1 = 359.4710 K`
    `T2 = 359.1903 K`
    `T3 = 359.1900 K`
-4. A short explanation of what quadratic convergence should look like in the
+
+5. A short explanation of what quadratic convergence should look like in the
    residual sequence.
 
    Near the solution, the next step of the residual is proportional to the previous step squared.
+
 ## Student attestation
 
 Names of students who checked the work:
