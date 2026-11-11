@@ -37,6 +37,7 @@ T\left(\frac{3L}{4}\right) &= 313.15\,\mathrm{K}.
 \dot{Q} = 16.7\ \mathrm{W}
 \$$
 
+
 ## V2 — Straight fin with convection
 
 An untipped rectangular fin has `L = 0.050 m`, `k = 167 W/(m K)`, width
@@ -47,8 +48,19 @@ tip for this benchmark.
 Provide:
 
 1. The exact excess-temperature expression `theta(x)`.
+
+   $\theta(x) = (T_b-T_\infty)\frac{\cosh[m(L-x)]}{\cosh(mL)}$
+
 2. The parameter `m = sqrt(h P/(k A))` with `P = 2(d+t)` and `A = dt`.
+
+   $m = \sqrt{\frac{(10)(0.102)}{(167)(5.0\times10^{-5})}} = 11.052\ \mathrm{m^{-1}}$
+
 3. Tip temperature and base heat rate.
+
+   $T_{\mathrm{tip}} = T_\infty + \frac{T_b-T_\infty}{\cosh(mL)} = 345.702\ \mathrm{K}$
+
+   ${Q} = kAm(T_b-T_\infty)\tanh(mL) = 2.551\ \mathrm{W}$
+
 
 ## V3 — Manufactured two-dimensional solution
 
