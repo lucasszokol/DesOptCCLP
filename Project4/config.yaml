@@ -1,7 +1,7 @@
 schema_version: 1
 project:
   title: PDE-Constrained Heat-Sink Optimization
-  team: [Charles Green, Christian Miranda, Lucas Somoshegyi-Szokol, Polina Kondratiuk]
+  team: [Charles Green, Christian Miranda, Kellen Worthington, Lucas Somoshegyi-Szokol, Polina Kondratiuk]
 geometry:
   base_width_m: 0.060
   extrusion_depth_m: 0.050
@@ -9,7 +9,7 @@ geometry:
   chip_width_m: 0.020
   candidate_fins: 20
   fin_thickness_m: 0.001
-  fin_height_bounds_m: [0.010, 0.050]
+  fin_height_bounds_m: [0.010, 0.055]
   density_bounds: [0.001, 1.0]
   base_elements_x: 40
   base_elements_z: 4
@@ -21,7 +21,7 @@ material:
   emissivity: 0.80
 physics:
   stefan_boltzmann_w_m2k4: 5.670374419e-8
-  linear_h_w_m2k: 10.0
+  linear_h_w_m2k: 15.0
   nonlinear_h_reference_w_m2k: 5.0
   nonlinear_h_reference_delta_k: 20.0
   ambient_smoothing_delta_k: 1.0e-6
