@@ -31,8 +31,9 @@ The completed benchmark derivations remain in
 transcription/attestation is read-only solver truth. Agents must not replace
 those answers.
 
-An additional decision is now required because the approved 50 mm height cap
-cannot produce a feasible thresholded design with even one vanished fin. See
+The team approved the DEC-002 feasibility amendment: a 55 mm height cap,
+linear comparison coefficient of 15 W/(m² K), and design under uncertainty as
+the backup bonus path. See
 [`DEC-002-optimization-feasibility.md`](coordination/decisions/DEC-002-optimization-feasibility.md).
 
 ## Intended reproducibility command
@@ -47,13 +48,10 @@ It must exit successfully before `site/assets/results.json` is treated as final.
 
 ## Team
 
-Charles Green, Christian Miranda, Lucas Somoshegyi-Szokol, and Polina
-Kondratiuk.
+Charles Green, Christian Miranda, Kellen Worthington, Lucas
+Somoshegyi-Szokol, and Polina Kondratiuk.
 
 ## Remaining human actions
 
-- Approve or revise DEC-002.
-- Confirm whether Kellen Worthington is a Project 4 author; the benchmark
-  attestation and collaborator list include Kellen, while current report
-  attribution does not.
+- Review the final AI-use statement and numerical report after the campaign.
 - After the final campaign and site QA pass, submit both URLs on Canvas.

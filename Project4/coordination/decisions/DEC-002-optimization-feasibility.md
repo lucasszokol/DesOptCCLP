@@ -1,6 +1,6 @@
 # DEC-002 — Optimization feasibility and bonus strategy
 
-Status: **human approval required**
+Status: **approved 2026-11-11**
 
 Date: 2026-11-11
 
@@ -67,12 +67,11 @@ gradients checked against finite differences. The fully nonlinear bonus plus
 uncertainty would provide an independent +10 path; topology can remain a third
 bonus attempt under the +15 cap.
 
-## Required human response
-
-The team should reply with either:
+## Human approval
 
 > We approve DEC-002: 55 mm height cap, linear comparison h = 15 W/(m² K), and
 > the uncertainty bonus as the backup path to at least +10.
 
-or list the exact changes required. Until approval, agents must not alter the
-frozen specification or authoritative configuration.
+The approval was received on 2026-11-11. The authoritative specification and
+configuration now include these values. The team also confirmed Kellen
+Worthington as a Project 4 author.

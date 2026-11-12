@@ -23,9 +23,10 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 2. Rendered-site desktop and 390 px visual QA.
 3. Repository and site URL submission on Canvas by a student.
 
-The full campaign also needs the human decision recorded in
-`coordination/decisions/DEC-002-optimization-feasibility.md`; the current
-50 mm domain cannot support a feasible thresholded design with any vanished fin.
+The DEC-002 human decision is recorded in
+`coordination/decisions/DEC-002-optimization-feasibility.md`: the approved
+domain uses a 55 mm height cap, the linear comparison uses
+15 W/(m² K), and uncertainty is the backup bonus path.
 
 ## Bugs caught so far
 

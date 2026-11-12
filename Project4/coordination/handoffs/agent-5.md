@@ -6,7 +6,7 @@
 - Commit SHA: `74674f1c17dc1a0ea3b2754989ff98486c7ae866`
 - Pull request: https://github.com/lucasszokol/DesOptCCLP/pull/13
 - Started (America/Phoenix): 2026-11-11
-- Status: active; awaiting Agent 3 fix for issue #10
+- Status: active; DEC-002 approved, awaiting Agent 3 campaign integration
 
 ## Scope completed
 
@@ -56,6 +56,11 @@
 
 ## Material discoveries and decisions
 
+- The team approved DEC-002 on 2026-11-11: 55 mm maximum fin height,
+  linear-comparison `h = 15 W/(m² K)`, and design under uncertainty as the
+  backup bonus path. Kellen Worthington is confirmed as a Project 4 author.
+- The approval was transcribed into `approvals.yaml`, `SPECIFICATION.md`, and
+  `config.yaml`; the configuration gate and all 19 Project 4 tests pass.
 - The full campaign is no longer blocked by human approval; the true blocker
   is optimizer trial-point handling during the final KKT stage.
 - The physical positivity guard in `elements.py` must remain. Agent 3 should
@@ -74,9 +79,6 @@
 ## Out-of-lane defects reported but not edited
 
 - Agent 3: KKT trial height violates the positive element-length domain (#10).
-- Shared contract: `SPECIFICATION.md` still says `awaiting team approval` even
-  though the signed approval gate is complete; this requires the authorized
-  shared-contract owner to reconcile.
 
 ## Integration notes
 
