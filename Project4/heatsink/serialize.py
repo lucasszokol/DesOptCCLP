@@ -54,6 +54,8 @@ def preliminary_payload(model: HeatSinkModel) -> dict:
     return {
         "schema_version": 1,
         "status": "awaiting_human_gate",
+        "model_configuration": model.config.raw,
+        "thermal_dofs": model.ndof,
         "units": {"length": "m", "temperature": "K", "mass": "kg", "power": "W"},
         "geometry": {
             "base_width_m": g.base_width_m,
@@ -106,6 +108,8 @@ def final_payload(
     return {
         "schema_version": 1,
         "status": "final",
+        "model_configuration": model.config.raw,
+        "thermal_dofs": model.ndof,
         "units": {"length": "m", "temperature": "K", "mass": "kg", "power": "W"},
         "geometry": {
             "base_width_m": g.base_width_m,

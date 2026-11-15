@@ -13,18 +13,18 @@ title: PDE-Constrained Heat-Sink Optimization
 
 We minimize the mass of a passively cooled 6061-T6 aluminum heat sink subject to nominal and overload chip-temperature limits. The initial and optimized ground-structure designs are shown with one linked camera. Geometry is drawn at true scale; no fin thickening is used. Colors show the nominal case, interpolating base Q4 and fin linear nodal temperatures; dark outlines indicate a part with at least one node over the nominal limit. During the history animation geometry changes while colors remain the final-state field, since fields were not saved at each iteration.
 
-<div class="controls"><button id="play-history">Play/pause optimization history</button><span>Temperature</span><div class="colorbar" style="width:220px"></div><span>low → limit</span></div>
+<div class="controls"><button id="play-history">Play/pause optimization history</button><span>Nominal temperature (K)</span><span id="color-low"></span><div class="colorbar" style="width:160px"></div><span id="color-high"></span></div>
 <div id="viewer"><div class="viewer-labels"><strong>Initial</strong><strong>Optimized</strong></div><div id="tooltip"></div></div>
 <div id="metrics" class="metrics"></div>
 <script type="module" src="assets/viewer.js"></script>
 
 ## Structure and formulation
 
-The design domain is a 60 mm × 50 mm extruded heat sink with a 5 mm base and twenty candidate plate fins. The forty primary variables are fin heights $H_i$ and filtered topology densities $\rho_i$. The objective is
+<span id="formulation-geometry">Loading design geometry and variable bounds.</span> The primary variables are fin heights $H_i$ and raw topology densities $\rho_i$, which are filtered before use. The objective is
 
 $$m=\rho_{Al}\left(V_b+d t_f\sum_i \bar\rho_iH_i\right).$$
 
-Two PDE response constraints limit a KS aggregate of the chip-interface temperature: 358.15 K at 50 W and 298.15 K ambient, and 373.15 K at 60 W and 308.15 K ambient. Heights are bounded from 10–55 mm and densities from 0.001–1. A bounding analysis rejected the original 100/125 W draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
+<span id="formulation-loads">Loading load cases and constraints.</span> A bounding analysis rejected the original power-load draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
 
 For load case $s$, the explicit scaled constraint is $g_s=\mathrm{KS}_{\beta}(T_{chip,s})/T_{limit,s}-1\le0$, where
 
@@ -38,7 +38,7 @@ The custom solver uses bilinear quadrilateral conduction elements in the base an
 
 $$q_s=h(T)(T-T_\infty)+\epsilon\sigma(T^4-T_\infty^4),\qquad h\propto|T-T_\infty|^{1/4}.$$
 
-Newton's method uses the consistent analytic tangent and backtracking. The model currently has 365 thermal degrees of freedom. Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
+Newton's method uses the consistent analytic tangent and backtracking. <span id="dof-count">Loading model size.</span> Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
 
 The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is applied over the centered chip footprint; exposed surfaces lose heat through the boundary law above, and the remainder of the underside is insulated. Each fin carries axial conduction coupled to its base node and loses heat from its sides and tip. The model does not resolve air flow or mutual fin shielding, so extrapolating to a manufactured design requires external validation.
 
@@ -72,7 +72,9 @@ The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-to
 
 ## Nonlinear component — bonus +5
 
-The N2 state includes temperature-dependent natural convection and $T^4$ radiation, is solved by Newton's method, differentiated at the converged state, and checked against the independently solved nonlinear benchmark. The linear and nonlinear fixed-topology optima are listed in the results table. The linear reference uses the approved constant $h=15\,\mathrm{W/(m^2K)}$ without radiation, so the difference reflects both the boundary-law change and the chosen reference coefficient; it should not be interpreted as an isolated radiation effect.
+The N2 state includes temperature-dependent natural convection and $T^4$ radiation, is solved by Newton's method, differentiated at the converged state, and checked against the independently solved nonlinear benchmark. The linear and nonlinear fixed-topology optima are listed in the results table. <span id="linear-reference">Loading the linear reference coefficient.</span> The difference reflects both the boundary-law change and the chosen reference coefficient; it should not be interpreted as an isolated radiation effect.
+
+<div id="comparison-summary"></div>
 
 ## Ground-structure topology — bonus +5
 

@@ -2459,6 +2459,98 @@
     "optimality": 9.591669561604617e-09,
     "success": true
   },
+  "model_configuration": {
+    "geometry": {
+      "base_elements_x": 40,
+      "base_elements_z": 4,
+      "base_thickness_m": 0.005,
+      "base_width_m": 0.06,
+      "candidate_fins": 20,
+      "chip_width_m": 0.02,
+      "density_bounds": [
+        0.001,
+        1.0
+      ],
+      "extrusion_depth_m": 0.05,
+      "fin_elements": 8,
+      "fin_height_bounds_m": [
+        0.01,
+        0.055
+      ],
+      "fin_thickness_m": 0.001
+    },
+    "load_cases": {
+      "nominal": {
+        "ambient_k": 298.15,
+        "chip_limit_k": 358.15,
+        "power_w": 50.0
+      },
+      "overload": {
+        "ambient_k": 308.15,
+        "chip_limit_k": 373.15,
+        "power_w": 60.0
+      }
+    },
+    "material": {
+      "conductivity_w_mk": 167.0,
+      "density_kg_m3": 2710.0,
+      "emissivity": 0.8,
+      "name": "Aluminum 6061-T6"
+    },
+    "optimization": {
+      "filter_radius_fins": 1.5,
+      "scaled_feasibility_tolerance": 0.0001,
+      "simp_density_floor": 0.001,
+      "simp_penalties": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "topology_threshold": 0.5
+    },
+    "outputs": {
+      "results_directory": "Project4/results",
+      "results_json": "Project4/site/assets/results.json"
+    },
+    "physics": {
+      "ambient_smoothing_delta_k": 1e-06,
+      "ks_rho_per_k": 0.25,
+      "linear_h_w_m2k": 15.0,
+      "nonlinear_h_reference_delta_k": 20.0,
+      "nonlinear_h_reference_w_m2k": 5.0,
+      "stefan_boltzmann_w_m2k4": 5.670374419e-08
+    },
+    "project": {
+      "team": [
+        "Charles Green",
+        "Christian Miranda",
+        "Kellen Worthington",
+        "Lucas Somoshegyi-Szokol",
+        "Polina Kondratiuk"
+      ],
+      "title": "PDE-Constrained Heat-Sink Optimization"
+    },
+    "schema_version": 1,
+    "solver": {
+      "line_search_minimum": 1e-06,
+      "newton_absolute_tolerance": 1e-10,
+      "newton_max_iterations": 60,
+      "newton_relative_tolerance": 1e-10
+    },
+    "uncertainty": {
+      "ambient_delta_k": 0.5,
+      "power_fraction": 0.01
+    },
+    "verification": {
+      "energy_balance_relative_tolerance": 1e-08,
+      "gradient_relative_tolerance": 1e-05,
+      "taylor_slope_bounds": [
+        1.8,
+        2.2
+      ],
+      "truth_file": "Project4/tests/benchmark_truth.yaml"
+    }
+  },
   "optimization_history": [
     {
       "design": [
@@ -11964,14 +12056,15 @@
   "schema_version": 1,
   "sensitivity_cost": {
     "adjoint_linear_solves_per_response": 1,
-    "adjoint_seconds": 0.3757907999679446,
+    "adjoint_seconds": 0.15202250005677342,
     "central_difference_state_solves": 80,
     "design_variables": 40,
-    "finite_difference_seconds": 26.935636000242084,
+    "finite_difference_seconds": 11.081360300071537,
     "relative_gradient_error": 2.2789480665371026e-08,
-    "speedup": 71.67720977346897
+    "speedup": 72.89289609059948
   },
   "status": "final",
+  "thermal_dofs": 365,
   "topology_starts": [
     {
       "filtered_densities": [
