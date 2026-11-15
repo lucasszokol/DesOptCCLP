@@ -98,6 +98,8 @@ The table compares mass and both temperature constraints. The physical peak and 
 
 <div id="results-table"></div>
 
+Presentation figures generated from the same results: [mass comparison](assets/figures/mass-comparison.png), [Taylor checks](assets/figures/taylor-checks.png), and [uncertainty comparison](assets/figures/uncertainty-comparison.png).
+
 ## Reproducibility
 
 From the repository root, install `Project4/requirements-project4.txt`, complete the human input files, then run:

@@ -83,6 +83,11 @@
 
 ## Integration notes
 
+- `heatsink.figures` regenerates slide-ready mass, Taylor, and uncertainty
+  plots solely from canonical results; the site links the generated PNGs.
+  The complete local reproduction and 23 tests passed and all three figures
+  were visually inspected. PR #13's preceding commit `74e5c9e` passed the
+  Python 3.11 full-reproduction workflow (run `43755047782`).
 - The uncertainty report now reanalyzes the nominal optimum in every sampled
   scenario and compares it against the scenario-optimized design. The high
   overload scenario fails for the nominal optimum but passes after a roughly

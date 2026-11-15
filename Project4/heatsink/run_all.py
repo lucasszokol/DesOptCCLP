@@ -21,6 +21,7 @@ from .benchmark_verification import benchmark_verification, write_evidence
 from .site import build_site
 from .uncertainty import run_uncertainty
 from .serialize import _design_view
+from .figures import generate_figures
 
 
 def main() -> int:
@@ -101,6 +102,7 @@ def main() -> int:
                            tolerance, float(config.raw["verification"]["gradient_relative_tolerance"]))
     destination = Path(config.raw["outputs"]["results_json"])
     write_json(payload, destination)
+    generate_figures(destination, project_directory / "site" / "assets" / "figures")
     build_site(project_directory / "site")
     print(f"Final results written to {destination}")
     return 0
