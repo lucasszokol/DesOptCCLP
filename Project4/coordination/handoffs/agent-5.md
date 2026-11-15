@@ -83,6 +83,16 @@
 
 ## Integration notes
 
+- Additional independent Agent 2 review: in the isolated source-archive copy
+  of `35caa92`, changed only the review copy's height upper bound to 0.055 m
+  and linear convection coefficient to 15 W/(m² K), matching DEC-002. Its
+  focused sensitivity suite passed 6/6. Independently invoked its 72 Taylor
+  checks across linear/nonlinear physics and penalties 1, 2, 3: 72/72 passed,
+  worst best directional relative error `4.821863774192135e-08`. No agent
+  branch or human-authored truth was changed or merged. The standalone CLI
+  itself was not run because it requires Git metadata absent from an archive.
+- Integration commit `187fe1c` passed Python 3.11 CI including the full
+  reproduction and regenerated-schema steps (Actions run `43755730455`).
 - Independent PR review at `2709aa0` (Agent 1) and `35caa92` (Agent 2):
   archived each branch to a separate directory and ran its focused tests in
   the clean Python 3.10 environment. Agent 1 benchmark tests passed 2/2;
