@@ -35,6 +35,10 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     results["kkt"]["bound_complementarity"] = 0.1
     with pytest.raises(ValueError, match="KKT"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["kkt"]["bound_complementarity"] = 0.0
+    results["uncertainty"]["baseline_design"]["load_cases"][0]["name"] = "wrong_scenario"
+    with pytest.raises(ValueError, match="baseline scenarios"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
     results["designs"]["optimized"] = None
     with pytest.raises(jsonschema.ValidationError):
         validate_final_payload(results, schema, 1e-4, 1e-5)

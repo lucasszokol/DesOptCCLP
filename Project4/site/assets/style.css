@@ -20,7 +20,7 @@ table { width:100%; border-collapse:collapse; } th,td { border:1px solid #aeb9c5
 code { overflow-wrap:anywhere; }
 pre { max-width:100%; overflow-x:auto; }
 mjx-container[display="true"] { max-width:100%; overflow-x:auto; overflow-y:hidden; }
-.data-panel, #results-table, #sensitivity-summary, #topology-starts { max-width:100%; overflow-x:auto; }
+.data-panel, #results-table, #sensitivity-summary, #topology-starts, #uncertainty-summary { max-width:100%; overflow-x:auto; }
 table { min-width:38rem; }
 @media (max-width:600px) { #viewer{height:430px}.viewer-grid,.metrics{grid-template-columns:1fr} main{padding:.7rem} }
 @media (prefers-color-scheme:dark) { body{background:#101419;color:#ecf2f8}.metric-card{background:#222b35}.gate{background:#392715}a{color:#7dbdff}#viewer{background:#121923} }

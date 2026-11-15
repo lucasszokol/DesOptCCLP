@@ -179,7 +179,7 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     base_count = (g["base_elements_x"] + 1) * (g["base_elements_z"] + 1)
     designs = [payload["designs"][name] for name in ("initial", "optimized", "linear_fixed", "nonlinear_fixed")]
     designs.append(payload["uncertainty"]["design"])
-    for design in designs:
+    for design in [*designs, payload["uncertainty"]["baseline_design"]]:
         if (len(design["heights_m"]) != count or len(design["densities"]) != count or
                 len(design["fin_temperature_k"]) != count or len(design["base_temperature_k"]) != base_count):
             raise ValueError(f"Geometry/field dimensions disagree for {design['name']}")
@@ -194,6 +194,9 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
         raise ValueError("Gradient check failed")
     checks = payload["uncertainty"]["gradient_checks"]
     scenarios = {case["name"] for case in payload["uncertainty"]["design"]["load_cases"]}
+    baseline_scenarios = {case["name"] for case in payload["uncertainty"]["baseline_design"]["load_cases"]}
+    if baseline_scenarios != scenarios:
+        raise ValueError("Uncertainty baseline scenarios do not match optimized scenarios")
     coverage = {(c["scenario"], c["variable_family"]) for c in checks}
     if coverage != {(name, family) for name in scenarios for family in ("height", "density")}:
         raise ValueError("Uncertainty gradient coverage is incomplete")

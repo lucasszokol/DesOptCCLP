@@ -83,6 +83,11 @@
 
 ## Integration notes
 
+- The uncertainty report now reanalyzes the nominal optimum in every sampled
+  scenario and compares it against the scenario-optimized design. The high
+  overload scenario fails for the nominal optimum but passes after a roughly
+  2.32% mass increase. Both rows and scenario limits come from results JSON;
+  baseline/optimized scenario names and field dimensions are validated.
 - The KKT data now includes explicit thermal and bound complementarity
   residuals computed from scaled margins, scaled heights, and SciPy's signed
   multipliers. Both are checked before final serialization alongside

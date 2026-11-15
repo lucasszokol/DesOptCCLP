@@ -92,6 +92,7 @@ def main() -> int:
         "assumptions": config.raw["uncertainty"],
         "description": "Paired low and high power and ambient scenarios for each load case; illustrative bounded scenarios, not a probability model.",
         "design": _design_view(robust_model, "Uncertainty scenario optimum", robust_run.full_design, True),
+        "baseline_design": _design_view(robust_model, "Nominal optimum under uncertainty", campaign.kkt_polish.full_design, True),
         "optimizer_success": bool(robust_run.result.success),
         "optimizer_message": str(robust_run.result.message),
         "gradient_checks": robust_checks,
