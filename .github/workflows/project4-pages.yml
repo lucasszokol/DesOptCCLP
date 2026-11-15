@@ -23,10 +23,14 @@ jobs:
         with: {python-version: "3.11", cache: pip}
       - run: pip install -r Project4/requirements-project4.txt
       - run: python -m pytest Project4/tests -q
+      - name: Preserve checked-in results for comparison
+        run: cp Project4/site/assets/results.json "$RUNNER_TEMP/project4-committed.json"
       - name: Reproduce verification, optimization, and site data
         run: python -m Project4.heatsink.run_all --config Project4/config.yaml
       - name: Validate regenerated data
         run: python -m pytest Project4/tests/test_results_schema.py -q
+      - name: Compare published and regenerated engineering results
+        run: python -m Project4.heatsink.compare_reproduction "$RUNNER_TEMP/project4-committed.json" Project4/site/assets/results.json
   build:
     if: github.event_name != 'pull_request'
     needs: test

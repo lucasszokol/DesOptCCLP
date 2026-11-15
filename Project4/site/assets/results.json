@@ -12066,12 +12066,12 @@
   "schema_version": 1,
   "sensitivity_cost": {
     "adjoint_linear_solves_per_response": 1,
-    "adjoint_seconds": 0.17169580003246665,
+    "adjoint_seconds": 0.16956599988043308,
     "central_difference_state_solves": 80,
     "design_variables": 40,
-    "finite_difference_seconds": 11.226674800273031,
+    "finite_difference_seconds": 11.447411000262946,
     "relative_gradient_error": 2.2789480665371026e-08,
-    "speedup": 65.38700887354341
+    "speedup": 67.51006102836014
   },
   "status": "final",
   "thermal_dofs": 365,
