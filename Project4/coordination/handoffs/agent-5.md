@@ -83,6 +83,19 @@
 
 ## Integration notes
 
+- Clean reproduction audit at commit `b0b4cf0`: archived source into a
+  separate checkout, created an isolated Python 3.10.2 venv, installed the
+  declared requirements, and ran `python -m Project4.heatsink.run_all --config
+  Project4/config.yaml` followed by `python -m pytest Project4/tests -q`.
+  The command passed, all 21 tests passed, the optimized and robust masses
+  matched the committed results, and all eight uncertainty gradient checks
+  passed. Python 3.11 was not installed on this machine, so the planned 3.11
+  reproduction remains unverified. GitHub Actions PR #13 test job succeeded
+  at `b0b4cf0`; build and deploy were skipped by design for pull requests.
+- Independent branch review: PR #8 supplies a standalone V1--V6 command; PR
+  #14 supplies broader adjoint coverage and a separate evidence generator. Both
+  are unmerged. Their changes have not been silently copied into integration;
+  the integration run currently uses its own narrower V7 suite.
 - 2026-11-15 takeover: scaled optimizer variables, enforced feasible KKT
   starting points, added failure gates, and corrected finite-difference timing
   to use state-only solves. The canonical command completed; 21 tests passed.

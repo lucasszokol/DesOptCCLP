@@ -12,7 +12,7 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 | Optimization | 15 | Scaled SLSQP stages, continuation, two asymmetric starts, threshold re-optimization, trust-constr KKT polish; `site/assets/results.json` | Local full campaign passes, including feasibility and KKT; all three topology starts return the all-solid design |
 | Nonlinear component | 15 | Natural-convection/radiation N2 residual, Newton solve, consistent tangent, passing V6 benchmark, linear/N2 results | Local comparison generated; linear reference coefficient is a separate modeling choice |
 | Website and 3D | 10 | Local report, Three.js geometry, nodal field, history, hover, metrics, JSON contract | Local desktop and 390 px checks performed; live deployment and final interaction audit pending |
-| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Local full command completed; clean-environment reproduction and CI pending |
+| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; PR #13 test job passed at b0b4cf0. Python 3.11 clean reproduction remains to be verified |
 | Presentation | 5 | Report sections and generated numerical tables | Team review and final editing pending |
 | Bonus: fully nonlinear | +5 | N2 Newton, analytic tangent, implicit adjoint, nonlinear benchmark and comparison | Local evidence produced; final report review pending |
 | Bonus: topology | +5 | Ground-structure densities, filter, SIMP continuation, threshold and fixed-topology comparison | Current optimum is all-solid; mixed topology and threshold-filter behavior remain unverified, so bonus is not claimed |
@@ -21,7 +21,7 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 ## Mandatory completion evidence still missing
 
 1. Review independent branches and integrate their evidence; implement discrete topology reanalysis if claiming a vanished-fin bonus, and review robust-study reporting.
-2. Run clean-environment reproduction, full tests, CI, and final viewer interaction QA.
+2. Verify the stated Python 3.11 environment and final viewer interactions; rerun CI after future changes.
 3. Obtain team review of the AI-use statement; merge and deploy with action-time approval; verify the public site in a private window.
 4. Confirm the overdue participation-sheet URL and submit repository and site URLs on Canvas by a student.
 
