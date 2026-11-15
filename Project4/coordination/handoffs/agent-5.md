@@ -83,6 +83,13 @@
 
 ## Integration notes
 
+- Final-data validation now checks exact nominal and uncertainty scenario
+  coverage and input parameters against configuration, scaled-constraint and
+  pass-flag consistency, and the individual verification check outcomes.
+  Regression tests reject omitted cases, altered inputs, inconsistent
+  constraint values and flags, and failed verification. Full reproduction and
+  28 tests passed locally; the previous commit `bd3ac65` passed Python 3.11 CI
+  including the full campaign in Actions run `43756481274`.
 - Additional independent Agent 2 review: in the isolated source-archive copy
   of `35caa92`, changed only the review copy's height upper bound to 0.055 m
   and linear convection coefficient to 15 W/(m² K), matching DEC-002. Its

@@ -199,6 +199,39 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     for design in designs[1:]:
         if any(not np.isfinite(c["scaled_constraint"]) or c["scaled_constraint"] > tolerance or not c["passed"] for c in design["load_cases"]):
             raise ValueError(f"Design {design['name']} is infeasible or non-finite")
+    config = payload["model_configuration"]
+    nominal_cases = config["load_cases"]
+    uncertainty = config["uncertainty"]
+    expected_scenarios = {}
+    for name, case in nominal_cases.items():
+        for sign, suffix in ((-1, "low"), (1, "high")):
+            expected_scenarios[f"{name}_{suffix}"] = {
+                "power_w": case["power_w"] * (1 + sign * uncertainty["power_fraction"]),
+                "ambient_k": case["ambient_k"] + sign * uncertainty["ambient_delta_k"],
+                "limit_k": case["chip_limit_k"],
+            }
+    expected_nominal = {name: {"power_w": case["power_w"], "ambient_k": case["ambient_k"],
+                               "limit_k": case["chip_limit_k"]} for name, case in nominal_cases.items()}
+    for design, expected in [(item, expected_nominal) for item in designs[:4]] + [
+            (payload["uncertainty"]["design"], expected_scenarios),
+            (payload["uncertainty"]["baseline_design"], expected_scenarios)]:
+        cases = design["load_cases"]
+        if len(cases) != len(expected) or {case["name"] for case in cases} != set(expected):
+            raise ValueError(f"Load-case coverage does not match configuration for {design['name']}")
+        for case in cases:
+            if any(not np.isclose(case[key], value, rtol=1e-12, atol=1e-12)
+                   for key, value in expected[case["name"]].items()):
+                raise ValueError(f"Load-case parameters do not match configuration for {case['name']}")
+            scaled = case["ks_temperature_k"] / case["limit_k"] - 1.0
+            if not np.isclose(case["scaled_constraint"], scaled, rtol=1e-10, atol=1e-12):
+                raise ValueError(f"Constraint value is inconsistent for {case['name']}")
+            if case["passed"] != (case["scaled_constraint"] <= tolerance):
+                raise ValueError(f"Constraint pass flag is inconsistent for {case['name']}")
+    verification_checks = [check for group in payload["verification"]["groups"] for check in group["checks"]]
+    if (not verification_checks or any(not check["pass"] for check in verification_checks) or
+            payload["verification"]["passed_checks"] != len(verification_checks) or
+            payload["verification"]["total_checks"] != len(verification_checks)):
+        raise ValueError("Verification check evidence is incomplete or failed")
     if any(not c.get("pass") for c in payload["gradient_checks"]):
         raise ValueError("Gradient check failed")
     checks = payload["uncertainty"]["gradient_checks"]

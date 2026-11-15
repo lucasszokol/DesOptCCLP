@@ -35,10 +35,11 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     with pytest.raises(ValueError, match="chip peak"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
     case["chip_peak_temperature_k"] = original_peak
+    original_constraint = results["designs"]["optimized"]["load_cases"][0]["scaled_constraint"]
     results["designs"]["optimized"]["load_cases"][0]["scaled_constraint"] = 0.1
     with pytest.raises(ValueError, match="infeasible"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
-    results["designs"]["optimized"]["load_cases"][0]["scaled_constraint"] = 0.0
+    results["designs"]["optimized"]["load_cases"][0]["scaled_constraint"] = original_constraint
     results["kkt"]["constraint_violation"] = float("nan")
     with pytest.raises(ValueError, match="KKT"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
@@ -48,8 +49,29 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
         validate_final_payload(results, schema, 1e-4, 1e-5)
     results["kkt"]["bound_complementarity"] = 0.0
     results["uncertainty"]["baseline_design"]["load_cases"][0]["name"] = "wrong_scenario"
-    with pytest.raises(ValueError, match="baseline scenarios"):
+    with pytest.raises(ValueError, match="Load-case coverage"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
     results["designs"]["optimized"] = None
     with pytest.raises(jsonschema.ValidationError):
         validate_final_payload(results, schema, 1e-4, 1e-5)
+
+
+@pytest.mark.parametrize("defect", ["missing_case", "wrong_power", "wrong_constraint", "wrong_flag", "failed_verification"])
+def test_final_evidence_rejects_inconsistent_loads_and_verification(defect) -> None:
+    assets = ROOT / "Project4" / "site" / "assets"
+    results = json.loads((assets / "results.json").read_text(encoding="utf-8"))
+    if results["status"] != "final":
+        pytest.skip("final campaign has not yet generated evidence")
+    cases = results["designs"]["initial"]["load_cases"]
+    if defect == "missing_case":
+        cases.pop()
+    elif defect == "wrong_power":
+        cases[0]["power_w"] += 1
+    elif defect == "wrong_constraint":
+        cases[0]["scaled_constraint"] += 0.01
+    elif defect == "wrong_flag":
+        cases[0]["passed"] = not cases[0]["passed"]
+    else:
+        results["verification"]["groups"][0]["checks"][0]["pass"] = False
+    with pytest.raises((ValueError, jsonschema.ValidationError)):
+        validate_final_payload(results, assets / "results.schema.json", 1e-4, 1e-5)
