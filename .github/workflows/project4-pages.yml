@@ -23,6 +23,10 @@ jobs:
         with: {python-version: "3.11", cache: pip}
       - run: pip install -r Project4/requirements-project4.txt
       - run: python -m pytest Project4/tests -q
+      - name: Reproduce verification, optimization, and site data
+        run: python -m Project4.heatsink.run_all --config Project4/config.yaml
+      - name: Validate regenerated data
+        run: python -m pytest Project4/tests/test_results_schema.py -q
   build:
     if: github.event_name != 'pull_request'
     needs: test

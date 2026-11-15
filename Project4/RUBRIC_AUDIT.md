@@ -11,8 +11,8 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 | Sensitivity analysis | 20 | `results/sensitivity/sensitivity.md`: both constraints and variable families pass; Taylor slopes 1.98--2.07 and all-variable relative error 2.28e-8 | Passed |
 | Optimization | 15 | Scaled SLSQP stages, continuation, two asymmetric starts, threshold re-optimization, trust-constr KKT polish; `site/assets/results.json` | Local full campaign passes, including feasibility and KKT; all three topology starts return the all-solid design |
 | Nonlinear component | 15 | Natural-convection/radiation N2 residual, Newton solve, consistent tangent, passing V6 benchmark, linear/N2 results | Local comparison generated; linear reference coefficient is a separate modeling choice |
-| Website and 3D | 10 | Local report, Three.js geometry, nodal field, history, hover, metrics, JSON contract | Local desktop and 390 px checks performed; live deployment and final interaction audit pending |
-| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; PR #13 Python 3.11 test job passed at f8669ab. The complete campaign has not been reproduced under Python 3.11 |
+| Website and 3D | 10 | Local report, Three.js geometry, nodal field, history, hover and touch inspection, metrics, JSON contract | Local desktop and 390 px checks exercised hover, tap, animation and layout; live deployment and private-window check pending |
+| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; PR #13 Python 3.11 test job passed at f8669ab. A full Python 3.11 campaign was added to CI but its run is pending |
 | Presentation | 5 | Report sections and generated numerical tables | Team review and final editing pending |
 | Bonus: fully nonlinear | +5 | N2 Newton, analytic tangent, implicit adjoint, nonlinear benchmark and comparison | Local evidence produced; final report review pending |
 | Bonus: topology | +5 | Ground-structure densities, filter, SIMP continuation, threshold and fixed-topology comparison | Current optimum is all-solid; mixed topology and threshold-filter behavior remain unverified, so bonus is not claimed |
@@ -21,7 +21,7 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 ## Mandatory completion evidence still missing
 
 1. Review independent branches and integrate their evidence; implement discrete topology reanalysis if claiming a vanished-fin bonus, and review robust-study reporting.
-2. Verify the stated Python 3.11 environment and final viewer interactions; rerun CI after future changes.
+2. Verify the new Python 3.11 full-campaign CI check and rerun CI after future changes.
 3. Obtain team review of the AI-use statement; merge and deploy with action-time approval; verify the public site in a private window.
 4. Confirm the overdue participation-sheet URL and submit repository and site URLs on Canvas by a student.
 
