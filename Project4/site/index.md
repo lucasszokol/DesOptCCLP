@@ -34,13 +34,17 @@ The limits are project engineering targets, not a specific chip datasheet. The m
 
 ## Analysis model
 
-The custom solver uses bilinear quadrilateral conduction elements in the base and coupled linear one-dimensional fin elements. The extruded depth is included in conduction, mass, heat input, and surface loss. The nonlinear boundary residual is
+The custom solver uses bilinear quadrilateral conduction elements in the base and coupled linear one-dimensional fin elements. The extruded depth is included in conduction, mass, heat input, and surface loss. The nonlinear boundary heat flux and its regularized convection coefficient are
 
-$$q_s=h(T)(T-T_\infty)+\epsilon\sigma(T^4-T_\infty^4),\qquad h\propto|T-T_\infty|^{1/4}.$$
+$$q_s=h(T)(T-T_\infty)+\epsilon\sigma(T^4-T_\infty^4),\qquad h(T)=h_{ref}\left(\frac{\sqrt{(T-T_\infty)^2+\delta^2}}{\Delta T_{ref}}\right)^{1/4}.$$
+
+<div id="model-parameters">Loading material and boundary parameters.</div>
+
+The quarter-power law is a simplified modeling assumption, not a full Churchill–Chu calculation. The reference coefficient, black-anodized emissivity, and engineering temperature limits are assumptions; no particular finish or chip has been validated against a datasheet.
 
 Newton's method uses the consistent analytic tangent and backtracking. <span id="dof-count">Loading model size.</span> Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
 
-The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is applied over the centered chip footprint; exposed surfaces lose heat through the boundary law above, and the remainder of the underside is insulated. Each fin carries axial conduction coupled to its base node and loses heat from its sides and tip. The model does not resolve air flow or mutual fin shielding, so extrapolating to a manufactured design requires external validation.
+The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is applied over the centered chip footprint; the remainder of the underside and the base side edges are insulated. The full base top receives surface loss, including the area represented by fin roots: fins connect to nodes rather than replacing a finite-width base patch. Each fin carries axial conduction and loses heat from its sides and tip. This full-top exposure and the lack of resolved air flow or mutual fin shielding can overestimate cooling; extrapolating to a manufactured design requires external validation.
 
 ## Verification
 
