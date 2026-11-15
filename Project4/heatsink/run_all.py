@@ -19,6 +19,8 @@ from .verification import (
 )
 from .benchmark_verification import benchmark_verification, write_evidence
 from .site import build_site
+from .uncertainty import run_uncertainty
+from .serialize import _design_view
 
 
 def main() -> int:
@@ -65,6 +67,20 @@ def main() -> int:
         print("V7 SENSITIVITY VERIFICATION FAILED")
         return 4
     campaign = run_campaign(model)
+    tolerance = float(config.raw["optimization"]["scaled_feasibility_tolerance"])
+    required_runs = (campaign.linear_fixed, campaign.nonlinear_fixed, campaign.threshold_polish, campaign.kkt_polish)
+    for run in required_runs:
+        violation = max(response.scaled_constraint for response in run.responses)
+        if not run.result.success or violation > tolerance:
+            print(f"OPTIMIZATION FAILED: {run.name}: {run.result.message}; "
+                  f"maximum scaled constraint = {violation:.6g} (tolerance {tolerance:.6g})")
+            return 5
+    robust_model, robust_run, robust_checks = run_uncertainty(model, campaign.kkt_polish.full_design)
+    robust_violation = max(r.scaled_constraint for r in robust_run.responses)
+    if (not robust_run.result.success or robust_violation > tolerance or
+            any(check["relative_error"] > config.raw["verification"]["gradient_relative_tolerance"] for check in robust_checks)):
+        print(f"UNCERTAINTY STUDY FAILED: {robust_run.result.message}; maximum constraint {robust_violation:.6g}")
+        return 6
     payload = final_payload(
         model,
         campaign,
@@ -72,6 +88,14 @@ def main() -> int:
         gradients,
         cost,
     )
+    payload["uncertainty"] = {
+        "assumptions": config.raw["uncertainty"],
+        "description": "Paired low and high power and ambient scenarios for each load case; illustrative bounded scenarios, not a probability model.",
+        "design": _design_view(robust_model, "Uncertainty scenario optimum", robust_run.full_design, True),
+        "optimizer_success": bool(robust_run.result.success),
+        "optimizer_message": str(robust_run.result.message),
+        "gradient_checks": robust_checks,
+    }
     destination = Path(config.raw["outputs"]["results_json"])
     write_json(payload, destination)
     build_site(project_directory / "site")

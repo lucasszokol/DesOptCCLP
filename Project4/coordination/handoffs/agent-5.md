@@ -83,6 +83,21 @@
 
 ## Integration notes
 
+- 2026-11-15 takeover: scaled optimizer variables, enforced feasible KKT
+  starting points, added failure gates, and corrected finite-difference timing
+  to use state-only solves. The canonical command completed; 21 tests passed.
+- The nonlinear fixed-topology mass is approximately 0.17279 kg. Two additional
+  asymmetric p=3 starts and the continuation start converged to all-solid
+  results. Mixed thresholded physical densities are rejected pending a true
+  discrete reanalysis. No vanished-fin bonus is claimed.
+- The illustrative uncertainty study uses paired ±1% power and ±0.5 K ambient
+  scenarios. Its approximately 0.17680 kg design passes all four; eight
+  family-specific directional gradient checks pass. These scenarios are not a
+  statistically calibrated reliability analysis.
+- The local desktop report and 390 px phone viewport were inspected; the
+  phone view loads both designs and has no document-wide horizontal overflow.
+  Final interaction checks, independent branch review, clean reproduction,
+  team AI-statement review, deployment, and Canvas submission remain.
 - Do not merge or copy an Agent 3 fix silently. Review its PR, merge through
   the maintainer workflow, update this branch from `main`, and rerun the full
   command before changing the final audit status.

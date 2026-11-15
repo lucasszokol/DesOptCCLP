@@ -71,11 +71,12 @@ class OptimizationProblem:
         g = self.model.config.geometry
         hlow, hhigh = g.fin_height_bounds_m
         if self.fixed_topology:
-            return Bounds(np.full(self.count, hlow), np.full(self.count, hhigh))
+            return Bounds(np.full(self.count, hlow), np.full(self.count, hhigh), keep_feasible=True)
         rlow, rhigh = g.density_bounds
         return Bounds(
             np.r_[np.full(self.count, hlow), np.full(self.count, rlow)],
             np.r_[np.full(self.count, hhigh), np.full(self.count, rhigh)],
+            keep_feasible=True,
         )
 
     def _evaluate(self, variables: np.ndarray) -> tuple[ResponseResult, ...]:
@@ -140,38 +141,74 @@ def optimize_design(
         if fixed_topology
         else np.asarray(initial_full_design, dtype=float)
     )
+    # Height variables are measured in metres while densities are O(1).
+    # Optimize dimensionless variables so the Hessian and trust region do not
+    # mix quantities whose magnitudes differ by two orders of magnitude.
+    scale = np.ones_like(initial)
+    scale[:problem.count] = model.config.geometry.fin_height_bounds_m[1]
+    physical_bounds = problem.bounds()
+    scaled_bounds = Bounds(physical_bounds.lb / scale, physical_bounds.ub / scale,
+                           keep_feasible=True)
+    def objective(z):
+        return problem.objective(z * scale)
+    def objective_gradient(z):
+        return problem.objective_gradient(z * scale) * scale
+    def margins(z):
+        return problem.margins(z * scale)
+    def margins_jacobian(z):
+        return problem.margins_jacobian(z * scale) * scale
+    def callback(z, state=None):
+        problem.callback(z * scale, state)
+    initial = initial / scale
     if method == "SLSQP":
         constraints = {
             "type": "ineq",
-            "fun": problem.margins,
-            "jac": problem.margins_jacobian,
+            "fun": margins,
+            "jac": margins_jacobian,
         }
         result = minimize(
-            problem.objective,
+            objective,
             initial,
             method="SLSQP",
-            jac=problem.objective_gradient,
-            bounds=problem.bounds(),
+            jac=objective_gradient,
+            bounds=scaled_bounds,
             constraints=constraints,
-            callback=problem.callback,
+            callback=callback,
             options={"ftol": 1.0e-10, "maxiter": max_iterations, "disp": False},
         )
     elif method == "trust-constr":
+        # Interior-point steps can stall if a keep-feasible variable starts
+        # exactly at a bound; move it a negligible distance into the domain.
+        initial = np.clip(initial, scaled_bounds.lb + 1e-7, scaled_bounds.ub - 1e-7)
+        # Start the interior-point solver strictly inside the thermal
+        # constraints too. Move toward the all-max-height bounding design;
+        # do not silently start at an infeasible state.
+        target = initial.copy()
+        target[:problem.count] = scaled_bounds.ub[:problem.count] - 1e-7
+        for fraction in (0.0, 1e-4, 1e-3, 1e-2, 0.1, 1.0):
+            candidate = initial + fraction * (target - initial)
+            if np.min(margins(candidate)) > 1e-9:
+                initial = candidate
+                break
+        else:
+            raise ValueError("No strictly feasible thermal starting point for KKT polish")
         constraint = NonlinearConstraint(
-            problem.margins, 0.0, np.inf, jac=problem.margins_jacobian
+            margins, 0.0, np.inf, jac=margins_jacobian, keep_feasible=True
         )
         result = minimize(
-            problem.objective,
+            objective,
             initial,
             method="trust-constr",
-            jac=problem.objective_gradient,
-            bounds=problem.bounds(),
+            jac=objective_gradient,
+            bounds=scaled_bounds,
             constraints=[constraint],
-            callback=problem.callback,
-            options={"gtol": 1.0e-8, "maxiter": max_iterations, "verbose": 0},
+            callback=callback,
+            options={"gtol": 1.0e-8, "maxiter": max_iterations, "verbose": 0,
+                     "initial_barrier_parameter": 1e-4, "initial_barrier_tolerance": 1e-4},
         )
     else:
         raise ValueError(f"unsupported optimizer {method}")
+    result.x = result.x * scale
     full = problem.full_design(result.x)
     responses = problem._evaluate(result.x)
     return OptimizationRun(

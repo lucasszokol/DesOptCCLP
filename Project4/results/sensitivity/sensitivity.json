@@ -411,10 +411,10 @@
   ],
   "cost_comparison": {
     "design_variables": 40,
-    "adjoint_seconds": 0.18681959994137287,
-    "finite_difference_seconds": 14.186277100350708,
-    "speedup": 75.93570002720593,
-    "relative_gradient_error": 2.2789797645838405e-08,
+    "adjoint_seconds": 0.339521000161767,
+    "finite_difference_seconds": 22.030589499976486,
+    "speedup": 64.8872661469537,
+    "relative_gradient_error": 2.2789480665371026e-08,
     "adjoint_linear_solves_per_response": 1,
     "central_difference_state_solves": 80
   }

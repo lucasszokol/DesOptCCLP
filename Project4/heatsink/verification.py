@@ -127,9 +127,13 @@ def sensitivity_cost_comparison(model: HeatSinkModel, design: np.ndarray) -> dic
     for index in range(design.size):
         perturbation = np.zeros(design.size)
         perturbation[index] = step
-        plus = model.response_with_adjoint(design + perturbation, case, nonlinear=True)
-        minus = model.response_with_adjoint(design - perturbation, case, nonlinear=True)
-        finite[index] = (plus.scaled_constraint - minus.scaled_constraint) / (2.0 * step)
+        plus = model.solve(design + perturbation, case, nonlinear=True)
+        minus = model.solve(design - perturbation, case, nonlinear=True)
+        if not plus.converged or not minus.converged:
+            raise RuntimeError("Finite-difference state solve did not converge")
+        plus_ks, _ = model.ks_temperature(plus.temperature_k)
+        minus_ks, _ = model.ks_temperature(minus.temperature_k)
+        finite[index] = (plus_ks - minus_ks) / (2.0 * step * case.chip_limit_k)
     finite_seconds = perf_counter() - start
     relative_error = np.linalg.norm(finite - response.gradient) / max(np.linalg.norm(finite), 1.0e-15)
     return {

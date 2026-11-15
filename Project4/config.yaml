@@ -40,6 +40,10 @@ optimization:
   simp_penalties: [1.0, 2.0, 3.0]
   topology_threshold: 0.50
   scaled_feasibility_tolerance: 1.0e-4
+uncertainty:
+  # Demonstration scenarios, not a statistically calibrated reliability model.
+  power_fraction: 0.01
+  ambient_delta_k: 0.5
 verification:
   truth_file: Project4/tests/benchmark_truth.yaml
   gradient_relative_tolerance: 1.0e-5

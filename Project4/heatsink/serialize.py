@@ -25,7 +25,7 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
                 "limit_k": case.chip_limit_k,
                 "ks_temperature_k": response.ks_temperature_k,
                 "scaled_constraint": response.scaled_constraint,
-                "passed": response.scaled_constraint <= 0.0,
+                "passed": response.scaled_constraint <= float(model.config.raw["optimization"]["scaled_feasibility_tolerance"]),
                 "energy_imbalance_w": response.solve.energy_imbalance_w,
                 "newton_iterations": response.solve.iterations,
             }
@@ -59,6 +59,8 @@ def preliminary_payload(model: HeatSinkModel) -> dict:
             "base_depth_m": g.extrusion_depth_m,
             "base_thickness_m": g.base_thickness_m,
             "fin_thickness_m": g.fin_thickness_m,
+            "base_elements_x": g.base_elements_x,
+            "base_elements_z": g.base_elements_z,
             "fin_x_m": model.x[model.fin_x_indices].tolist(),
         },
         "designs": {
@@ -109,6 +111,8 @@ def final_payload(
             "base_depth_m": g.extrusion_depth_m,
             "base_thickness_m": g.base_thickness_m,
             "fin_thickness_m": g.fin_thickness_m,
+            "base_elements_x": g.base_elements_x,
+            "base_elements_z": g.base_elements_z,
             "fin_x_m": model.x[model.fin_x_indices].tolist(),
         },
         "designs": {
@@ -118,6 +122,14 @@ def final_payload(
             "nonlinear_fixed": _design_view(model, "Nonlinear fixed-topology optimum", campaign.nonlinear_fixed.full_design, True),
         },
         "optimization_history": history,
+        "topology_starts": [
+            {"name": run.name, "success": bool(run.result.success),
+             "message": str(run.result.message), "mass_kg": run.mass_kg,
+             "max_scaled_constraint": max(r.scaled_constraint for r in run.responses),
+             "raw_densities": run.full_design[model.config.geometry.candidate_fins:].tolist(),
+             "filtered_densities": model.split_design(run.full_design)[2].tolist()}
+            for run in campaign.topology_starts
+        ],
         "verification": verification,
         "gradient_checks": gradient_checks,
         "sensitivity_cost": sensitivity_cost,
