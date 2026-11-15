@@ -61,7 +61,7 @@
         "verification": {"type": "object", "required": ["status", "groups"], "properties": {"status": {"const": "passed"}, "groups": {"type": "array", "minItems": 6}}},
         "gradient_checks": {"type": "array", "minItems": 4},
         "topology_starts": {"type": "array", "minItems": 3},
-        "kkt": {"type": "object", "required": ["success", "optimality", "constraint_violation", "multipliers"], "properties": {"success": {"const": true}}},
+        "kkt": {"type": "object", "required": ["success", "optimality", "constraint_violation", "constraint_complementarity", "bound_complementarity", "multipliers"], "properties": {"success": {"const": true}}},
         "uncertainty": {"type": "object", "required": ["assumptions", "design", "optimizer_success", "gradient_checks"], "properties": {"design": {"$ref": "#/$defs/design"}, "optimizer_success": {"const": true}, "gradient_checks": {"type": "array", "minItems": 8}}}
       }
     }

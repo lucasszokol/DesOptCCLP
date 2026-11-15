@@ -83,6 +83,10 @@
 
 ## Integration notes
 
+- The KKT data now includes explicit thermal and bound complementarity
+  residuals computed from scaled margins, scaled heights, and SciPy's signed
+  multipliers. Both are checked before final serialization alongside
+  stationarity and feasibility. The local full run passed.
 - The results contract now requires final optimization, verification,
   uncertainty, gradient, KKT, and mesh data. `run_all` validates the schema,
   dimensions, constraints, finite fields, KKT residuals, and uncertainty

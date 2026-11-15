@@ -105,6 +105,18 @@ def final_payload(
     if multipliers is not None:
         multipliers = [np.asarray(value).tolist() for value in multipliers]
     g = model.config.geometry
+    if multipliers is None or len(multipliers) < 2:
+        raise ValueError("KKT polish did not return constraint and bound multipliers")
+    # trust-constr uses lower-bounded positive margins, so its inequality
+    # multipliers are nonpositive; bound multipliers are signed by active side.
+    margins = -np.array([response.scaled_constraint for response in final_run.responses])
+    constraint_complementarity = float(np.max(np.abs(np.asarray(multipliers[0]) * margins)))
+    heights = final_run.full_design[:g.candidate_fins]
+    low, high = g.fin_height_bounds_m
+    scaled_heights = heights / high
+    bound_multipliers = np.asarray(multipliers[1])
+    bound_slack = np.where(bound_multipliers >= 0, 1.0 - scaled_heights, scaled_heights - low / high)
+    bound_complementarity = float(np.max(np.abs(bound_multipliers * bound_slack)))
     return {
         "schema_version": 1,
         "status": "final",
@@ -143,6 +155,8 @@ def final_payload(
             "message": str(final_run.result.message),
             "optimality": float(getattr(final_run.result, "optimality", np.nan)),
             "constraint_violation": float(getattr(final_run.result, "constr_violation", np.nan)),
+            "constraint_complementarity": constraint_complementarity,
+            "bound_complementarity": bound_complementarity,
             "multipliers": multipliers,
         },
     }
@@ -186,6 +200,7 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     if any(not np.isfinite(c["relative_error"]) or c["relative_error"] > gradient_tolerance for c in checks):
         raise ValueError("Uncertainty gradient check failed")
     kkt = payload["kkt"]
-    if (not np.isfinite(kkt["optimality"]) or not np.isfinite(kkt["constraint_violation"]) or
-            kkt["optimality"] > tolerance or kkt["constraint_violation"] > tolerance):
+    residuals = (kkt["optimality"], kkt["constraint_violation"],
+                 kkt["constraint_complementarity"], kkt["bound_complementarity"])
+    if any(not np.isfinite(value) or value > tolerance for value in residuals):
         raise ValueError("KKT residual exceeds tolerance")

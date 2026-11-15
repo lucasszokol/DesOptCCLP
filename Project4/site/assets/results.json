@@ -2426,6 +2426,8 @@
     }
   ],
   "kkt": {
+    "bound_complementarity": 1.0923083394824094e-07,
+    "constraint_complementarity": 3.263729931389235e-08,
     "constraint_violation": 0.0,
     "message": "`gtol` termination condition is satisfied.",
     "multipliers": [
@@ -12056,12 +12058,12 @@
   "schema_version": 1,
   "sensitivity_cost": {
     "adjoint_linear_solves_per_response": 1,
-    "adjoint_seconds": 0.15202250005677342,
+    "adjoint_seconds": 0.14926480036228895,
     "central_difference_state_solves": 80,
     "design_variables": 40,
-    "finite_difference_seconds": 11.081360300071537,
+    "finite_difference_seconds": 11.31461439980194,
     "relative_gradient_error": 2.2789480665371026e-08,
-    "speedup": 72.89289609059948
+    "speedup": 75.80229479649326
   },
   "status": "final",
   "thermal_dofs": 365,
