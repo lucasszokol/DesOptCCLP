@@ -70,6 +70,8 @@ The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-to
 
 <canvas id="history-plot" class="report-plot" width="900" height="360" aria-label="Optimization convergence plot"></canvas>
 
+The history concatenates separate optimizer stages; dashed vertical lines mark stage changes, so jumps between stages are not individual-iteration convergence failures.
+
 ## Nonlinear component — bonus +5
 
 The N2 state includes temperature-dependent natural convection and $T^4$ radiation, is solved by Newton's method, differentiated at the converged state, and checked against the independently solved nonlinear benchmark. The linear and nonlinear fixed-topology optima are listed in the results table. <span id="linear-reference">Loading the linear reference coefficient.</span> The difference reflects both the boundary-law change and the chosen reference coefficient; it should not be interpreted as an isolated radiation effect.
