@@ -9,7 +9,7 @@ from .config import load_config
 from .gates import HumanGateError, require_human_approvals
 from .model import HeatSinkModel
 from .campaign import run_campaign
-from .serialize import final_payload, write_json
+from .serialize import final_payload, write_json, validate_final_payload
 from .verification import (
     sensitivity_cost_comparison,
     objective_gradient_checks,
@@ -96,6 +96,8 @@ def main() -> int:
         "optimizer_message": str(robust_run.result.message),
         "gradient_checks": robust_checks,
     }
+    validate_final_payload(payload, project_directory / "site" / "assets" / "results.schema.json",
+                           tolerance, float(config.raw["verification"]["gradient_relative_tolerance"]))
     destination = Path(config.raw["outputs"]["results_json"])
     write_json(payload, destination)
     build_site(project_directory / "site")

@@ -83,6 +83,12 @@
 
 ## Integration notes
 
+- The results contract now requires final optimization, verification,
+  uncertainty, gradient, KKT, and mesh data. `run_all` validates the schema,
+  dimensions, constraints, finite fields, KKT residuals, and uncertainty
+  scenario/family coverage before writing final JSON. The full command and
+  22-test suite passed locally; regression checks also reject incomplete,
+  infeasible, and non-finite final evidence.
 - Local viewer interaction QA exercised hover and animation at desktop and
   390 px widths, plus touch inspection at 390 px. The mobile viewport has no
   page-wide overflow with the topology table present. Hover/tap now report the

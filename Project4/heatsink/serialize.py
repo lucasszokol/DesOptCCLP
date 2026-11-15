@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import jsonschema
 
 from .model import HeatSinkModel
 from .campaign import CampaignResult
@@ -146,4 +147,41 @@ def final_payload(
 def write_json(payload: dict, path: str | Path) -> None:
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    destination.write_text(json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+
+
+def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, gradient_tolerance: float) -> None:
+    """Reject incomplete or infeasible final evidence before publication."""
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    jsonschema.validate(payload, schema)
+    if payload.get("status") != "final":
+        raise ValueError("Final publication requires final status")
+    g = payload["geometry"]
+    count = len(g["fin_x_m"])
+    base_count = (g["base_elements_x"] + 1) * (g["base_elements_z"] + 1)
+    designs = [payload["designs"][name] for name in ("initial", "optimized", "linear_fixed", "nonlinear_fixed")]
+    designs.append(payload["uncertainty"]["design"])
+    for design in designs:
+        if (len(design["heights_m"]) != count or len(design["densities"]) != count or
+                len(design["fin_temperature_k"]) != count or len(design["base_temperature_k"]) != base_count):
+            raise ValueError(f"Geometry/field dimensions disagree for {design['name']}")
+        numerical_fields = (design["mass_kg"], design["heights_m"], design["densities"],
+                            design["base_temperature_k"], design["fin_temperature_k"])
+        if any(not np.all(np.isfinite(field)) for field in numerical_fields):
+            raise ValueError(f"Non-finite geometry or field in {design['name']}")
+    for design in designs[1:]:
+        if any(not np.isfinite(c["scaled_constraint"]) or c["scaled_constraint"] > tolerance or not c["passed"] for c in design["load_cases"]):
+            raise ValueError(f"Design {design['name']} is infeasible or non-finite")
+    if any(not c.get("pass") for c in payload["gradient_checks"]):
+        raise ValueError("Gradient check failed")
+    checks = payload["uncertainty"]["gradient_checks"]
+    scenarios = {case["name"] for case in payload["uncertainty"]["design"]["load_cases"]}
+    coverage = {(c["scenario"], c["variable_family"]) for c in checks}
+    if coverage != {(name, family) for name in scenarios for family in ("height", "density")}:
+        raise ValueError("Uncertainty gradient coverage is incomplete")
+    if any(not np.isfinite(c["relative_error"]) or c["relative_error"] > gradient_tolerance for c in checks):
+        raise ValueError("Uncertainty gradient check failed")
+    kkt = payload["kkt"]
+    if (not np.isfinite(kkt["optimality"]) or not np.isfinite(kkt["constraint_violation"]) or
+            kkt["optimality"] > tolerance or kkt["constraint_violation"] > tolerance):
+        raise ValueError("KKT residual exceeds tolerance")

@@ -15,4 +15,4 @@ Status: **PASSED**
 | mass | density | 1.51e-10 | PASS |
 
 Adjoint/finite-difference relative gradient error: `2.27895e-08`.
-Measured speedup: `64.9x` (80 central-difference state solves).
+Measured speedup: `71.7x` (80 central-difference state solves).

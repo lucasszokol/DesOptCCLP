@@ -26,6 +26,12 @@ $$m=\rho_{Al}\left(V_b+d t_f\sum_i \bar\rho_iH_i\right).$$
 
 Two PDE response constraints limit a KS aggregate of the chip-interface temperature: 358.15 K at 50 W and 298.15 K ambient, and 373.15 K at 60 W and 308.15 K ambient. Heights are bounded from 10–55 mm and densities from 0.001–1. A bounding analysis rejected the original 100/125 W draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
 
+For load case $s$, the explicit scaled constraint is $g_s=\mathrm{KS}_{\beta}(T_{chip,s})/T_{limit,s}-1\le0$, where
+
+$$\mathrm{KS}_{\beta}(T)=T_{\max}+\beta^{-1}\log\!\sum_j\exp[\beta(T_j-T_{\max})].$$
+
+The limits are project engineering targets, not a specific chip datasheet. The mass expression counts a fixed base plus filtered fin volumes; the ground-structure variables are raw densities, filtered before use in the physics and mass. Constants, bounds, mesh and loads are recorded in the repository's configuration.
+
 ## Analysis model
 
 The custom solver uses bilinear quadrilateral conduction elements in the base and coupled linear one-dimensional fin elements. The extruded depth is included in conduction, mass, heat input, and surface loss. The nonlinear boundary residual is
@@ -33,6 +39,8 @@ The custom solver uses bilinear quadrilateral conduction elements in the base an
 $$q_s=h(T)(T-T_\infty)+\epsilon\sigma(T^4-T_\infty^4),\qquad h\propto|T-T_\infty|^{1/4}.$$
 
 Newton's method uses the consistent analytic tangent and backtracking. The model currently has 365 thermal degrees of freedom. Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
+
+The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is applied over the centered chip footprint; exposed surfaces lose heat through the boundary law above, and the remainder of the underside is insulated. Each fin carries axial conduction coupled to its base node and loses heat from its sides and tip. The model does not resolve air flow or mutual fin shielding, so extrapolating to a manufactured design requires external validation.
 
 ## Verification
 
@@ -45,6 +53,8 @@ The team independently supplied benchmark values before the agent checked the so
 For residual $R(T,x)=0$ and response $f(T,x)$, each discrete adjoint solves
 
 $$R_T^T\lambda=-f_T^T,\qquad \frac{df}{dx}=f_x+\lambda^TR_x.$$
+
+This follows by differentiating $R(T(x),x)=0$: $R_TT_x+R_x=0$. Multiplying by $\lambda^T$ eliminates $T_x$ from the total derivative. For each scaled temperature constraint $f_T$ is the KS softmax weight vector divided by its temperature limit and $f_x=0$ at fixed state. Mass is independent of the thermal state, so its gradient is computed directly. The same adjoint relation applies to the converged nonlinear tangent.
 
 The implementation includes analytic $R_x$ for every height and raw density, including density-filter propagation, SIMP conduction, changing fin length, and density-scaled surface loss. The table compares adjoint and central-difference directions for both load cases and both variable families.
 
