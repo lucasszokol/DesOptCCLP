@@ -87,9 +87,9 @@
   390 px widths, plus touch inspection at 390 px. The mobile viewport has no
   page-wide overflow with the topology table present. Hover/tap now report the
   interpolated field at the hit point; history still shows final-state colors.
-- The Python 3.11 GitHub Actions test job now includes the complete `run_all`
-  reproduction and schema validation. This new workflow must pass in CI before
-  a Python 3.11 full-campaign success can be claimed.
+- The Python 3.11 GitHub Actions test job includes the complete `run_all`
+  reproduction and schema validation. Both steps passed for `96c470e` in run
+  `43752039284`, alongside the full pytest suite.
 - Clean reproduction audit at commit `b0b4cf0`: archived source into a
   separate checkout, created an isolated Python 3.10.2 venv, installed the
   declared requirements, and ran `python -m Project4.heatsink.run_all --config
