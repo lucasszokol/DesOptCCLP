@@ -96,6 +96,19 @@
   #14 supplies broader adjoint coverage and a separate evidence generator. Both
   are unmerged. Their changes have not been silently copied into integration;
   the integration run currently uses its own narrower V7 suite.
+- PR #13's Python 3.11 GitHub Actions test job succeeded on `f8669ab` (run
+  43751556256). That job runs pytest, not the full optimization command.
+- A three-way merge preview on `f8669ab` is clean for PR #8; PR #14 conflicts
+  in `verification.py` and the generated sensitivity JSON and Markdown. PR #8's
+  standalone CLI reads the requested truth file directly and does not call
+  `require_human_approvals`; its passing output must not by itself be treated as
+  evidence that the human gate passed. PR #14's standalone evidence is broader
+  than the integration command's V7 checks but its generator writes the same
+  sensitivity files that the integration command regenerates. Preserve both
+  provenance and the canonical results contract when reconciling it. Its CLI
+  also unconditionally invokes `git rev-parse HEAD`, which fails in a source
+  archive without Git metadata; do not claim archive reproducibility for that
+  separate command without handling unavailable provenance.
 - 2026-11-15 takeover: scaled optimizer variables, enforced feasible KKT
   starting points, added failure gates, and corrected finite-difference timing
   to use state-only solves. The canonical command completed; 21 tests passed.
