@@ -18,11 +18,12 @@ are generated from one canonical `site/assets/results.json` file.
 - V1--V6 reports 20/20 checks passing; V7 adjoint/Taylor evidence passes.
 - GitHub Pages test, build, and deployment jobs pass, and the public site
   responds successfully.
-- The full optimization command currently reaches the final KKT stage and then
-  fails on the bound-handling defect tracked in
-  [issue #10](https://github.com/lucasszokol/DesOptCCLP/issues/10).
-- The live site therefore still shows preliminary data. Do not present it as a
-  final optimized result yet.
+- On the integration branch, the full optimization and uncertainty command
+  completes with feasible results and a successful KKT polish; all three
+  tested topology starts return an all-solid design.
+- The latest site and results are still on the integration branch. The public
+  site follows `main` and therefore still shows preliminary data until the
+  integration PR is approved, merged, and deployed.
 
 ## Human gates
 
@@ -42,8 +43,8 @@ the backup bonus path. See
 .\.venv\Scripts\python.exe -m Project4.heatsink.run_all --config Project4\config.yaml
 ```
 
-The command will run verification, gradient checks, the three optimization
-cases, report-table generation, JSON serialization, and the static-site build.
+The command runs verification, gradient checks, optimization, uncertainty
+scenarios, final-data validation, JSON serialization, and the static-site build.
 It must exit successfully before `site/assets/results.json` is treated as final.
 
 ## Team
@@ -54,4 +55,6 @@ Somoshegyi-Szokol, and Polina Kondratiuk.
 ## Remaining human actions
 
 - Review the final AI-use statement and numerical report after the campaign.
+- Review and authorize the integration PR merge; verify the deployed site in a
+  private window, and confirm the participation-sheet URL.
 - After the final campaign and site QA pass, submit both URLs on Canvas.
