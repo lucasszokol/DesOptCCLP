@@ -25,6 +25,7 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
                 "ambient_k": case.ambient_k,
                 "limit_k": case.chip_limit_k,
                 "ks_temperature_k": response.ks_temperature_k,
+                "chip_peak_temperature_k": float(np.max(response.solve.temperature_k[model.chip_dofs()])),
                 "scaled_constraint": response.scaled_constraint,
                 "passed": response.scaled_constraint <= float(model.config.raw["optimization"]["scaled_feasibility_tolerance"]),
                 "energy_imbalance_w": response.solve.energy_imbalance_w,
@@ -177,6 +178,7 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     g = payload["geometry"]
     count = len(g["fin_x_m"])
     base_count = (g["base_elements_x"] + 1) * (g["base_elements_z"] + 1)
+    balance_tolerance = float(payload["model_configuration"]["verification"]["energy_balance_relative_tolerance"])
     designs = [payload["designs"][name] for name in ("initial", "optimized", "linear_fixed", "nonlinear_fixed")]
     designs.append(payload["uncertainty"]["design"])
     for design in [*designs, payload["uncertainty"]["baseline_design"]]:
@@ -187,6 +189,13 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
                             design["base_temperature_k"], design["fin_temperature_k"])
         if any(not np.all(np.isfinite(field)) for field in numerical_fields):
             raise ValueError(f"Non-finite geometry or field in {design['name']}")
+        for case in design["load_cases"]:
+            if (not np.isfinite(case["energy_imbalance_w"]) or
+                    abs(case["energy_imbalance_w"]) > balance_tolerance * case["power_w"]):
+                raise ValueError(f"Energy balance failed for {design['name']}: {case['name']}")
+            if (not np.isfinite(case["chip_peak_temperature_k"]) or
+                    case["chip_peak_temperature_k"] > case["ks_temperature_k"] + 1e-10):
+                raise ValueError(f"Invalid chip peak for {design['name']}: {case['name']}")
     for design in designs[1:]:
         if any(not np.isfinite(c["scaled_constraint"]) or c["scaled_constraint"] > tolerance or not c["passed"] for c in design["load_cases"]):
             raise ValueError(f"Design {design['name']} is infeasible or non-finite")

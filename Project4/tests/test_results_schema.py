@@ -24,6 +24,17 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
         pytest.skip("final campaign has not yet generated evidence")
     schema = assets / "results.schema.json"
     validate_final_payload(results, schema, 1e-4, 1e-5)
+    case = results["designs"]["optimized"]["load_cases"][0]
+    original_balance = case["energy_imbalance_w"]
+    case["energy_imbalance_w"] = case["power_w"] * 1e-3
+    with pytest.raises(ValueError, match="Energy balance"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    case["energy_imbalance_w"] = original_balance
+    original_peak = case["chip_peak_temperature_k"]
+    case["chip_peak_temperature_k"] = case["ks_temperature_k"] + 1
+    with pytest.raises(ValueError, match="chip peak"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    case["chip_peak_temperature_k"] = original_peak
     results["designs"]["optimized"]["load_cases"][0]["scaled_constraint"] = 0.1
     with pytest.raises(ValueError, match="infeasible"):
         validate_final_payload(results, schema, 1e-4, 1e-5)

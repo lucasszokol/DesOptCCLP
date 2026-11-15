@@ -477,6 +477,7 @@
       "load_cases": [
         {
           "ambient_k": 298.15,
+          "chip_peak_temperature_k": 363.8958919387601,
           "energy_imbalance_w": 6.304645694399369e-11,
           "ks_temperature_k": 373.60855272339353,
           "limit_k": 358.15,
@@ -488,6 +489,7 @@
         },
         {
           "ambient_k": 308.15,
+          "chip_peak_temperature_k": 381.9328516825473,
           "energy_imbalance_w": 2.29832153308962e-10,
           "ks_temperature_k": 391.5450936865367,
           "limit_k": 373.15,
@@ -978,6 +980,7 @@
       "load_cases": [
         {
           "ambient_k": 298.15,
+          "chip_peak_temperature_k": 344.2642957517959,
           "energy_imbalance_w": 4.7414516757271485e-11,
           "ks_temperature_k": 354.02126339334853,
           "limit_k": 358.15,
@@ -989,6 +992,7 @@
         },
         {
           "ambient_k": 308.15,
+          "chip_peak_temperature_k": 363.4871549021489,
           "energy_imbalance_w": 4.950351240040618e-11,
           "ks_temperature_k": 373.15000000095296,
           "limit_k": 373.15,
@@ -1479,6 +1483,7 @@
       "load_cases": [
         {
           "ambient_k": 298.15,
+          "chip_peak_temperature_k": 347.1240982786444,
           "energy_imbalance_w": 5.363887112252996e-11,
           "ks_temperature_k": 356.8658828946018,
           "limit_k": 358.15,
@@ -1490,6 +1495,7 @@
         },
         {
           "ambient_k": 308.15,
+          "chip_peak_temperature_k": 363.50414287538894,
           "energy_imbalance_w": 3.9321434996963944e-11,
           "ks_temperature_k": 373.15000000000845,
           "limit_k": 373.15,
@@ -1980,6 +1986,7 @@
       "load_cases": [
         {
           "ambient_k": 298.15,
+          "chip_peak_temperature_k": 347.12410043242903,
           "energy_imbalance_w": 3.2230218494078144e-11,
           "ks_temperature_k": 356.8658817633854,
           "limit_k": 358.15,
@@ -1991,6 +1998,7 @@
         },
         {
           "ambient_k": 308.15,
+          "chip_peak_temperature_k": 363.5041457296565,
           "energy_imbalance_w": 5.432099214885966e-11,
           "ks_temperature_k": 373.1499991063392,
           "limit_k": 373.15,
@@ -12058,12 +12066,12 @@
   "schema_version": 1,
   "sensitivity_cost": {
     "adjoint_linear_solves_per_response": 1,
-    "adjoint_seconds": 0.1736973999068141,
+    "adjoint_seconds": 0.16528420010581613,
     "central_difference_state_solves": 80,
     "design_variables": 40,
-    "finite_difference_seconds": 11.729658199939877,
+    "finite_difference_seconds": 11.748769300058484,
     "relative_gradient_error": 2.2789480665371026e-08,
-    "speedup": 67.52926760119986
+    "speedup": 71.08222862522152
   },
   "status": "final",
   "thermal_dofs": 365,
@@ -12704,6 +12712,7 @@
       "load_cases": [
         {
           "ambient_k": 297.65,
+          "chip_peak_temperature_k": 346.28667894022476,
           "energy_imbalance_w": 3.204547738278052e-11,
           "ks_temperature_k": 356.03332077057865,
           "limit_k": 358.15,
@@ -12715,6 +12724,7 @@
         },
         {
           "ambient_k": 298.65,
+          "chip_peak_temperature_k": 347.95967918684823,
           "energy_imbalance_w": 4.717293222711305e-11,
           "ks_temperature_k": 357.6966061697506,
           "limit_k": 358.15,
@@ -12726,6 +12736,7 @@
         },
         {
           "ambient_k": 307.65,
+          "chip_peak_temperature_k": 362.62288150811827,
           "energy_imbalance_w": 4.909139761366532e-11,
           "ks_temperature_k": 372.2744256903871,
           "limit_k": 373.15,
@@ -12737,6 +12748,7 @@
         },
         {
           "ambient_k": 308.65,
+          "chip_peak_temperature_k": 364.3833381760497,
           "energy_imbalance_w": 5.4512838687514886e-11,
           "ks_temperature_k": 374.0235093147426,
           "limit_k": 373.15,
@@ -13228,6 +13240,7 @@
       "load_cases": [
         {
           "ambient_k": 297.65,
+          "chip_peak_temperature_k": 345.50363391224545,
           "energy_imbalance_w": 5.356071142159635e-11,
           "ks_temperature_k": 355.24414877158335,
           "limit_k": 358.15,
@@ -13239,6 +13252,7 @@
         },
         {
           "ambient_k": 298.65,
+          "chip_peak_temperature_k": 347.1683753918262,
           "energy_imbalance_w": 4.5496051370719215e-11,
           "ks_temperature_k": 356.89908051387096,
           "limit_k": 358.15,
@@ -13250,6 +13264,7 @@
         },
         {
           "ambient_k": 307.65,
+          "chip_peak_temperature_k": 361.76524893926364,
           "energy_imbalance_w": 5.324807261786191e-11,
           "ks_temperature_k": 371.4097694088664,
           "limit_k": 373.15,
@@ -13261,6 +13276,7 @@
         },
         {
           "ambient_k": 308.65,
+          "chip_peak_temperature_k": 363.5169566454823,
           "energy_imbalance_w": 4.5574211071652826e-11,
           "ks_temperature_k": 373.15,
           "limit_k": 373.15,

@@ -6,12 +6,13 @@
   "$defs": {
     "case": {
       "type": "object",
-      "required": ["name", "power_w", "ambient_k", "limit_k", "ks_temperature_k", "scaled_constraint", "passed", "energy_imbalance_w", "newton_iterations"],
+      "required": ["name", "power_w", "ambient_k", "limit_k", "ks_temperature_k", "chip_peak_temperature_k", "scaled_constraint", "passed", "energy_imbalance_w", "newton_iterations"],
       "properties": {
         "name": {"type": "string", "minLength": 1},
         "power_w": {"type": "number", "exclusiveMinimum": 0},
         "limit_k": {"type": "number", "exclusiveMinimum": 0},
         "ks_temperature_k": {"type": "number"},
+        "chip_peak_temperature_k": {"type": "number"},
         "scaled_constraint": {"type": "number"},
         "passed": {"type": "boolean"},
         "energy_imbalance_w": {"type": "number"}
