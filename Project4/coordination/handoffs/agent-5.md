@@ -83,6 +83,15 @@
 
 ## Integration notes
 
+- Independent PR review at `2709aa0` (Agent 1) and `35caa92` (Agent 2):
+  archived each branch to a separate directory and ran its focused tests in
+  the clean Python 3.10 environment. Agent 1 benchmark tests passed 2/2;
+  Agent 2 sensitivity tests passed 6/6. These are branch-local checks using
+  their pre-DEC-002 configurations, not integrated-model verification. No
+  branch was merged and no student truth files were modified.
+- Integration PR #13's Python 3.11 test, complete reproduction, and
+  regenerated-data schema steps passed for `a16dddb` in Actions run
+  `43755431116`; its build and deployment jobs were skipped for the PR.
 - `heatsink.figures` regenerates slide-ready mass, Taylor, and uncertainty
   plots solely from canonical results; the site links the generated PNGs.
   The complete local reproduction and 23 tests passed and all three figures
