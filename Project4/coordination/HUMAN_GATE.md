@@ -11,7 +11,7 @@ The parallel Goal prompts are ready only when every box is checked by a person.
 - [x] The two human-authored files are committed and pushed to `main`.
 - [x] Each teammate has repository write access and a distinct assigned lane
   documented in `ASSIGNMENTS.md` and the corresponding GitHub issue.
-- [ ] Lucas sends exactly one Goal prompt from `GOAL_PROMPTS.md` to each agent.
+- [x] Lucas sends exactly one Goal prompt from `GOAL_PROMPTS.md` to each agent.
 
 The gate does not certify that the answers are correct. Agent 1 verifies them
 against the independent solver after the gate; disagreement must be reported,
