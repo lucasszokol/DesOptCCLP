@@ -5,7 +5,7 @@
   "required": ["schema_version", "status", "units", "geometry", "designs", "optimization_history", "verification"],
   "properties": {
     "schema_version": {"const": 1},
-    "status": {"enum": ["awaiting_human_gate", "verified", "final"]},
+    "status": {"enum": ["awaiting_human_gate", "preliminary", "verified", "campaign_incomplete", "final"]},
     "units": {"type": "object"},
     "geometry": {
       "type": "object",

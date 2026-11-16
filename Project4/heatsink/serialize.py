@@ -12,7 +12,7 @@ from .campaign import CampaignResult
 
 
 def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear: bool) -> dict:
-    heights, _, density = model.split_design(design)
+    heights, raw_density, density = model.split_design(design)
     cases = []
     nominal_temperature = None
     for case in model.config.load_cases:
@@ -24,6 +24,7 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
                 "ambient_k": case.ambient_k,
                 "limit_k": case.chip_limit_k,
                 "ks_temperature_k": response.ks_temperature_k,
+                "peak_chip_temperature_k": float(np.max(response.solve.temperature_k[model.chip_dofs()])),
                 "scaled_constraint": response.scaled_constraint,
                 "passed": response.scaled_constraint <= 0.0,
                 "energy_imbalance_w": response.solve.energy_imbalance_w,
@@ -41,6 +42,7 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
         "mass_kg": model.mass_kg(design),
         "heights_m": heights.tolist(),
         "densities": density.tolist(),
+        "raw_densities": raw_density.tolist(),
         "base_temperature_k": nominal_temperature[: model.base_dofs].tolist(),
         "fin_temperature_k": fin_temperatures,
         "load_cases": cases,
@@ -52,21 +54,28 @@ def preliminary_payload(model: HeatSinkModel) -> dict:
     g = model.config.geometry
     return {
         "schema_version": 1,
-        "status": "awaiting_human_gate",
+        "status": "preliminary",
         "units": {"length": "m", "temperature": "K", "mass": "kg", "power": "W"},
         "geometry": {
             "base_width_m": g.base_width_m,
             "base_depth_m": g.extrusion_depth_m,
             "base_thickness_m": g.base_thickness_m,
             "fin_thickness_m": g.fin_thickness_m,
+            "chip_width_m": g.chip_width_m,
+            "fin_height_bounds_m": list(g.fin_height_bounds_m),
+            "density_bounds": list(g.density_bounds),
+            "fin_elements": g.fin_elements,
             "fin_x_m": model.x[model.fin_x_indices].tolist(),
+            "base_elements_x": model.nx,
+            "base_elements_z": model.nz,
+            "display_density_threshold": float(model.config.raw["optimization"]["topology_threshold"]),
         },
         "designs": {
             "initial": _design_view(model, "Initial uniform design", design, True),
             "optimized": None,
         },
         "optimization_history": [],
-        "verification": {"status": "awaiting_student_derivation", "tests": []},
+        "verification": {"status": "not_in_snapshot", "tests": []},
         "gradient_checks": [],
         "kkt": None,
     }
@@ -102,22 +111,36 @@ def final_payload(
     g = model.config.geometry
     return {
         "schema_version": 1,
-        "status": "final",
+        "status": ("final" if all(run.result.success for run in all_runs) and all(
+            r.scaled_constraint <= float(model.config.raw["optimization"]["scaled_feasibility_tolerance"])
+            for r in final_run.responses
+        ) else "campaign_incomplete"),
         "units": {"length": "m", "temperature": "K", "mass": "kg", "power": "W"},
         "geometry": {
             "base_width_m": g.base_width_m,
             "base_depth_m": g.extrusion_depth_m,
             "base_thickness_m": g.base_thickness_m,
             "fin_thickness_m": g.fin_thickness_m,
+            "chip_width_m": g.chip_width_m,
+            "fin_height_bounds_m": list(g.fin_height_bounds_m),
+            "density_bounds": list(g.density_bounds),
+            "fin_elements": g.fin_elements,
             "fin_x_m": model.x[model.fin_x_indices].tolist(),
+            "base_elements_x": model.nx,
+            "base_elements_z": model.nz,
+            "display_density_threshold": float(model.config.raw["optimization"]["topology_threshold"]),
         },
         "designs": {
             "initial": _design_view(model, "Initial uniform design", initial, True),
-            "optimized": _design_view(model, "Nonlinear topology optimum", final_run.full_design, True),
-            "linear_fixed": _design_view(model, "Linear fixed-topology optimum", campaign.linear_fixed.full_design, False),
-            "nonlinear_fixed": _design_view(model, "Nonlinear fixed-topology optimum", campaign.nonlinear_fixed.full_design, True),
+            "optimized": _design_view(model, "Nonlinear topology candidate", final_run.full_design, True),
+            "linear_fixed": _design_view(model, "Linear fixed-topology candidate", campaign.linear_fixed.full_design, False),
+            "nonlinear_fixed": _design_view(model, "Nonlinear fixed-topology candidate", campaign.nonlinear_fixed.full_design, True),
         },
         "optimization_history": history,
+        "optimization_runs": [
+            {"name": run.name, "success": bool(run.result.success), "message": str(run.result.message)}
+            for run in all_runs
+        ],
         "verification": verification,
         "gradient_checks": gradient_checks,
         "sensitivity_cost": sensitivity_cost,
