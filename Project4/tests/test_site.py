@@ -13,3 +13,10 @@ def test_static_site_build_contains_report_and_assets() -> None:
     assert "__REPORT_CONTENT__" not in html
     assert (destination / "assets" / "results.json").exists()
     assert (destination / "assets" / "viewer.js").exists()
+
+
+def test_report_preserves_math_and_calls_out_missing_evidence() -> None:
+    html = (build_site(ROOT / "Project4" / "site") / "index.html").read_text(encoding="utf-8")
+    assert r"\frac{df}{dx}" in html
+    assert "human wording review pending" in html
+    assert 'src="assets/viewer.js"' in html

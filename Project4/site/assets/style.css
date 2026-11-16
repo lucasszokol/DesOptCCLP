@@ -20,3 +20,9 @@ table { width:100%; border-collapse:collapse; } th,td { border:1px solid #aeb9c5
 code { overflow-wrap:anywhere; }
 @media (max-width:600px) { #viewer{height:430px}.viewer-grid,.metrics{grid-template-columns:1fr} main{padding:.7rem} }
 @media (prefers-color-scheme:dark) { body{background:#101419;color:#ecf2f8}.metric-card{background:#222b35}.gate{background:#392715}a{color:#7dbdff}#viewer{background:#121923} }
+.legend { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; margin:.7rem 0; }
+.legend .colorbar { width:180px; background:linear-gradient(90deg,#f2faff,#144a85); }
+.table-wrap { overflow-x:auto; }
+#viewer-status { position:absolute; right:1rem; bottom:.5rem; background:#fff; color:#263238; padding:.25rem; }
+#tooltip { z-index:4; max-width:180px; }
+@media(max-width:600px) { #viewer { height:350px; } .legend .colorbar { width:100px; } }
