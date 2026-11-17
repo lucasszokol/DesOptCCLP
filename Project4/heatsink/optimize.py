@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from time import perf_counter
 
 import numpy as np
 from scipy.optimize import Bounds, NonlinearConstraint, OptimizeResult, minimize
@@ -15,6 +16,7 @@ class OptimizationHistory:
     designs: list[list[float]] = field(default_factory=list)
     mass_kg: list[float] = field(default_factory=list)
     constraint_margins: list[list[float]] = field(default_factory=list)
+    elapsed_seconds: list[float] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -25,6 +27,27 @@ class OptimizationRun:
     mass_kg: float
     responses: tuple[ResponseResult, ...]
     history: OptimizationHistory
+    method: str
+    fixed_topology: bool
+    nonlinear: bool
+    penalty: float
+    initial_design: np.ndarray
+    elapsed_seconds: float
+    feasibility_tolerance: float
+
+    @property
+    def max_scaled_constraint(self) -> float:
+        return max(response.scaled_constraint for response in self.responses)
+
+    @property
+    def feasible(self) -> bool:
+        return self.max_scaled_constraint <= self.feasibility_tolerance
+
+    @property
+    def accepted(self) -> bool:
+        """True only for a successful solver exit with a feasible final design."""
+
+        return bool(self.result.success and self.feasible)
 
 
 class OptimizationProblem:
@@ -51,6 +74,7 @@ class OptimizationProblem:
             raise ValueError("frozen_density has the wrong shape")
         self.reference_mass = model.mass_kg(model.initial_design())
         self.history = OptimizationHistory()
+        self.started_at = perf_counter()
         self._key: bytes | None = None
         self._responses: tuple[ResponseResult, ...] | None = None
 
@@ -71,11 +95,16 @@ class OptimizationProblem:
         g = self.model.config.geometry
         hlow, hhigh = g.fin_height_bounds_m
         if self.fixed_topology:
-            return Bounds(np.full(self.count, hlow), np.full(self.count, hhigh))
+            return Bounds(
+                np.full(self.count, hlow),
+                np.full(self.count, hhigh),
+                keep_feasible=True,
+            )
         rlow, rhigh = g.density_bounds
         return Bounds(
             np.r_[np.full(self.count, hlow), np.full(self.count, rlow)],
             np.r_[np.full(self.count, hhigh), np.full(self.count, rhigh)],
+            keep_feasible=True,
         )
 
     def _evaluate(self, variables: np.ndarray) -> tuple[ResponseResult, ...]:
@@ -99,6 +128,12 @@ class OptimizationProblem:
         full = self.model.mass_gradient(self.full_design(variables)) / self.reference_mass
         return self.reduced_gradient(full)
 
+    def objective_hessian(self, variables: np.ndarray) -> np.ndarray:
+        """Return the exact zero Hessian of the mass objective."""
+
+        size = np.asarray(variables).size
+        return np.zeros((size, size))
+
     def margins(self, variables: np.ndarray) -> np.ndarray:
         return -np.array([response.scaled_constraint for response in self._evaluate(variables)])
 
@@ -107,11 +142,19 @@ class OptimizationProblem:
             [-self.reduced_gradient(response.gradient) for response in self._evaluate(variables)]
         )
 
-    def callback(self, variables: np.ndarray, state: object | None = None) -> None:
+    def record(self, variables: np.ndarray) -> None:
         full = self.full_design(variables)
+        if self.history.designs and np.array_equal(
+            np.asarray(self.history.designs[-1]), full
+        ):
+            return
         self.history.designs.append(full.tolist())
         self.history.mass_kg.append(self.model.mass_kg(full))
         self.history.constraint_margins.append(self.margins(variables).tolist())
+        self.history.elapsed_seconds.append(perf_counter() - self.started_at)
+
+    def callback(self, variables: np.ndarray, state: object | None = None) -> None:
+        self.record(variables)
 
 
 def optimize_design(
@@ -128,6 +171,7 @@ def optimize_design(
 ) -> OptimizationRun:
     """Run one documented optimization stage with exact gradients."""
 
+    started_at = perf_counter()
     problem = OptimizationProblem(
         model,
         fixed_topology=fixed_topology,
@@ -140,6 +184,8 @@ def optimize_design(
         if fixed_topology
         else np.asarray(initial_full_design, dtype=float)
     )
+    initial_full = problem.full_design(initial).copy()
+    problem.record(initial)
     if method == "SLSQP":
         constraints = {
             "type": "ineq",
@@ -157,23 +203,100 @@ def optimize_design(
             options={"ftol": 1.0e-10, "maxiter": max_iterations, "disp": False},
         )
     elif method == "trust-constr":
+        physical_bounds = problem.bounds()
+        lower = np.asarray(physical_bounds.lb, dtype=float)
+        scale = np.asarray(physical_bounds.ub, dtype=float) - lower
+        scaled_initial = (initial - lower) / scale
+
+        def physical(scaled: np.ndarray) -> np.ndarray:
+            return lower + scale * np.asarray(scaled, dtype=float)
+
+        def scaled_objective(scaled: np.ndarray) -> float:
+            return problem.objective(physical(scaled))
+
+        def scaled_objective_gradient(scaled: np.ndarray) -> np.ndarray:
+            return problem.objective_gradient(physical(scaled)) * scale
+
+        def scaled_margins(scaled: np.ndarray) -> np.ndarray:
+            return problem.margins(physical(scaled))
+
+        def scaled_margins_jacobian(scaled: np.ndarray) -> np.ndarray:
+            return problem.margins_jacobian(physical(scaled)) * scale[None, :]
+
+        def scaled_callback(scaled: np.ndarray, state: object | None = None) -> None:
+            problem.callback(physical(scaled), state)
+
         constraint = NonlinearConstraint(
-            problem.margins, 0.0, np.inf, jac=problem.margins_jacobian
+            scaled_margins, 0.0, np.inf, jac=scaled_margins_jacobian
         )
         result = minimize(
-            problem.objective,
-            initial,
+            scaled_objective,
+            scaled_initial,
             method="trust-constr",
-            jac=problem.objective_gradient,
-            bounds=problem.bounds(),
+            jac=scaled_objective_gradient,
+            hess=problem.objective_hessian,
+            bounds=Bounds(
+                np.zeros_like(scaled_initial),
+                np.ones_like(scaled_initial),
+                keep_feasible=True,
+            ),
             constraints=[constraint],
-            callback=problem.callback,
-            options={"gtol": 1.0e-8, "maxiter": max_iterations, "verbose": 0},
+            callback=scaled_callback,
+            options={
+                "gtol": 1.0e-10,
+                "xtol": 1.0e-12,
+                "barrier_tol": 1.0e-12,
+                "maxiter": max_iterations,
+                "verbose": 0,
+            },
         )
+        result["scaled_x"] = np.asarray(result.x, dtype=float).copy()
+        result.x = physical(result.x)
+        result["variable_scale"] = scale
+        multipliers = getattr(result, "v", None)
+        if multipliers is not None and len(multipliers) >= 2:
+            constraint_multipliers = np.asarray(multipliers[0], dtype=float)
+            scaled_bound_multipliers = np.asarray(multipliers[1], dtype=float)
+            physical_bound_multipliers = scaled_bound_multipliers / scale
+            result["constraint_multipliers"] = constraint_multipliers
+            result["scaled_bound_multipliers"] = scaled_bound_multipliers
+            result["physical_bound_multipliers"] = physical_bound_multipliers
+            stationarity = (
+                problem.objective_gradient(result.x)
+                + problem.margins_jacobian(result.x).T @ constraint_multipliers
+                + physical_bound_multipliers
+            )
+            result["physical_stationarity"] = stationarity
+            result["physical_stationarity_inf_norm"] = float(
+                np.linalg.norm(stationarity, ord=np.inf)
+            )
+            margins = problem.margins(result.x)
+            result["constraint_complementarity"] = (
+                constraint_multipliers * margins
+            )
+            result["constraint_complementarity_inf_norm"] = float(
+                np.linalg.norm(result.constraint_complementarity, ord=np.inf)
+            )
+            bound_slack = np.where(
+                physical_bound_multipliers > 0.0,
+                physical_bounds.ub - result.x,
+                result.x - physical_bounds.lb,
+            )
+            result["bound_complementarity"] = (
+                physical_bound_multipliers * bound_slack
+            )
+            result["bound_complementarity_inf_norm"] = float(
+                np.linalg.norm(result.bound_complementarity, ord=np.inf)
+            )
     else:
         raise ValueError(f"unsupported optimizer {method}")
     full = problem.full_design(result.x)
     responses = problem._evaluate(result.x)
+    problem.record(result.x)
+    elapsed = perf_counter() - started_at
+    feasibility_tolerance = float(
+        model.config.raw["optimization"]["scaled_feasibility_tolerance"]
+    )
     return OptimizationRun(
         name=name,
         result=result,
@@ -181,4 +304,11 @@ def optimize_design(
         mass_kg=model.mass_kg(full),
         responses=responses,
         history=problem.history,
+        method=method,
+        fixed_topology=fixed_topology,
+        nonlinear=nonlinear,
+        penalty=float(penalty),
+        initial_design=initial_full,
+        elapsed_seconds=elapsed,
+        feasibility_tolerance=feasibility_tolerance,
     )
