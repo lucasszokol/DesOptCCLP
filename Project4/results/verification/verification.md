@@ -1,5 +1,13 @@
 # Verification evidence
 
+Status: **PASSED** (20/20 checks passed).
+
+Regenerate from the repository root:
+
+```powershell
+.\.venv\Scripts\python.exe -m Project4.heatsink.benchmark_verification --config Project4\config.yaml
+```
+
 | ID | Quantity | Computed | Submitted/exact | Abs. error | Tolerance | Pass |
 |---|---|---:|---:|---:|---:|:---:|
 | V1 | T(1/4L) | 353.15 | 353.15 | 0 | 5e-09 | PASS |
