@@ -1,2 +1,0 @@
-# Compatibility wrapper retained for existing commands and open pull requests.
--r requirements.txt
