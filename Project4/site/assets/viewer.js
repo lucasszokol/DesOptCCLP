@@ -12,14 +12,37 @@ const raycaster=new THREE.Raycaster(), pointer=new THREE.Vector2(), selectable=[
 function colorFor(t,ambient,limit){const u=Math.max(0,Math.min(1,(t-ambient)/(limit-ambient)));return new THREE.Color().setHSL(.58,.76,.91-.65*u)}
 function colorVertices(geometry, temperatureAt, ambient, limit){const positions=geometry.getAttribute("position"), colors=[];for(let i=0;i<positions.count;i++){const c=colorFor(temperatureAt(positions.getX(i),positions.getY(i)),ambient,limit);colors.push(c.r,c.g,c.b)}geometry.setAttribute("color",new THREE.Float32BufferAttribute(colors,3));}
 function baseTemperature(values,g,x,y){const nx=g.base_elements_x,nz=g.base_elements_z;const fx=Math.max(0,Math.min(nx,(x/g.base_width_m+.5)*nx)),fz=Math.max(0,Math.min(nz,(y/g.base_thickness_m+.5)*nz));const ix=Math.min(nx-1,Math.floor(fx)),iz=Math.min(nz-1,Math.floor(fz)),a=fx-ix,b=fz-iz,at=(i,j)=>values[j*(nx+1)+i];return (1-b)*((1-a)*at(ix,iz)+a*at(ix+1,iz))+b*((1-a)*at(ix,iz+1)+a*at(ix+1,iz+1));}
+// Give each rendered triangle its containing Q4 element's nodal values.
+// The fragment shader evaluates bilinear shape functions at each pixel, rather
+// than interpolating temperatures linearly across the triangle.
+function baseFieldGeometry(g,values){
+  const geometry=new THREE.BoxGeometry(g.base_width_m,g.base_thickness_m,g.base_depth_m,g.base_elements_x,g.base_elements_z,1).toNonIndexed();
+  const positions=geometry.getAttribute("position"), corners=[], uv=[], nx=g.base_elements_x,nz=g.base_elements_z;
+  const at=(i,j)=>values[j*(nx+1)+i];
+  const coords=i=>[(positions.getX(i)/g.base_width_m+.5)*nx,(positions.getY(i)/g.base_thickness_m+.5)*nz];
+  for(let i=0;i<positions.count;i+=3){
+    const c=[coords(i),coords(i+1),coords(i+2)],fx=(c[0][0]+c[1][0]+c[2][0])/3,fz=(c[0][1]+c[1][1]+c[2][1])/3;
+    const ix=Math.min(nx-1,Math.max(0,Math.floor(fx))),iz=Math.min(nz-1,Math.max(0,Math.floor(fz)));
+    for(const [x,z] of c){corners.push(at(ix,iz),at(ix+1,iz),at(ix,iz+1),at(ix+1,iz+1));uv.push(Math.max(0,Math.min(1,x-ix)),Math.max(0,Math.min(1,z-iz)));}
+  }
+  geometry.setAttribute("q4Corners",new THREE.Float32BufferAttribute(corners,4));
+  geometry.setAttribute("q4Coordinates",new THREE.Float32BufferAttribute(uv,2));
+  return geometry;
+}
+function baseFieldMaterial(ambient,limit){return new THREE.ShaderMaterial({
+  uniforms:{ambient:{value:ambient},limit:{value:limit}},
+  vertexShader:`attribute vec4 q4Corners; attribute vec2 q4Coordinates; varying vec4 vCorners; varying vec2 vCoords; void main(){vCorners=q4Corners;vCoords=q4Coordinates;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
+  fragmentShader:`uniform float ambient; uniform float limit; varying vec4 vCorners; varying vec2 vCoords;
+  vec3 hsl(float h,float s,float l){vec3 k=mod(vec3(0.0,8.0,4.0)+h*12.0,12.0);float a=s*min(l,1.0-l);return l-a*max(vec3(-1.0),min(min(k-3.0,9.0-k),vec3(1.0)));}
+  void main(){float bottom=mix(vCorners.x,vCorners.y,vCoords.x);float top=mix(vCorners.z,vCorners.w,vCoords.x);float t=mix(bottom,top,vCoords.y);float u=clamp((t-ambient)/(limit-ambient),0.0,1.0);gl_FragColor=vec4(hsl(.58,.76,.91-.65*u),1.0);}`
+});}
 function finTemperature(values,height,y){const f=Math.max(0,Math.min(values.length-1,(y/height+.5)*(values.length-1))),i=Math.min(values.length-2,Math.floor(f)),a=f-i;return values[i]*(1-a)+values[i+1]*a;}
 function addDesign(design,offset,label){
   const group=new THREE.Group(); group.position.x=offset; scene.add(group);
   const g=data.geometry, nominal=design.load_cases[0], ambient=nominal.ambient_k, limit=nominal.limit_k;
   const baseT=design.base_temperature_k.reduce((a,b)=>a+b,0)/design.base_temperature_k.length;
-  const baseGeometry=new THREE.BoxGeometry(g.base_width_m,g.base_thickness_m,g.base_depth_m,g.base_elements_x,g.base_elements_z,1);
-  colorVertices(baseGeometry,(x,y)=>baseTemperature(design.base_temperature_k,g,x,y),ambient,limit);
-  const base=new THREE.Mesh(baseGeometry,new THREE.MeshStandardMaterial({vertexColors:true}));
+  const baseGeometry=baseFieldGeometry(g,design.base_temperature_k);
+  const base=new THREE.Mesh(baseGeometry,baseFieldMaterial(ambient,limit));
   base.position.y=g.base_thickness_m/2; base.userData={label:`${label} base`,temperature:baseT,values:design.base_temperature_k,kind:"base"}; group.add(base); selectable.push(base);
   design.heights_m.forEach((height,i)=>{const values=design.fin_temperature_k[i];const temp=values.reduce((a,b)=>a+b,0)/values.length;const referenceHeight=Math.max(height,.001);const geometry=new THREE.BoxGeometry(g.fin_thickness_m,referenceHeight,g.base_depth_m,1,values.length-1,1);colorVertices(geometry,(_x,y)=>finTemperature(values,referenceHeight,y),ambient,limit);const fin=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:.35+.65*design.densities[i]}));fin.position.set(g.fin_x_m[i],g.base_thickness_m+height/2,0);fin.visible=design.densities[i]>=.05;fin.userData={label:`${label} fin ${i+1}`,temperature:temp,density:design.densities[i],height,index:i,referenceHeight,values,kind:"fin"};group.add(fin);selectable.push(fin);if(label==="Optimized")animatedFins.push(fin);if(Math.max(...values)>limit){const mark=new THREE.LineSegments(new THREE.EdgesGeometry(fin.geometry),new THREE.LineBasicMaterial({color:0x111111}));mark.position.copy(fin.position);group.add(mark)}});
   if(Math.max(...design.base_temperature_k)>limit){const mark=new THREE.LineSegments(new THREE.EdgesGeometry(base.geometry),new THREE.LineBasicMaterial({color:0x111111}));mark.position.copy(base.position);group.add(mark)}
@@ -56,6 +79,7 @@ let frame=0,playing=false;const play=document.getElementById("play-history");if(
 function showHistory(index){const record=data.optimization_history[Math.floor(index)],design=record?.design;if(!design)return;const count=animatedFins.length;animatedFins.forEach((fin,i)=>{const height=design[i],density=design[count+i];fin.scale.y=height/fin.userData.referenceHeight;fin.position.y=data.geometry.base_thickness_m+height/2;fin.material.opacity=.35+.65*density;fin.visible=density>=.05;fin.userData.height=height;fin.userData.density=density})}
 function resize(){const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(35)/2)*Math.max(1,1.5/camera.aspect)));camera.updateProjectionMatrix()}
 function animate(){requestAnimationFrame(animate);resize();if(playing&&data.optimization_history.length){frame=(frame+.02)%data.optimization_history.length;showHistory(frame)}renderer.render(scene,camera)}animate();
+if(data.nonlinear_fin_check){const f=data.nonlinear_fin_check;document.getElementById("fin-check-summary").textContent=`Production fin assembly vs independent numerical BVP: ${f.status}; maximum nodal errors ${f.meshes.map(m=>`${m.elements} elements: ${m.maximum_nodal_error_k.toExponential(3)} K`).join(", ")}. Worst tangent directional error: ${Math.max(...f.meshes.map(m=>m.tangent_direction_relative_error)).toExponential(3)}. Newton quadratic residual ratios: ${f.meshes.map(m=>`${m.elements} elements: ${(m.quadratic_residual_ratios||[]).map(x=>x.toExponential(3)).join(", ")}`).join("; ")}.`;}
 if (data.expanded_sensitivity?.constraint_checks) {
   const checks = data.expanded_sensitivity.constraint_checks;
   const summary = document.createElement("p");

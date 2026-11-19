@@ -2,7 +2,7 @@
   "blockers": [
     "No fin vanishes in the selected topology. The one-fin screen uses filtered densities and does not establish feasibility of a physically removed fin."
   ],
-  "campaign_elapsed_seconds": 74.80727609992027,
+  "campaign_elapsed_seconds": 85.09065969986841,
   "comparisons": {
     "kkt_polished_mass_kg": 0.17279022399242852,
     "linear_reference_feasible": true,
@@ -37,7 +37,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 3.780492499936372,
+      "elapsed_seconds": 3.932368100155145,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -159,7 +159,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.11650989996269345,
+          "elapsed_seconds": 0.1617490998469293,
           "iteration": 0,
           "mass_kg": 0.1897
         },
@@ -210,7 +210,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.22790180006995797,
+          "elapsed_seconds": 0.29299869993701577,
           "iteration": 1,
           "mass_kg": 0.12827129105910973
         },
@@ -261,7 +261,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.5212246999144554,
+          "elapsed_seconds": 0.5700276996940374,
           "iteration": 2,
           "mass_kg": 0.1432116419266868
         },
@@ -312,7 +312,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.7765353000722826,
+          "elapsed_seconds": 0.8502505999058485,
           "iteration": 3,
           "mass_kg": 0.14800653219842147
         },
@@ -363,7 +363,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.0519828000105917,
+          "elapsed_seconds": 1.111517199780792,
           "iteration": 4,
           "mass_kg": 0.14818927120286157
         },
@@ -414,7 +414,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.165116200223565,
+          "elapsed_seconds": 1.2402212000451982,
           "iteration": 5,
           "mass_kg": 0.14641777714646662
         },
@@ -465,7 +465,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.4516724003478885,
+          "elapsed_seconds": 1.499127599876374,
           "iteration": 6,
           "mass_kg": 0.14764246402249465
         },
@@ -516,7 +516,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.6803101003170013,
+          "elapsed_seconds": 1.7536661997437477,
           "iteration": 7,
           "mass_kg": 0.14799500438184918
         },
@@ -567,7 +567,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.9373979000374675,
+          "elapsed_seconds": 2.0151343001052737,
           "iteration": 8,
           "mass_kg": 0.1494280591082416
         },
@@ -618,7 +618,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.1895512002520263,
+          "elapsed_seconds": 2.274665500037372,
           "iteration": 9,
           "mass_kg": 0.149706051907482
         },
@@ -669,7 +669,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.3058476001024246,
+          "elapsed_seconds": 2.4010997000150383,
           "iteration": 10,
           "mass_kg": 0.14969515247959447
         },
@@ -720,7 +720,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.5552751002833247,
+          "elapsed_seconds": 2.65264829993248,
           "iteration": 11,
           "mass_kg": 0.14974108209547524
         },
@@ -771,7 +771,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.8575849002227187,
+          "elapsed_seconds": 2.9088289998471737,
           "iteration": 12,
           "mass_kg": 0.14974339340735066
         },
@@ -822,7 +822,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.9793747002258897,
+          "elapsed_seconds": 3.035331199876964,
           "iteration": 13,
           "mass_kg": 0.14974336340300876
         },
@@ -873,7 +873,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.205430000089109,
+          "elapsed_seconds": 3.2922415998764336,
           "iteration": 14,
           "mass_kg": 0.14974414467976768
         },
@@ -924,7 +924,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.319683300331235,
+          "elapsed_seconds": 3.42260259995237,
           "iteration": 15,
           "mass_kg": 0.14974430356241103
         },
@@ -975,7 +975,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.5525547000579536,
+          "elapsed_seconds": 3.6809308999218047,
           "iteration": 16,
           "mass_kg": 0.14974428134699347
         },
@@ -1026,7 +1026,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.780095800291747,
+          "elapsed_seconds": 3.931959900073707,
           "iteration": 17,
           "mass_kg": 0.14974431983182965
         }
@@ -1141,7 +1141,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 7.531544300261885,
+      "elapsed_seconds": 8.878732900135219,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -1263,7 +1263,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.3062490997835994,
+          "elapsed_seconds": 0.33992209983989596,
           "iteration": 0,
           "mass_kg": 0.1897
         },
@@ -1314,7 +1314,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.601783599704504,
+          "elapsed_seconds": 0.6765749999321997,
           "iteration": 1,
           "mass_kg": 0.16901062244269913
         },
@@ -1365,7 +1365,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.9119647997431457,
+          "elapsed_seconds": 1.0188418999314308,
           "iteration": 2,
           "mass_kg": 0.16670795878940844
         },
@@ -1416,7 +1416,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.5090111996978521,
+          "elapsed_seconds": 1.7039017002098262,
           "iteration": 3,
           "mass_kg": 0.16916261608264238
         },
@@ -1467,7 +1467,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.1057635000906885,
+          "elapsed_seconds": 2.376807200256735,
           "iteration": 4,
           "mass_kg": 0.1714394616761852
         },
@@ -1518,7 +1518,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.704487199895084,
+          "elapsed_seconds": 3.060890099965036,
           "iteration": 5,
           "mass_kg": 0.17238267019391076
         },
@@ -1569,7 +1569,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.304003399796784,
+          "elapsed_seconds": 3.815905500203371,
           "iteration": 6,
           "mass_kg": 0.1725870335455059
         },
@@ -1620,7 +1620,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.9262725999578834,
+          "elapsed_seconds": 4.647388000041246,
           "iteration": 7,
           "mass_kg": 0.17266328221828364
         },
@@ -1671,7 +1671,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.530340199824423,
+          "elapsed_seconds": 5.437970799859613,
           "iteration": 8,
           "mass_kg": 0.17275082680949752
         },
@@ -1722,7 +1722,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.139515500050038,
+          "elapsed_seconds": 6.133011400233954,
           "iteration": 9,
           "mass_kg": 0.17276116763511282
         },
@@ -1773,7 +1773,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.745654500089586,
+          "elapsed_seconds": 6.820638299919665,
           "iteration": 10,
           "mass_kg": 0.17277521746690527
         },
@@ -1824,7 +1824,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.0445083999074996,
+          "elapsed_seconds": 7.159142999909818,
           "iteration": 11,
           "mass_kg": 0.1727884327742159
         },
@@ -1875,7 +1875,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.345962499734014,
+          "elapsed_seconds": 7.497404700145125,
           "iteration": 12,
           "mass_kg": 0.17279007240667835
         },
@@ -1926,7 +1926,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.647763699758798,
+          "elapsed_seconds": 7.832753099966794,
           "iteration": 13,
           "mass_kg": 0.17279022368138172
         },
@@ -1977,7 +1977,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.947475099936128,
+          "elapsed_seconds": 8.188234600238502,
           "iteration": 14,
           "mass_kg": 0.17279022365839888
         },
@@ -2028,7 +2028,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.531503399834037,
+          "elapsed_seconds": 8.878698300104588,
           "iteration": 15,
           "mass_kg": 0.1727902236801869
         }
@@ -2143,7 +2143,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 8.351807700004429,
+      "elapsed_seconds": 9.358375400304794,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -2265,7 +2265,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.29557020030915737,
+          "elapsed_seconds": 0.3523760000243783,
           "iteration": 0,
           "mass_kg": 0.1592125
         },
@@ -2316,7 +2316,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.6061794999986887,
+          "elapsed_seconds": 0.7100940998643637,
           "iteration": 1,
           "mass_kg": 0.16979830314026081
         },
@@ -2367,7 +2367,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.2138963001780212,
+          "elapsed_seconds": 1.4178269002586603,
           "iteration": 2,
           "mass_kg": 0.17044346264831578
         },
@@ -2418,7 +2418,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.8766589001752436,
+          "elapsed_seconds": 2.1048626000992954,
           "iteration": 3,
           "mass_kg": 0.17129710115438826
         },
@@ -2469,7 +2469,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.5627227001823485,
+          "elapsed_seconds": 2.796237700153142,
           "iteration": 4,
           "mass_kg": 0.1720643913207126
         },
@@ -2520,7 +2520,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.1829328001476824,
+          "elapsed_seconds": 3.4734761002473533,
           "iteration": 5,
           "mass_kg": 0.1724678466724375
         },
@@ -2571,7 +2571,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.7967668999917805,
+          "elapsed_seconds": 4.164063400123268,
           "iteration": 6,
           "mass_kg": 0.17250801479438377
         },
@@ -2622,7 +2622,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.405449999962002,
+          "elapsed_seconds": 4.853930999990553,
           "iteration": 7,
           "mass_kg": 0.17258230266032362
         },
@@ -2673,7 +2673,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.068566100206226,
+          "elapsed_seconds": 5.541936700232327,
           "iteration": 8,
           "mass_kg": 0.17272596409290372
         },
@@ -2724,7 +2724,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.696248600259423,
+          "elapsed_seconds": 6.301093699876219,
           "iteration": 9,
           "mass_kg": 0.17271378402776982
         },
@@ -2775,7 +2775,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.31071799993515,
+          "elapsed_seconds": 7.086696200072765,
           "iteration": 10,
           "mass_kg": 0.1727751354278303
         },
@@ -2826,7 +2826,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.614997500088066,
+          "elapsed_seconds": 7.440493300091475,
           "iteration": 11,
           "mass_kg": 0.17278742785030668
         },
@@ -2877,7 +2877,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.915201799944043,
+          "elapsed_seconds": 7.803827099967748,
           "iteration": 12,
           "mass_kg": 0.17279015705164846
         },
@@ -2928,7 +2928,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.205368800088763,
+          "elapsed_seconds": 8.18752870010212,
           "iteration": 13,
           "mass_kg": 0.1727902236625892
         },
@@ -2979,7 +2979,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.623876600060612,
+          "elapsed_seconds": 8.596872900146991,
           "iteration": 14,
           "mass_kg": 0.17279022365647095
         },
@@ -3030,7 +3030,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 8.351766500156373,
+          "elapsed_seconds": 9.3583088000305,
           "iteration": 15,
           "mass_kg": 0.1727902236623075
         }
@@ -3145,7 +3145,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 8.112413799855858,
+      "elapsed_seconds": 9.17084710020572,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -3267,7 +3267,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.397427000105381,
+          "elapsed_seconds": 0.3978568003512919,
           "iteration": 0,
           "mass_kg": 0.17365394736842102
         },
@@ -3318,7 +3318,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.7239443003199995,
+          "elapsed_seconds": 0.7805711003020406,
           "iteration": 1,
           "mass_kg": 0.17250758739482475
         },
@@ -3369,7 +3369,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.0695990002714097,
+          "elapsed_seconds": 1.1394432000815868,
           "iteration": 2,
           "mass_kg": 0.17202170291696378
         },
@@ -3420,7 +3420,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.37863659998402,
+          "elapsed_seconds": 1.4768860000185668,
           "iteration": 3,
           "mass_kg": 0.17101841092251024
         },
@@ -3471,7 +3471,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.0248604002408683,
+          "elapsed_seconds": 2.1893817000091076,
           "iteration": 4,
           "mass_kg": 0.17234854371640146
         },
@@ -3522,7 +3522,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 2.6721793999895453,
+          "elapsed_seconds": 2.8685087002813816,
           "iteration": 5,
           "mass_kg": 0.1722713353759239
         },
@@ -3573,7 +3573,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.3252798998728395,
+          "elapsed_seconds": 3.5630083000287414,
           "iteration": 6,
           "mass_kg": 0.1724716405195684
         },
@@ -3624,7 +3624,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.9306385000236332,
+          "elapsed_seconds": 4.388529200106859,
           "iteration": 7,
           "mass_kg": 0.17277546741208272
         },
@@ -3675,7 +3675,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.521749600302428,
+          "elapsed_seconds": 5.1069673001766205,
           "iteration": 8,
           "mass_kg": 0.17278266626365868
         },
@@ -3726,7 +3726,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.112367300316691,
+          "elapsed_seconds": 5.789435000158846,
           "iteration": 9,
           "mass_kg": 0.17278692589547368
         },
@@ -3777,7 +3777,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.701312799938023,
+          "elapsed_seconds": 6.463325000368059,
           "iteration": 10,
           "mass_kg": 0.17278853121616794
         },
@@ -3828,7 +3828,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.013830299954861,
+          "elapsed_seconds": 6.797373400069773,
           "iteration": 11,
           "mass_kg": 0.1727883926712684
         },
@@ -3879,7 +3879,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.612200400326401,
+          "elapsed_seconds": 7.469974500127137,
           "iteration": 12,
           "mass_kg": 0.17279022365435842
         },
@@ -3930,7 +3930,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.905936900060624,
+          "elapsed_seconds": 7.802657900378108,
           "iteration": 13,
           "mass_kg": 0.17279022369164318
         },
@@ -3981,7 +3981,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.498500800225884,
+          "elapsed_seconds": 8.491701600141823,
           "iteration": 14,
           "mass_kg": 0.1727902236916045
         },
@@ -4032,7 +4032,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 8.112370000220835,
+          "elapsed_seconds": 9.17080570012331,
           "iteration": 15,
           "mass_kg": 0.1727902236721304
         }
@@ -4147,7 +4147,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 0.9327933001331985,
+      "elapsed_seconds": 1.0222161002457142,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -4269,7 +4269,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.33486949978396297,
+          "elapsed_seconds": 0.3414392997510731,
           "iteration": 0,
           "mass_kg": 0.1727902236801869
         },
@@ -4320,7 +4320,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.6300863996148109,
+          "elapsed_seconds": 0.6757907997816801,
           "iteration": 1,
           "mass_kg": 0.17279022368176966
         },
@@ -4371,7 +4371,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.9327529999427497,
+          "elapsed_seconds": 1.022168600000441,
           "iteration": 2,
           "mass_kg": 0.1727902236803452
         }
@@ -4486,7 +4486,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 7.634946799837053,
+      "elapsed_seconds": 8.655257099773735,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -4608,7 +4608,7 @@
             0.6,
             0.6
           ],
-          "elapsed_seconds": 0.2981175002641976,
+          "elapsed_seconds": 0.3393159001134336,
           "iteration": 0,
           "mass_kg": 0.13008000000000003
         },
@@ -4659,7 +4659,7 @@
             0.8054905454099867,
             0.78426279136341
           ],
-          "elapsed_seconds": 0.6080153002403677,
+          "elapsed_seconds": 0.6718703000806272,
           "iteration": 1,
           "mass_kg": 0.16316382394074877
         },
@@ -4710,7 +4710,7 @@
             0.9401896406143243,
             0.9044171680180718
           ],
-          "elapsed_seconds": 0.91845260001719,
+          "elapsed_seconds": 1.001008199993521,
           "iteration": 2,
           "mass_kg": 0.16859905881975784
         },
@@ -4761,7 +4761,7 @@
             0.991178813171089,
             0.9514184516572232
           ],
-          "elapsed_seconds": 1.2153882002457976,
+          "elapsed_seconds": 1.3451744001358747,
           "iteration": 3,
           "mass_kg": 0.16775013365100339
         },
@@ -4812,7 +4812,7 @@
             0.9999999999999905,
             0.9698515531253113
           ],
-          "elapsed_seconds": 1.817775100003928,
+          "elapsed_seconds": 2.03811650024727,
           "iteration": 4,
           "mass_kg": 0.16989064763493922
         },
@@ -4863,7 +4863,7 @@
             1.0,
             0.9691202795800634
           ],
-          "elapsed_seconds": 2.484329900238663,
+          "elapsed_seconds": 2.718600200023502,
           "iteration": 5,
           "mass_kg": 0.17196275208935333
         },
@@ -4914,7 +4914,7 @@
             1.0,
             0.9693273675823864
           ],
-          "elapsed_seconds": 3.195699800271541,
+          "elapsed_seconds": 3.429181999992579,
           "iteration": 6,
           "mass_kg": 0.17251844394622717
         },
@@ -4965,7 +4965,7 @@
             1.0,
             0.9747762538119604
           ],
-          "elapsed_seconds": 3.9477090002037585,
+          "elapsed_seconds": 4.11250889999792,
           "iteration": 7,
           "mass_kg": 0.17266368822447914
         },
@@ -5016,7 +5016,7 @@
             1.0,
             0.9979108200570506
           ],
-          "elapsed_seconds": 4.564368499908596,
+          "elapsed_seconds": 4.978912400081754,
           "iteration": 8,
           "mass_kg": 0.17223608041112054
         },
@@ -5067,7 +5067,7 @@
             0.9999999999999937,
             0.9982587700311399
           ],
-          "elapsed_seconds": 5.169080100022256,
+          "elapsed_seconds": 5.868688300251961,
           "iteration": 9,
           "mass_kg": 0.17270438438014662
         },
@@ -5118,7 +5118,7 @@
             0.999999999999988,
             0.9999999999999784
           ],
-          "elapsed_seconds": 5.836787300184369,
+          "elapsed_seconds": 6.58857630006969,
           "iteration": 10,
           "mass_kg": 0.17275440910460582
         },
@@ -5169,7 +5169,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.138129400089383,
+          "elapsed_seconds": 6.934278899803758,
           "iteration": 11,
           "mass_kg": 0.1727868921939001
         },
@@ -5220,7 +5220,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.4400054002180696,
+          "elapsed_seconds": 7.2764857998117805,
           "iteration": 12,
           "mass_kg": 0.17279018711709881
         },
@@ -5271,7 +5271,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.7365251001901925,
+          "elapsed_seconds": 7.618560200091451,
           "iteration": 13,
           "mass_kg": 0.17279022350089016
         },
@@ -5322,7 +5322,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.036453899927437,
+          "elapsed_seconds": 7.965141700115055,
           "iteration": 14,
           "mass_kg": 0.17279022368682648
         },
@@ -5373,7 +5373,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.634421700146049,
+          "elapsed_seconds": 8.654722000006586,
           "iteration": 15,
           "mass_kg": 0.1727902236905662
         }
@@ -5488,7 +5488,7 @@
         "grayness": 3.64153152077051e-15,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 6.800724500324577,
+      "elapsed_seconds": 8.302261100150645,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -5610,7 +5610,7 @@
             0.9526315789473685,
             1.0
           ],
-          "elapsed_seconds": 0.3031869004480541,
+          "elapsed_seconds": 0.37312009977176785,
           "iteration": 0,
           "mass_kg": 0.15789351447368422
         },
@@ -5661,7 +5661,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.6051464001648128,
+          "elapsed_seconds": 0.7364423996768892,
           "iteration": 1,
           "mass_kg": 0.1763944241389862
         },
@@ -5712,7 +5712,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.9090128000825644,
+          "elapsed_seconds": 1.0657699997536838,
           "iteration": 2,
           "mass_kg": 0.17108010590520678
         },
@@ -5763,7 +5763,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.2035985002294183,
+          "elapsed_seconds": 1.4391842996701598,
           "iteration": 3,
           "mass_kg": 0.16808190107153442
         },
@@ -5814,7 +5814,7 @@
             0.9999999999999943,
             0.9999999999999999
           ],
-          "elapsed_seconds": 1.8046310003846884,
+          "elapsed_seconds": 2.1489764996804297,
           "iteration": 4,
           "mass_kg": 0.1690175542919852
         },
@@ -5865,7 +5865,7 @@
             0.999999999999996,
             1.0
           ],
-          "elapsed_seconds": 2.4032599003985524,
+          "elapsed_seconds": 2.9592091999948025,
           "iteration": 5,
           "mass_kg": 0.1713838558207505
         },
@@ -5916,7 +5916,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.0007759002037346,
+          "elapsed_seconds": 3.797944599762559,
           "iteration": 6,
           "mass_kg": 0.17255408478124523
         },
@@ -5967,7 +5967,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.639262800104916,
+          "elapsed_seconds": 4.610269200056791,
           "iteration": 7,
           "mass_kg": 0.1726773466582343
         },
@@ -6018,7 +6018,7 @@
             1.0,
             0.9999999999999999
           ],
-          "elapsed_seconds": 3.9644933003000915,
+          "elapsed_seconds": 4.987569399643689,
           "iteration": 8,
           "mass_kg": 0.17265523912326972
         },
@@ -6069,7 +6069,7 @@
             0.9999999999999986,
             1.0
           ],
-          "elapsed_seconds": 4.615681300405413,
+          "elapsed_seconds": 5.786902399733663,
           "iteration": 9,
           "mass_kg": 0.17276799794721448
         },
@@ -6120,7 +6120,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.915740100201219,
+          "elapsed_seconds": 6.136360799893737,
           "iteration": 10,
           "mass_kg": 0.17276459215512394
         },
@@ -6171,7 +6171,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.517976800445467,
+          "elapsed_seconds": 6.85524639999494,
           "iteration": 11,
           "mass_kg": 0.1727857157461952
         },
@@ -6222,7 +6222,7 @@
             0.9999999999999997,
             0.9999999999999999
           ],
-          "elapsed_seconds": 5.821568800136447,
+          "elapsed_seconds": 7.231914499774575,
           "iteration": 12,
           "mass_kg": 0.17278988565352976
         },
@@ -6273,7 +6273,7 @@
             0.999999999999999,
             0.9999999999999999
           ],
-          "elapsed_seconds": 6.1358781000599265,
+          "elapsed_seconds": 7.610703899990767,
           "iteration": 13,
           "mass_kg": 0.17279022367119246
         },
@@ -6324,7 +6324,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.46113200020045,
+          "elapsed_seconds": 7.957493199966848,
           "iteration": 14,
           "mass_kg": 0.17279022369159813
         },
@@ -6375,7 +6375,7 @@
             0.9999999999999994,
             0.9999999999999999
           ],
-          "elapsed_seconds": 6.80067910021171,
+          "elapsed_seconds": 8.302215300034732,
           "iteration": 15,
           "mass_kg": 0.1727902236797332
         }
@@ -6490,7 +6490,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 1.2247727001085877,
+      "elapsed_seconds": 1.6296793003566563,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -6612,7 +6612,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.3076309999451041,
+          "elapsed_seconds": 0.3642311003059149,
           "iteration": 0,
           "mass_kg": 0.1727902236803452
         },
@@ -6663,7 +6663,7 @@
             1.0,
             0.9999999999999997
           ],
-          "elapsed_seconds": 0.6272041997872293,
+          "elapsed_seconds": 0.7991349999792874,
           "iteration": 1,
           "mass_kg": 0.17279022368542937
         },
@@ -6714,7 +6714,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.2247187998145819,
+          "elapsed_seconds": 1.6296205003745854,
           "iteration": 2,
           "mass_kg": 0.17279022368062227
         }
@@ -6829,7 +6829,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 0.9002971001900733,
+      "elapsed_seconds": 1.215713799931109,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -6951,7 +6951,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.2945846002548933,
+          "elapsed_seconds": 0.4173730998300016,
           "iteration": 0,
           "mass_kg": 0.17279022368062227
         },
@@ -7002,7 +7002,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.5960538000799716,
+          "elapsed_seconds": 0.8008245001547039,
           "iteration": 1,
           "mass_kg": 0.1727902236915516
         },
@@ -7053,7 +7053,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.9002435002475977,
+          "elapsed_seconds": 1.2156509002670646,
           "iteration": 2,
           "mass_kg": 0.1727902236817152
         }
@@ -7168,7 +7168,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 1.1862592999823391,
+      "elapsed_seconds": 1.4793942999094725,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -7290,7 +7290,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.29462649999186397,
+          "elapsed_seconds": 0.3614277997985482,
           "iteration": 0,
           "mass_kg": 0.1727902236817152
         },
@@ -7341,7 +7341,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.5880098999477923,
+          "elapsed_seconds": 0.7796983998268843,
           "iteration": 1,
           "mass_kg": 0.17279022369148803
         },
@@ -7392,7 +7392,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.1862160000018775,
+          "elapsed_seconds": 1.4793524998240173,
           "iteration": 2,
           "mass_kg": 0.17279022368208666
         }
@@ -7540,7 +7540,7 @@
         "grayness": 0.0,
         "intermediate_count_0p01_0p99": 0
       },
-      "elapsed_seconds": 28.053664700128138,
+      "elapsed_seconds": 31.045040199998766,
       "feasibility_tolerance": 0.0001,
       "feasible": true,
       "final_design": {
@@ -7662,7 +7662,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.3002494997344911,
+          "elapsed_seconds": 0.4003881998360157,
           "iteration": 0,
           "mass_kg": 0.18360249999999997
         },
@@ -7713,7 +7713,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.6085326001048088,
+          "elapsed_seconds": 0.7439649999141693,
           "iteration": 1,
           "mass_kg": 0.18263550887728
         },
@@ -7764,7 +7764,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 0.9166882997378707,
+          "elapsed_seconds": 1.0833474998362362,
           "iteration": 2,
           "mass_kg": 0.17167507725202233
         },
@@ -7815,7 +7815,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.2159369997680187,
+          "elapsed_seconds": 1.4585547000169754,
           "iteration": 3,
           "mass_kg": 0.11676966710489485
         },
@@ -7866,7 +7866,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.5096840998157859,
+          "elapsed_seconds": 1.8037099000066519,
           "iteration": 4,
           "mass_kg": 0.12514587836276486
         },
@@ -7917,7 +7917,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 1.8070348999463022,
+          "elapsed_seconds": 2.1556871999055147,
           "iteration": 5,
           "mass_kg": 0.12715548618245265
         },
@@ -7968,7 +7968,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.224412700161338,
+          "elapsed_seconds": 3.548997600097209,
           "iteration": 6,
           "mass_kg": 0.12654083045577724
         },
@@ -8019,7 +8019,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 3.8783617997542024,
+          "elapsed_seconds": 4.250480500049889,
           "iteration": 7,
           "mass_kg": 0.126818632965112
         },
@@ -8070,7 +8070,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.175924699753523,
+          "elapsed_seconds": 4.599527699872851,
           "iteration": 8,
           "mass_kg": 0.12951322333077958
         },
@@ -8121,7 +8121,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.472724299877882,
+          "elapsed_seconds": 4.9455352001823485,
           "iteration": 9,
           "mass_kg": 0.15077770848242597
         },
@@ -8172,7 +8172,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 4.848707499913871,
+          "elapsed_seconds": 5.29628900019452,
           "iteration": 10,
           "mass_kg": 0.1632656920067496
         },
@@ -8223,7 +8223,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.1447755000554025,
+          "elapsed_seconds": 5.699355400167406,
           "iteration": 11,
           "mass_kg": 0.17296190893326616
         },
@@ -8274,7 +8274,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.459115299861878,
+          "elapsed_seconds": 6.0809829998761415,
           "iteration": 12,
           "mass_kg": 0.17294027476029974
         },
@@ -8325,7 +8325,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 5.811203199904412,
+          "elapsed_seconds": 6.533784099854529,
           "iteration": 13,
           "mass_kg": 0.17288634034127728
         },
@@ -8376,7 +8376,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.162732699885964,
+          "elapsed_seconds": 7.030213700141758,
           "iteration": 14,
           "mass_kg": 0.17277008836901886
         },
@@ -8427,7 +8427,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 6.4929478000849485,
+          "elapsed_seconds": 7.407443800009787,
           "iteration": 15,
           "mass_kg": 0.17272939761441208
         },
@@ -8478,7 +8478,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 7.5165128000080585,
+          "elapsed_seconds": 8.440216000191867,
           "iteration": 16,
           "mass_kg": 0.17280140087284557
         },
@@ -8529,7 +8529,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 10.503166200127453,
+          "elapsed_seconds": 12.010994399897754,
           "iteration": 17,
           "mass_kg": 0.17280462067530727
         },
@@ -8580,7 +8580,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 11.110090000089258,
+          "elapsed_seconds": 12.68722439976409,
           "iteration": 18,
           "mass_kg": 0.17280419343944983
         },
@@ -8631,7 +8631,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 11.428104099817574,
+          "elapsed_seconds": 13.043024099897593,
           "iteration": 19,
           "mass_kg": 0.17280313688671614
         },
@@ -8682,7 +8682,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 11.748095400165766,
+          "elapsed_seconds": 13.38584030000493,
           "iteration": 20,
           "mass_kg": 0.17279741985192443
         },
@@ -8733,7 +8733,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 12.054683099966496,
+          "elapsed_seconds": 13.758294499944896,
           "iteration": 21,
           "mass_kg": 0.172795696197233
         },
@@ -8784,7 +8784,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 12.962586099747568,
+          "elapsed_seconds": 14.78198520001024,
           "iteration": 22,
           "mass_kg": 0.17279760424774315
         },
@@ -8835,7 +8835,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 13.260168899782002,
+          "elapsed_seconds": 15.129937400110066,
           "iteration": 23,
           "mass_kg": 0.1727958478685302
         },
@@ -8886,7 +8886,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 13.552403799723834,
+          "elapsed_seconds": 15.480144000146538,
           "iteration": 24,
           "mass_kg": 0.17279590879463322
         },
@@ -8937,7 +8937,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 13.849798500072211,
+          "elapsed_seconds": 15.821801899932325,
           "iteration": 25,
           "mass_kg": 0.1727909105740135
         },
@@ -8988,7 +8988,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 14.753921399824321,
+          "elapsed_seconds": 16.833482400048524,
           "iteration": 26,
           "mass_kg": 0.1727912359168996
         },
@@ -9039,7 +9039,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 17.325209999922663,
+          "elapsed_seconds": 19.26569989975542,
           "iteration": 27,
           "mass_kg": 0.17279126887152751
         },
@@ -9090,7 +9090,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 18.411080100107938,
+          "elapsed_seconds": 20.285418899729848,
           "iteration": 28,
           "mass_kg": 0.17279127357793275
         },
@@ -9141,7 +9141,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 18.724877499975264,
+          "elapsed_seconds": 20.621820699889213,
           "iteration": 29,
           "mass_kg": 0.1727908529579992
         },
@@ -9192,7 +9192,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 19.087695199996233,
+          "elapsed_seconds": 20.957674900069833,
           "iteration": 30,
           "mass_kg": 0.17279067878358925
         },
@@ -9243,7 +9243,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 21.323704400099814,
+          "elapsed_seconds": 23.423086800146848,
           "iteration": 31,
           "mass_kg": 0.17279077877524832
         },
@@ -9294,7 +9294,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 21.679923499934375,
+          "elapsed_seconds": 23.76939419982955,
           "iteration": 32,
           "mass_kg": 0.17279079163605757
         },
@@ -9345,7 +9345,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 21.98798460001126,
+          "elapsed_seconds": 24.1275387997739,
           "iteration": 33,
           "mass_kg": 0.17279085102133263
         },
@@ -9396,7 +9396,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 22.287182100117207,
+          "elapsed_seconds": 24.493305000010878,
           "iteration": 34,
           "mass_kg": 0.17279084673954323
         },
@@ -9447,7 +9447,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 22.592447699978948,
+          "elapsed_seconds": 24.839232199825346,
           "iteration": 35,
           "mass_kg": 0.17279084452658797
         },
@@ -9498,7 +9498,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 23.47806779993698,
+          "elapsed_seconds": 25.867746999952942,
           "iteration": 36,
           "mass_kg": 0.1727908319860768
         },
@@ -9549,7 +9549,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 23.81142359972,
+          "elapsed_seconds": 26.203873499762267,
           "iteration": 37,
           "mass_kg": 0.1727907999633329
         },
@@ -9600,7 +9600,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 24.10369860008359,
+          "elapsed_seconds": 26.549173399806023,
           "iteration": 38,
           "mass_kg": 0.17279079256972818
         },
@@ -9651,7 +9651,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 24.40081090014428,
+          "elapsed_seconds": 26.907056499738246,
           "iteration": 39,
           "mass_kg": 0.17279074867007443
         },
@@ -9702,7 +9702,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 24.717146600130945,
+          "elapsed_seconds": 27.256485300138593,
           "iteration": 40,
           "mass_kg": 0.17279073409236104
         },
@@ -9753,7 +9753,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 25.013851399999112,
+          "elapsed_seconds": 27.621525699738413,
           "iteration": 41,
           "mass_kg": 0.17279043182060277
         },
@@ -9804,7 +9804,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 25.303668099921197,
+          "elapsed_seconds": 27.974395900033414,
           "iteration": 42,
           "mass_kg": 0.17279036613590515
         },
@@ -9855,7 +9855,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 25.602916500065476,
+          "elapsed_seconds": 28.318505799863487,
           "iteration": 43,
           "mass_kg": 0.17279043724910745
         },
@@ -9906,7 +9906,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 25.90477759996429,
+          "elapsed_seconds": 28.6557984999381,
           "iteration": 44,
           "mass_kg": 0.17279043843205694
         },
@@ -9957,7 +9957,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 26.214542699977756,
+          "elapsed_seconds": 28.996133300010115,
           "iteration": 45,
           "mass_kg": 0.17279026658824817
         },
@@ -10008,7 +10008,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 26.52850649971515,
+          "elapsed_seconds": 29.34059870010242,
           "iteration": 46,
           "mass_kg": 0.17279026751739354
         },
@@ -10059,7 +10059,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 26.82467840006575,
+          "elapsed_seconds": 29.68552380008623,
           "iteration": 47,
           "mass_kg": 0.17279026755056123
         },
@@ -10110,7 +10110,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 27.137038399931043,
+          "elapsed_seconds": 30.02086120005697,
           "iteration": 48,
           "mass_kg": 0.17279023250152492
         },
@@ -10161,7 +10161,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 27.450587200000882,
+          "elapsed_seconds": 30.35907409992069,
           "iteration": 49,
           "mass_kg": 0.17279022554949433
         },
@@ -10212,7 +10212,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 27.749301800038666,
+          "elapsed_seconds": 30.698865099810064,
           "iteration": 50,
           "mass_kg": 0.1727902241528188
         },
@@ -10263,7 +10263,7 @@
             1.0,
             1.0
           ],
-          "elapsed_seconds": 28.05339720007032,
+          "elapsed_seconds": 31.044750299770385,
           "iteration": 51,
           "mass_kg": 0.17279022399242852
         }
