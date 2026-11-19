@@ -1,6 +1,8 @@
 # Frozen Engineering Specification
 
-Status: **team approved**, including the DEC-002 amendment on 2026-11-11
+Status: Engineering loads and limits **team approved**, including DEC-002.
+The mesh-consistent KS sampling and 0.5 K numerical reserve were approved by
+the team on 2026-11-19 (DEC-003).
 
 ## Engineering problem
 
@@ -34,8 +36,12 @@ m(\mathbf{x})=\rho_{Al}\left(V_{base}+d\,t_f
 \sum_{i=1}^{20}\bar\rho_i H_i\right).
 $$
 
-Each temperature constraint uses a smooth KS aggregate of the chip-interface
-nodal temperatures. All optimization constraints are scaled to order one.
+Each temperature constraint uses a smooth KS aggregate of temperatures at 15
+fixed physical points across the chip, evaluated by FE interpolation. The
+optimizer requires the aggregate to be at least 0.5 K below the approved
+engineering limit; the exact piecewise-linear chip peak and the original
+engineering limits are separately checked. All optimization constraints are
+scaled to order one. See `coordination/decisions/DEC-003-mesh-consistency.md`.
 
 ## Governing model
 

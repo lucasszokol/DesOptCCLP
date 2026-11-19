@@ -39,6 +39,10 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     with pytest.raises(ValueError, match="Nonlinear fin cross-check"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
     results["nonlinear_fin_check"]["status"] = "passed"
+    results["design_mesh_validation"]["status"] = "failed"
+    with pytest.raises(ValueError, match="Design mesh verification"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["design_mesh_validation"]["status"] = "passed"
     case = results["designs"]["optimized"]["load_cases"][0]
     original_balance = case["energy_imbalance_w"]
     case["energy_imbalance_w"] = case["power_w"] * 1e-3

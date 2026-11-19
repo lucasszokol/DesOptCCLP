@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+from scipy.sparse import coo_matrix
+from scipy.sparse.linalg import spsolve
 
 from .config import LoadCase, ProjectConfig
 from .elements import line_conduction_matrix, quad4_conduction_matrix
@@ -33,7 +35,7 @@ class ResponseResult:
 
 
 class HeatSinkModel:
-    """Dense reference implementation sized for verification and optimization."""
+    """Sparse coupled base and fin finite-element implementation."""
 
     def __init__(self, config: ProjectConfig):
         self.config = config
@@ -82,16 +84,18 @@ class HeatSinkModel:
                 )
         return tuple(quads)
 
-    def _assemble_base_matrix(self) -> np.ndarray:
-        matrix = np.zeros((self.ndof, self.ndof))
+    def _assemble_base_matrix(self):
+        rows, columns, values = [], [], []
         material = self.config.material
         depth = self.config.geometry.extrusion_depth_m
         for dofs in self.quads:
             local = quad4_conduction_matrix(
                 self.base_coordinates[dofs], material.conductivity_w_mk, depth
             )
-            matrix[np.ix_(dofs, dofs)] += local
-        return matrix
+            rows.extend(np.repeat(dofs, 4))
+            columns.extend(np.tile(dofs, 4))
+            values.extend(local.ravel())
+        return coo_matrix((values, (rows, columns)), shape=(self.ndof, self.ndof)).tocsr()
 
     def initial_design(self, height_m: float = 0.030) -> np.ndarray:
         count = self.config.geometry.candidate_fins
@@ -131,6 +135,47 @@ class HeatSinkModel:
         half = 0.5 * self.config.geometry.chip_width_m + 1.0e-14
         return np.flatnonzero(np.abs(self.x) <= half)
 
+    def chip_sampling_matrix(self) -> np.ndarray:
+        """Fixed physical KS points, including both chip edges, interpolated from FE nodes.
+
+        The 15 fixed locations are the original coarse mesh's 13 interior
+        chip nodes plus both true footprint edges. They do not depend on the
+        analysis mesh, avoiding a changing KS offset on refinement.
+        """
+        half = 0.5 * self.config.geometry.chip_width_m
+        fractions = np.asarray(self.config.raw["physics"]["ks_sample_positions_fraction_of_half_width"], dtype=float)
+        if (fractions.ndim != 1 or len(fractions) < 2 or fractions[0] != -1.0 or fractions[-1] != 1.0
+                or np.any(np.diff(fractions) <= 0)):
+            raise ValueError("KS sample fractions must increase from -1 to 1")
+        positions = half * fractions
+        indices = np.clip(np.searchsorted(self.x, positions, side="right") - 1, 0, self.nx - 1)
+        weight = (positions - self.x[indices]) / (self.x[indices + 1] - self.x[indices])
+        sampling = np.zeros((len(positions), self.ndof))
+        sampling[np.arange(len(positions)), indices] = 1.0 - weight
+        sampling[np.arange(len(positions)), indices + 1] = weight
+        return sampling
+
+    def chip_peak_temperature(self, temperature: np.ndarray) -> float:
+        """Maximum of the piecewise-linear interface over the complete chip width."""
+        half = 0.5 * self.config.geometry.chip_width_m
+        points = np.r_[-half, self.x[self.chip_dofs()], half]
+        return float(np.max(np.interp(points, self.x, np.asarray(temperature)[:self.nx + 1])))
+
+    def chip_load_weights(self) -> np.ndarray:
+        """Integrate bottom-edge shape functions over the exact chip footprint."""
+        half = 0.5 * self.config.geometry.chip_width_m
+        weights = np.zeros(self.ndof)
+        for i in range(self.nx):
+            left, right = self.x[i], self.x[i + 1]
+            a, b = max(left, -half), min(right, half)
+            if b <= a:
+                continue
+            length = right - left
+            right_integral = ((b - left)**2 - (a - left)**2) / (2.0 * length)
+            weights[i] += ((b - a) - right_integral) / (2.0 * half)
+            weights[i + 1] += right_integral / (2.0 * half)
+        return weights
+
     def _surface_flux(self, temperature: float, ambient: float, nonlinear: bool) -> tuple[float, float]:
         p = self.config.raw["physics"]
         delta = temperature - ambient
@@ -158,7 +203,7 @@ class HeatSinkModel:
         *,
         nonlinear: bool,
         penalty: float,
-    ) -> tuple[np.ndarray, np.ndarray, float]:
+    ):
         """Return residual, consistent tangent, and integrated surface loss."""
 
         t = np.asarray(temperature, dtype=float)
@@ -169,7 +214,11 @@ class HeatSinkModel:
         floor = float(self.config.raw["optimization"]["simp_density_floor"])
         conduction_scale = simp_factor(density, penalty, floor)
         residual = self.base_matrix @ t
-        tangent = self.base_matrix.copy()
+        rows, columns, values = [], [], []
+        def add_tangent(dofs, local):
+            rows.extend(np.repeat(dofs, len(dofs)))
+            columns.extend(np.tile(dofs, len(dofs)))
+            values.extend(np.asarray(local).ravel())
         surface_loss = 0.0
 
         gauss = (-1.0 / np.sqrt(3.0), 1.0 / np.sqrt(3.0))
@@ -181,21 +230,22 @@ class HeatSinkModel:
             for pair in zip(dofs[:-1], dofs[1:]):
                 element = np.asarray(pair, dtype=int)
                 residual[element] += conduction @ t[element]
-                tangent[np.ix_(element, element)] += conduction
+                local_tangent = conduction.copy()
                 for xi in gauss:
                     shape = 0.5 * np.array([1.0 - xi, 1.0 + xi])
                     value = float(shape @ t[element])
                     flux, derivative = self._surface_flux(value, case.ambient_k, nonlinear)
                     weight = perimeter * 0.5 * length
                     residual[element] += weight * shape * flux
-                    tangent[np.ix_(element, element)] += weight * derivative * np.outer(shape, shape)
+                    local_tangent += weight * derivative * np.outer(shape, shape)
                     surface_loss += weight * flux
+                add_tangent(element, local_tangent)
 
             tip = int(dofs[-1])
             tip_area = g.fin_thickness_m * g.extrusion_depth_m * density[i]
             flux, derivative = self._surface_flux(float(t[tip]), case.ambient_k, nonlinear)
             residual[tip] += tip_area * flux
-            tangent[tip, tip] += tip_area * derivative
+            add_tangent(np.array([tip]), np.array([[tip_area * derivative]]))
             surface_loss += tip_area * flux
 
         # Exposed horizontal base top, integrated with two-node edge elements.
@@ -203,24 +253,19 @@ class HeatSinkModel:
         edge_length = g.base_width_m / self.nx
         for ix in range(self.nx):
             edge = np.array([top + ix, top + ix + 1])
+            local_tangent = np.zeros((2, 2))
             for xi in gauss:
                 shape = 0.5 * np.array([1.0 - xi, 1.0 + xi])
                 value = float(shape @ t[edge])
                 flux, derivative = self._surface_flux(value, case.ambient_k, nonlinear)
                 weight = g.extrusion_depth_m * 0.5 * edge_length
                 residual[edge] += weight * shape * flux
-                tangent[np.ix_(edge, edge)] += weight * derivative * np.outer(shape, shape)
+                local_tangent += weight * derivative * np.outer(shape, shape)
                 surface_loss += weight * flux
+            add_tangent(edge, local_tangent)
 
-        # Uniform chip heat flux on selected bottom edges; distribute exactly.
-        half = 0.5 * g.chip_width_m
-        selected = [ix for ix in range(self.nx) if abs(0.5 * (self.x[ix] + self.x[ix + 1])) <= half]
-        if not selected:
-            raise RuntimeError("chip region has no boundary edges")
-        edge_power = case.power_w / len(selected)
-        for ix in selected:
-            edge = np.array([ix, ix + 1])
-            residual[edge] -= 0.5 * edge_power
+        residual -= case.power_w * self.chip_load_weights()
+        tangent = self.base_matrix + coo_matrix((values, (rows, columns)), shape=(self.ndof, self.ndof)).tocsr()
         return residual, tangent, float(surface_loss)
 
     def assemble_design_jacobian(
@@ -286,15 +331,14 @@ class HeatSinkModel:
     def ks_temperature(self, temperature: np.ndarray) -> tuple[float, np.ndarray]:
         """Smooth maximum of chip-interface temperature and its state gradient."""
 
-        chip = self.chip_dofs()
-        values = np.asarray(temperature, dtype=float)[chip]
+        sampling = self.chip_sampling_matrix()
+        values = sampling @ np.asarray(temperature, dtype=float)
         rho = float(self.config.raw["physics"]["ks_rho_per_k"])
         maximum = float(values.max())
         exponent = np.exp(rho * (values - maximum))
         weights = exponent / exponent.sum()
         value = maximum + np.log(exponent.sum()) / rho
-        gradient = np.zeros(self.ndof)
-        gradient[chip] = weights
+        gradient = sampling.T @ weights
         return float(value), gradient
 
     def response_with_adjoint(
@@ -319,7 +363,7 @@ class HeatSinkModel:
         )
         # g = KS / limit - 1.  The residual has no explicit dependence on g.
         dg_dt = dks_dt / case.chip_limit_k
-        adjoint = np.linalg.solve(tangent.T, -dg_dt)
+        adjoint = spsolve(tangent.T.tocsr(), -dg_dt)
         gradient = adjoint @ residual_design
         return ResponseResult(
             solve=solved,
@@ -355,7 +399,7 @@ class HeatSinkModel:
                 initial_norm = max(norm, 1.0)
             if norm <= float(settings["newton_absolute_tolerance"]) + float(settings["newton_relative_tolerance"]) * initial_norm:
                 return SolveResult(temperature, tuple(history), iteration, True, case.power_w, surface_loss, surface_loss - case.power_w)
-            step = np.linalg.solve(tangent, -residual)
+            step = spsolve(tangent.tocsr(), -residual)
             alpha = 1.0
             minimum = float(settings["line_search_minimum"])
             while alpha >= minimum:

@@ -26,6 +26,7 @@ from .uncertainty import run_uncertainty
 from .serialize import _design_view
 from .figures import generate_figures
 from .nonlinear_fin_check import nonlinear_fin_check
+from .mesh_validation import validate_design_meshes
 
 
 def main() -> int:
@@ -92,16 +93,21 @@ def main() -> int:
     required_runs = (campaign.linear_fixed, campaign.nonlinear_fixed, campaign.threshold_polish, campaign.kkt_polish)
     for run in required_runs:
         violation = max(response.scaled_constraint for response in run.responses)
-        if not run.result.success or violation > tolerance:
+        if not run.accepted or violation > tolerance:
             print(f"OPTIMIZATION FAILED: {run.name}: {run.result.message}; "
                   f"maximum scaled constraint = {violation:.6g} (tolerance {tolerance:.6g})")
             return 5
     robust_model, robust_run, robust_checks = run_uncertainty(model, campaign.kkt_polish.full_design)
     robust_violation = max(r.scaled_constraint for r in robust_run.responses)
-    if (not robust_run.result.success or robust_violation > tolerance or
+    if (not robust_run.accepted or robust_violation > tolerance or
             any(check["relative_error"] > config.raw["verification"]["gradient_relative_tolerance"] for check in robust_checks)):
         print(f"UNCERTAINTY STUDY FAILED: {robust_run.result.message}; maximum constraint {robust_violation:.6g}")
         return 6
+    mesh_evidence = validate_design_meshes(model, campaign.kkt_polish.full_design,
+                                           robust_model, robust_run.full_design)
+    if mesh_evidence["status"] != "passed":
+        print("DESIGN MESH VERIFICATION FAILED:", mesh_evidence)
+        return 7
     payload = final_payload(
         model,
         campaign,
@@ -111,6 +117,7 @@ def main() -> int:
     )
     payload["expanded_sensitivity"] = sensitivity
     payload["nonlinear_fin_check"] = fin_check
+    payload["design_mesh_validation"] = mesh_evidence
     payload["uncertainty"] = {
         "assumptions": config.raw["uncertainty"],
         "description": "Paired low and high power and ambient scenarios for each load case; illustrative bounded scenarios, not a probability model.",

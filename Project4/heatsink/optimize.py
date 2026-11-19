@@ -34,10 +34,13 @@ class OptimizationRun:
     initial_design: np.ndarray
     elapsed_seconds: float
     feasibility_tolerance: float
+    temperature_reserve_k: float
+    temperature_limits_k: tuple[float, ...]
 
     @property
     def max_scaled_constraint(self) -> float:
-        return max(response.scaled_constraint for response in self.responses)
+        return max(response.scaled_constraint + self.temperature_reserve_k / limit
+                   for limit, response in zip(self.temperature_limits_k, self.responses))
 
     @property
     def feasible(self) -> bool:
@@ -129,13 +132,22 @@ class OptimizationProblem:
         return self.reduced_gradient(full)
 
     def objective_hessian(self, variables: np.ndarray) -> np.ndarray:
-        """Return the exact zero Hessian of the mass objective."""
+        """Exact mass Hessian, including height/density cross derivatives."""
 
         size = np.asarray(variables).size
-        return np.zeros((size, size))
+        result = np.zeros((size, size))
+        if not self.fixed_topology:
+            g, material = self.model.config.geometry, self.model.config.material
+            coefficient = material.density_kg_m3 * g.extrusion_depth_m * g.fin_thickness_m / self.reference_mass
+            cross = coefficient * self.model.filter_matrix
+            result[:self.count, self.count:] = cross
+            result[self.count:, :self.count] = cross.T
+        return result
 
     def margins(self, variables: np.ndarray) -> np.ndarray:
-        return -np.array([response.scaled_constraint for response in self._evaluate(variables)])
+        reserve = float(self.model.config.raw["optimization"]["temperature_reserve_k"])
+        return -np.array([response.scaled_constraint + reserve / case.chip_limit_k
+                          for case, response in zip(self.model.config.load_cases, self._evaluate(variables))])
 
     def margins_jacobian(self, variables: np.ndarray) -> np.ndarray:
         return np.vstack(
@@ -234,7 +246,7 @@ def optimize_design(
             scaled_initial,
             method="trust-constr",
             jac=scaled_objective_gradient,
-            hess=problem.objective_hessian,
+            hess=lambda scaled: scale[:, None] * problem.objective_hessian(physical(scaled)) * scale[None, :],
             bounds=Bounds(
                 np.zeros_like(scaled_initial),
                 np.ones_like(scaled_initial),
@@ -311,4 +323,6 @@ def optimize_design(
         initial_design=initial_full,
         elapsed_seconds=elapsed,
         feasibility_tolerance=feasibility_tolerance,
+        temperature_reserve_k=float(model.config.raw["optimization"]["temperature_reserve_k"]),
+        temperature_limits_k=tuple(case.chip_limit_k for case in model.config.load_cases),
     )

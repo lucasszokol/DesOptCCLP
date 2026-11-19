@@ -18,12 +18,11 @@ are generated from one canonical `site/assets/results.json` file.
 - V1--V6 reports 20/20 checks passing; V7 adjoint/Taylor evidence passes.
 - GitHub Pages test, build, and deployment jobs pass, and the public site
   responds successfully.
-- On the integration branch, the full optimization and uncertainty command
-  completes with feasible results and a successful KKT polish; all three
-  tested topology starts return an all-solid design.
-- The latest site and results are still on the integration branch. The public
-  site follows `main` and therefore still shows preliminary data until the
-  integration PR is approved, merged, and deployed.
+- An audit found mesh dependence in the earlier KS constraint and a mismatch
+  in the chip footprint. The team-approved DEC-003 amendment corrects those
+  issues and adds a 0.5 K numerical reserve and design-level mesh verification.
+- The public site follows `main`; verify that the latest approved results have
+  deployed before submission.
 
 ## Human gates
 
@@ -36,6 +35,8 @@ The team approved the DEC-002 feasibility amendment: a 55 mm height cap,
 linear comparison coefficient of 15 W/(m² K), and design under uncertainty as
 the backup bonus path. See
 [`DEC-002-optimization-feasibility.md`](coordination/decisions/DEC-002-optimization-feasibility.md).
+The later numerical amendment is documented in
+[`DEC-003-mesh-consistency.md`](coordination/decisions/DEC-003-mesh-consistency.md).
 
 ## Intended reproducibility command
 

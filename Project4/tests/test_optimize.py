@@ -22,6 +22,20 @@ def test_optimizer_interface_shapes_and_gradients() -> None:
     topology = OptimizationProblem(model, fixed_topology=False, nonlinear=True, penalty=3.0)
     assert topology.objective_gradient(full).shape == (40,)
     np.testing.assert_allclose(topology.full_design(full), full)
+    actual = topology.margins(full)
+    expected = np.array([-response.scaled_constraint - config.raw["optimization"]["temperature_reserve_k"] / case.chip_limit_k
+                         for case, response in zip(config.load_cases, topology._evaluate(full))])
+    np.testing.assert_allclose(actual, expected, rtol=0, atol=1e-15)
+
+
+def test_joint_mass_hessian_matches_gradient_difference() -> None:
+    model = HeatSinkModel(load_config(ROOT / "Project4" / "config.yaml"))
+    problem = OptimizationProblem(model, fixed_topology=False, nonlinear=True, penalty=3.0)
+    design = model.initial_design()
+    direction = np.r_[np.linspace(-.2, .2, 20), np.linspace(.1, -.1, 20)]
+    step = 1e-6
+    reference = (problem.objective_gradient(design + step*direction) - problem.objective_gradient(design - step*direction))/(2*step)
+    np.testing.assert_allclose(problem.objective_hessian(design) @ direction, reference, rtol=1e-8, atol=1e-9)
 
 
 def test_nonlinear_fixed_run_records_history_and_acceptance() -> None:

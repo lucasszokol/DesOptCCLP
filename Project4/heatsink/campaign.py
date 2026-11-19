@@ -128,6 +128,7 @@ def _strictly_feasible_kkt_seed(
                 nonlinear=True,
                 penalty=penalty,
             ).scaled_constraint
+            + float(model.config.raw["optimization"]["temperature_reserve_k"]) / case.chip_limit_k
             for case in model.config.load_cases
         )
         if maximum_constraint < -1.0e-8:
@@ -339,8 +340,8 @@ def _run_record(model: HeatSinkModel, run: OptimizationRun, role: str) -> dict:
                 "ks_temperature_k": response.ks_temperature_k,
                 "limit_k": case.chip_limit_k,
                 "scaled_constraint": response.scaled_constraint,
-                "constraint_margin": -response.scaled_constraint,
-                "feasible": response.scaled_constraint
+                "constraint_margin": -response.scaled_constraint - run.temperature_reserve_k / case.chip_limit_k,
+                "feasible": response.scaled_constraint + run.temperature_reserve_k / case.chip_limit_k
                 <= run.feasibility_tolerance,
                 "newton_converged": response.solve.converged,
                 "newton_iterations": response.solve.iterations,
@@ -433,7 +434,7 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
     for index, (case, response) in enumerate(
         zip(model.config.load_cases, kkt.responses)
     ):
-        if abs(response.scaled_constraint) <= active_tolerance:
+        if abs(response.scaled_constraint + kkt.temperature_reserve_k / case.chip_limit_k) <= active_tolerance:
             active_constraints.append(
                 {
                     "name": case.name,
