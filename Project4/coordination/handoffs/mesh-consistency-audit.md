@@ -2,7 +2,7 @@
 
 The November 19 audit found that the former midpoint-edge load applied the
 20 mm chip power over 21 mm, and the unnormalized KS sum changed with the
-number of chip nodes. The proposed DEC-003 corrects the footprint, samples
+number of chip nodes. The approved DEC-003 corrects the footprint, samples
 15 fixed physical positions including the chip edges, and adds a 0.5 K
 numerical reserve while leaving the approved physical limits unchanged.
 
@@ -24,6 +24,6 @@ have regression coverage. The local isolated browser preview showed both
 metric panels, working WebGL, hover/tap, animation, MathJax, and no browser
 errors at 1280 px and 390 px; document width stayed within the viewport.
 
-DEC-003 remains pending team review. Existing benchmark truth and approval
-files are unchanged. The public report is not updated by this branch until
-the team accepts the amendment and the final deployment succeeds.
+The team approved DEC-003's fixed sampling and 0.5 K reserve on 2026-11-19.
+Existing benchmark truth and approval files are unchanged. The public report
+is updated only after this branch is merged and the deployment succeeds.

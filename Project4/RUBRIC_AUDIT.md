@@ -6,10 +6,10 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 
 | Criterion | Points | Current evidence | Status |
 |---|---:|---|---|
-| Structure and formulation | 10 | `SPECIFICATION.md`, `config.yaml`, explicit formulas, property sources, and `approvals.yaml` | Limits and loads approved; DEC-003 numerical amendment pending team review |
+| Structure and formulation | 10 | `SPECIFICATION.md`, `config.yaml`, explicit formulas, property sources, and `approvals.yaml` | Loads and limits approved; DEC-003 numerical settings approved 2026-11-19 |
 | Analysis and verification | 20 | `results/verification/verification.md`: 20/20 V1--V6 checks pass; the results JSON also records the production nonlinear fin comparison against an independent numerical BVP, tangent check, and mesh refinement | Passed; reference is numerical rather than student-derived exact truth |
 | Sensitivity analysis | 20 | `results/sensitivity/sensitivity.md` records both constraints, variable families, physics modes, and configured SIMP penalties | Expanded Agent 2 checks integrated in the reproducibility command; the output records each pass/fail result |
-| Optimization | 15 | SLSQP stages, three topology starts, continuation, threshold re-optimization, unit-box trust-constr KKT polish; `site/assets/results.json` | Revised campaign adds a numerical reserve and design-level mesh checks; review generated evidence and DEC-003 |
+| Optimization | 15 | SLSQP stages, three topology starts, continuation, threshold re-optimization, unit-box trust-constr KKT polish; `site/assets/results.json` | Revised campaign passes with the approved numerical reserve and design-level mesh checks |
 | Nonlinear component | 15 | Natural-convection/radiation N2 residual, Newton solve, consistent tangent, passing V6 benchmark, linear/N2 results | Local comparison generated; linear reference coefficient is a separate modeling choice |
 | Website and 3D | 10 | Report, Three.js geometry, per-fragment bilinear base field, history, hover and touch inspection, metrics, JSON contract | Browser checks and current deployment evidence recorded in the handoff |
 | Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; Python 3.11 CI ran the complete campaign and schema validation successfully at 187fe1c |
@@ -20,10 +20,9 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 
 ## Mandatory completion evidence still missing
 
-1. Review DEC-003 and the revised design and mesh results.
-2. Implement discrete topology reanalysis if claiming a vanished-fin bonus.
-3. Verify the latest public deployment in a private window after changes.
-4. Confirm the participation-sheet URL and submit repository and site URLs on Canvas.
+1. Implement discrete topology reanalysis if claiming a vanished-fin bonus.
+2. Verify the latest public deployment in a private window after changes.
+3. Confirm the participation-sheet URL and submit repository and site URLs on Canvas.
 
 The DEC-002 human decision is recorded in
 `coordination/decisions/DEC-002-optimization-feasibility.md`: the approved

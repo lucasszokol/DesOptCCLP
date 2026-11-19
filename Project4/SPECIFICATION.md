@@ -1,8 +1,8 @@
 # Frozen Engineering Specification
 
 Status: Engineering loads and limits **team approved**, including DEC-002.
-The mesh-consistent KS sampling and 0.5 K numerical reserve are a proposed
-implementation amendment pending team review (DEC-003).
+The mesh-consistent KS sampling and 0.5 K numerical reserve were approved by
+the team on 2026-11-19 (DEC-003).
 
 ## Engineering problem
 

@@ -1,6 +1,7 @@
 # DEC-003 — Chip footprint and mesh-consistent temperature evaluation
 
-Status: **proposed; team review pending**.
+Status: **team approved on 2026-11-19**. The team confirmed the 15 fixed
+sampling points and 0.5 K reserve for the revised final design.
 
 The approved loads, ambient conditions, material, geometry bounds, and chip
 temperature limits are unchanged. An audit found that the former midpoint-edge
@@ -9,7 +10,7 @@ the KS sum used a mesh-dependent number of chip nodes. On the prior published
 design, refining the base mesh changed overload KS from 373.150 K to 376.253 K,
 although the physical peak moved by roughly 0.32 K.
 
-The proposed correction integrates heat-flux shape functions over the exact
+The correction integrates heat-flux shape functions over the exact
 20 mm footprint, including partial elements. KS uses 15 fixed physical positions
 across that footprint, including its endpoints and the original 13 interior
 coarse-mesh nodes. FE interpolation evaluates those points at every mesh.
@@ -28,6 +29,6 @@ Sparse assembly and solves do not change the physical problem. The trust-constr
 joint-design Hessian is corrected to include height/density cross terms; the
 previously published fixed-topology polish did not use those mixed terms.
 
-This amendment changes the numerical aggregate and adds a design reserve, so
-the team should review the resulting designs and this decision before treating
-them as the approved final submission. Human benchmark truth is unchanged.
+This amendment changes the numerical aggregate and adds a design reserve.
+The team approved those settings for the revised final design. Human benchmark
+truth is unchanged; final deployment and submission checks remain necessary.

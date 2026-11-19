@@ -18,11 +18,11 @@ are generated from one canonical `site/assets/results.json` file.
 - V1--V6 reports 20/20 checks passing; V7 adjoint/Taylor evidence passes.
 - GitHub Pages test, build, and deployment jobs pass, and the public site
   responds successfully.
-- The current public site follows `main`. An audit found mesh dependence in
-  its reported KS constraint and a mismatch in the chip footprint.
-- The proposed DEC-003 branch corrects those issues, adds a 0.5 K numerical
-  reserve, sparse assembly, and design-level mesh verification. The team must
-  review the amendment and regenerated designs before final submission.
+- An audit found mesh dependence in the earlier KS constraint and a mismatch
+  in the chip footprint. The team-approved DEC-003 amendment corrects those
+  issues and adds a 0.5 K numerical reserve and design-level mesh verification.
+- The public site follows `main`; verify that the latest approved results have
+  deployed before submission.
 
 ## Human gates
 
@@ -55,6 +55,5 @@ Somoshegyi-Szokol, and Polina Kondratiuk.
 
 ## Remaining human actions
 
-- Review DEC-003 and the revised numerical results, then verify the deployed
-  site in a private window and confirm the participation-sheet URL.
+- Verify the deployed site in a private window and confirm the participation-sheet URL.
 - After the final campaign and site QA pass, submit both URLs on Canvas.
