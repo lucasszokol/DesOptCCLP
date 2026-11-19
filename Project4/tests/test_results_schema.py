@@ -35,6 +35,10 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
         pytest.skip("final campaign has not yet generated evidence")
     schema = assets / "results.schema.json"
     validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["nonlinear_fin_check"]["status"] = "failed"
+    with pytest.raises(ValueError, match="Nonlinear fin cross-check"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["nonlinear_fin_check"]["status"] = "passed"
     case = results["designs"]["optimized"]["load_cases"][0]
     original_balance = case["energy_imbalance_w"]
     case["energy_imbalance_w"] = case["power_w"] * 1e-3

@@ -231,6 +231,9 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
             payload["verification"]["passed_checks"] != len(verification_checks) or
             payload["verification"]["total_checks"] != len(verification_checks)):
         raise ValueError("Verification check evidence is incomplete or failed")
+    fin_check = payload.get("nonlinear_fin_check", {})
+    if fin_check.get("status") != "passed" or len(fin_check.get("meshes", [])) != 2:
+        raise ValueError("Nonlinear fin cross-check is missing or failed")
     if any(not c.get("pass") for c in payload["gradient_checks"]):
         raise ValueError("Gradient check failed")
     checks = payload["uncertainty"]["gradient_checks"]

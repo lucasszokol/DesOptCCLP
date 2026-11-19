@@ -44,6 +44,20 @@ def generate_figures(results_path: Path, output_directory: Path) -> list[Path]:
     ax.legend(fontsize=9)
     save(fig, "taylor-checks.png")
 
+    meshes = next(group["mesh_history"] for group in data["verification"]["groups"] if group["id"] == "V3")
+    h = np.array([row["h"] for row in meshes])
+    l2 = np.array([row["l2_error"] for row in meshes])
+    energy = np.array([row["energy_error"] for row in meshes])
+    fig, ax = plt.subplots(figsize=(8, 5), layout="constrained")
+    ax.loglog(h, l2, "o-", label="L2 error")
+    ax.loglog(h, energy, "s-", label="Energy error")
+    ax.loglog(h, l2[0]*(h/h[0])**2, "--", label="Expected L2 slope 2")
+    ax.loglog(h, energy[0]*(h/h[0]), "--", label="Expected energy slope 1")
+    ax.set(xlabel="Mesh size h", ylabel="Error norm", title="Manufactured-solution mesh convergence")
+    ax.grid(True, which="both", alpha=.25)
+    ax.legend()
+    save(fig, "mesh-convergence.png")
+
     u = data["uncertainty"]
     baseline = u["baseline_design"]["load_cases"]
     robust = u["design"]["load_cases"]

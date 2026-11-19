@@ -25,6 +25,7 @@ from .site import build_site
 from .uncertainty import run_uncertainty
 from .serialize import _design_view
 from .figures import generate_figures
+from .nonlinear_fin_check import nonlinear_fin_check
 
 
 def main() -> int:
@@ -58,6 +59,10 @@ def main() -> int:
     write_evidence(verification, verification_directory)
     if verification["status"] != "passed":
         print(f"VERIFICATION FAILED: see {verification_directory / 'verification.md'}")
+        return 3
+    fin_check = nonlinear_fin_check(model)
+    if fin_check["status"] != "passed":
+        print("NONLINEAR FIN CROSS-CHECK FAILED")
         return 3
     count = config.geometry.candidate_fins
     start = np.r_[np.linspace(0.025, 0.040, count), np.linspace(0.45, 0.65, count)]
@@ -105,6 +110,7 @@ def main() -> int:
         cost,
     )
     payload["expanded_sensitivity"] = sensitivity
+    payload["nonlinear_fin_check"] = fin_check
     payload["uncertainty"] = {
         "assumptions": config.raw["uncertainty"],
         "description": "Paired low and high power and ambient scenarios for each load case; illustrative bounded scenarios, not a probability model.",

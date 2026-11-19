@@ -96,12 +96,12 @@ The fixed slope window uses the largest four steps, selected before observing er
 
 | Physics | Load | Full-gradient relative error | State + adjoint (s) | State-only FD (s) | Speedup |
 |---|---|---:|---:|---:|---:|
-| linear | nominal | 7.27206e-09 | 0.05741 | 2.939 | 51.2 |
-| linear | overload | 7.62499e-09 | 0.05782 | 2.936 | 50.8 |
-| nonlinear | nominal | 9.60543e-08 | 0.1468 | 10.36 | 70.6 |
-| nonlinear | overload | 1.12038e-07 | 0.1685 | 13.11 | 77.8 |
+| linear | nominal | 7.27206e-09 | 0.06924 | 3.836 | 55.4 |
+| linear | overload | 7.62499e-09 | 0.06496 | 3.377 | 52 |
+| nonlinear | nominal | 9.60543e-08 | 0.1788 | 12.45 | 69.6 |
+| nonlinear | overload | 1.12038e-07 | 0.2037 | 14.89 | 73.1 |
 
 Finite differences compute no adjoints. Timings are single warmed measurements, not a portable performance guarantee. Mass is state independent, so its exact direct gradient needs no adjoint solve.
 
 Adjoint/finite-difference relative gradient error: `9.60543e-08`.
-Measured speedup: `70.6x` (80 central-difference state solves).
+Measured speedup: `69.6x` (80 central-difference state solves).

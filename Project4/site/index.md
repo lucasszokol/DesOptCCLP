@@ -52,6 +52,14 @@ The team independently supplied benchmark values before the agent checked the so
 
 <div id="verification-summary" class="data-panel">Verification evidence awaits the student worksheet.</div>
 
+The manufactured-solution mesh study compares the measured error slopes with the expected Q4 rates:
+
+![Manufactured-solution error versus mesh size](assets/figures/mesh-convergence.png)
+
+The independently derived scalar Newton benchmark above is supplemented by a prescribed-root nonlinear fin cross-check: the production finite-element residual and tangent are compared with an independently formulated SciPy boundary-value solution on two meshes. Residual ratios $\|R_{n+1}\|/\|R_n\|^2$ show local quadratic convergence before roundoff; the consistent tangent is also checked against a central directional difference. This is a numerical reference, not an independently derived exact solution or validation of real-world convection.
+
+<div id="fin-check-summary">Loading nonlinear fin cross-check.</div>
+
 ## Sensitivities
 
 For residual $R(T,x)=0$ and response $f(T,x)$, each discrete adjoint solves
@@ -68,7 +76,7 @@ The implementation includes analytic $R_x$ for every height and raw density, inc
 
 ## Optimization
 
-The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT polish. Heights are scaled by the maximum height and mass by the starting mass. The overload constraint governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation.
+The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT polish. The mass objective is divided by the starting mass; SLSQP uses physical design-variable units, while the KKT polish maps each bounded height to the unit interval. The overload constraint governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation.
 
 <div id="kkt-summary"></div>
 
@@ -82,11 +90,11 @@ The N2 state includes temperature-dependent natural convection and $T^4$ radiati
 
 <div id="comparison-summary"></div>
 
-## Ground-structure topology — bonus +5
+## Ground-structure topology study
 
 Candidate fins may vanish through filtered density variables. A density floor prevents singular conduction matrices, SIMP continuation discourages gray fins, and a one-dimensional filter suppresses alternating artifacts. Filtering makes an isolated thresholded raw density differ from the physical density, so mixed topologies need further validation before they can be treated as removed fins.
 
-We compare the continuation solution with two additional asymmetric $p=3$ starts, one with an edge fin and one with an interior fin initialized at the density floor. The additional starts do not repeat the full continuation schedule. Successful feasible candidates compete on mass before thresholding and height re-optimization.
+At $p=1$ the three topology starts use the fixed-topology solution, uniform raw density 0.60, and an edge-weighted density profile. Feasible starts compete on mass; the selected design then proceeds through $p=2$ and $p=3$, thresholding, and height re-optimization. The selected result retains all 20 fins. The screened low-density candidate is filtered, so it does not establish a feasible physically removed fin; we do not claim the topology bonus on that basis.
 
 <div id="topology-starts"></div>
 
@@ -114,7 +122,7 @@ python -m Project4.heatsink.run_all --config Project4/config.yaml
 
 ## Limitations and AI-use statement
 
-The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team reported that it had reviewed the work on November 16, 2026. A feasibility bound caught a substantive specification bug: the original 100/125 W cases admitted no feasible design, so the documented study cases were corrected to 50/60 W before optimization. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
+The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team reported that it had reviewed the work on November 16, 2026. Verification exposed an implementation bug in the original cost comparison: each finite-difference perturbation unnecessarily computed an adjoint, inflating the reported finite-difference cost. The corrected comparison uses state-only solves and a regression test checks this. A separate feasibility bound showed that the initial 100/125 W cases were infeasible, so the team approved 50/60 W study cases. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
 
 ## References
 

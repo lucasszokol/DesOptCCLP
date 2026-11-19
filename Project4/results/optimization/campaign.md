@@ -2,23 +2,23 @@
 
 Status: **complete_with_authoritative_model_blockers**
 
-Campaign runtime: 74.807 s.
+Campaign runtime: 85.091 s.
 
 ## Runs
 
 | Run | Role | Method | Success | Accepted | Mass (kg) | Max scaled constraint | Iterations | Time (s) |
 |---|---|---|:---:|:---:|---:|---:|---:|---:|
-| linear_fixed_topology | linear_fixed_reference | SLSQP | PASS | PASS | 0.1497443198 | 3.85469e-13 | 18 | 3.780 |
-| nonlinear_fixed_uniform_max | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 7.0961e-12 | 14 | 7.532 |
-| nonlinear_fixed_uniform_75_percent | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.77491e-11 | 14 | 8.352 |
-| nonlinear_fixed_symmetric_taper | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.17255e-11 | 14 | 8.112 |
-| topology_start_from_fixed_topology_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 6.91558e-12 | 1 | 0.933 |
-| topology_start_uniform_density_0p60_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 8.13793e-13 | 16 | 7.635 |
-| topology_start_edge_weighted_density_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 7.20979e-12 | 14 | 6.801 |
-| topology_simp_p2 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 6.63736e-12 | 1 | 1.225 |
-| topology_simp_p3 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 5.97566e-12 | 1 | 0.900 |
-| threshold_height_reoptimization | threshold_height_reoptimization | SLSQP | PASS | PASS | 0.1727902237 | 5.75007e-12 | 1 | 1.186 |
-| trust_constr_kkt_polish | kkt_polish | trust-constr | PASS | PASS | 0.172790224 | -3.13153e-11 | 83 | 28.054 |
+| linear_fixed_topology | linear_fixed_reference | SLSQP | PASS | PASS | 0.1497443198 | 3.85469e-13 | 18 | 3.932 |
+| nonlinear_fixed_uniform_max | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 7.0961e-12 | 14 | 8.879 |
+| nonlinear_fixed_uniform_75_percent | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.77491e-11 | 14 | 9.358 |
+| nonlinear_fixed_symmetric_taper | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.17255e-11 | 14 | 9.171 |
+| topology_start_from_fixed_topology_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 6.91558e-12 | 1 | 1.022 |
+| topology_start_uniform_density_0p60_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 8.13793e-13 | 16 | 8.655 |
+| topology_start_edge_weighted_density_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 7.20979e-12 | 14 | 8.302 |
+| topology_simp_p2 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 6.63736e-12 | 1 | 1.630 |
+| topology_simp_p3 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 5.97566e-12 | 1 | 1.216 |
+| threshold_height_reoptimization | threshold_height_reoptimization | SLSQP | PASS | PASS | 0.1727902237 | 5.75007e-12 | 1 | 1.479 |
+| trust_constr_kkt_polish | kkt_polish | trust-constr | PASS | PASS | 0.172790224 | -3.13153e-11 | 83 | 31.045 |
 
 ## Comparisons
 

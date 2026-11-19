@@ -2059,7 +2059,7 @@
           -0.03151794696698008
         ],
         "adjoint_linear_solves_per_response": 1,
-        "adjoint_seconds": 0.05741079989820719,
+        "adjoint_seconds": 0.06923560006543994,
         "central_difference_state_solves": 80,
         "design_variables": 40,
         "family_relative_errors": {
@@ -2109,7 +2109,7 @@
           -0.03448587553300797,
           -0.03151794699673971
         ],
-        "finite_difference_seconds": 2.9387044003233314,
+        "finite_difference_seconds": 3.8361269999295473,
         "finite_difference_steps": [
           1e-06,
           1e-06,
@@ -2156,7 +2156,7 @@
         "penalty": 3.0,
         "physics": "linear",
         "relative_gradient_error": 7.272062002132582e-09,
-        "speedup": 51.1873098011843,
+        "speedup": 55.40685711257974,
         "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
       },
       {
@@ -2203,7 +2203,7 @@
           -0.03627857083616336
         ],
         "adjoint_linear_solves_per_response": 1,
-        "adjoint_seconds": 0.05781919974833727,
+        "adjoint_seconds": 0.06496160011738539,
         "central_difference_state_solves": 80,
         "design_variables": 40,
         "family_relative_errors": {
@@ -2253,7 +2253,7 @@
           -0.03969478987730923,
           -0.036278570869630045
         ],
-        "finite_difference_seconds": 2.9364567999728024,
+        "finite_difference_seconds": 3.3768121004104614,
         "finite_difference_steps": [
           1e-06,
           1e-06,
@@ -2300,7 +2300,7 @@
         "penalty": 3.0,
         "physics": "linear",
         "relative_gradient_error": 7.624994865816801e-09,
-        "speedup": 50.78688070319146,
+        "speedup": 51.98166446498506,
         "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
       },
       {
@@ -2347,7 +2347,7 @@
           -0.025742735551552924
         ],
         "adjoint_linear_solves_per_response": 1,
-        "adjoint_seconds": 0.1467883000150323,
+        "adjoint_seconds": 0.17883660038933158,
         "central_difference_state_solves": 80,
         "design_variables": 40,
         "family_relative_errors": {
@@ -2397,7 +2397,7 @@
           -0.02820893141297631,
           -0.02574273353372902
         ],
-        "finite_difference_seconds": 10.357324599754065,
+        "finite_difference_seconds": 12.450546000152826,
         "finite_difference_steps": [
           1e-06,
           1e-06,
@@ -2444,7 +2444,7 @@
         "penalty": 3.0,
         "physics": "nonlinear",
         "relative_gradient_error": 9.605431427623299e-08,
-        "speedup": 70.559605899744,
+        "speedup": 69.61967501645462,
         "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
       },
       {
@@ -2491,7 +2491,7 @@
           -0.027590497426359484
         ],
         "adjoint_linear_solves_per_response": 1,
-        "adjoint_seconds": 0.16854619979858398,
+        "adjoint_seconds": 0.2036542003042996,
         "central_difference_state_solves": 80,
         "design_variables": 40,
         "family_relative_errors": {
@@ -2541,7 +2541,7 @@
           -0.030250917570917576,
           -0.02759049406719782
         ],
-        "finite_difference_seconds": 13.105130100157112,
+        "finite_difference_seconds": 14.890903699677438,
         "finite_difference_steps": [
           1e-06,
           1e-06,
@@ -2588,7 +2588,7 @@
         "penalty": 3.0,
         "physics": "nonlinear",
         "relative_gradient_error": 1.1203778137096544e-07,
-        "speedup": 77.75393403006416,
+        "speedup": 73.11856901270627,
         "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
       }
     ],
@@ -17182,7 +17182,7 @@
         -0.025742735551552924
       ],
       "adjoint_linear_solves_per_response": 1,
-      "adjoint_seconds": 0.1467883000150323,
+      "adjoint_seconds": 0.17883660038933158,
       "central_difference_state_solves": 80,
       "design_variables": 40,
       "family_relative_errors": {
@@ -17232,7 +17232,7 @@
         -0.02820893141297631,
         -0.02574273353372902
       ],
-      "finite_difference_seconds": 10.357324599754065,
+      "finite_difference_seconds": 12.450546000152826,
       "finite_difference_steps": [
         1e-06,
         1e-06,
@@ -17279,7 +17279,7 @@
       "penalty": 3.0,
       "physics": "nonlinear",
       "relative_gradient_error": 9.605431427623299e-08,
-      "speedup": 70.559605899744,
+      "speedup": 69.61967501645462,
       "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
     },
     "id": "V7",
@@ -18594,6 +18594,51 @@
       ],
       "truth_file": "Project4/tests/benchmark_truth.yaml"
     }
+  },
+  "nonlinear_fin_check": {
+    "ambient_k": 298.15,
+    "coarse_error_tolerance_k": 0.1,
+    "description": "Production fin residual and tangent with prescribed root temperature compared with scipy.integrate.solve_bvp; the reference is numerical, not student-derived exact truth.",
+    "length_m": 0.05,
+    "meshes": [
+      {
+        "elements": 8,
+        "maximum_nodal_error_k": 0.004503121010657196,
+        "quadratic_residual_ratios": [
+          0.0032415670407101647,
+          0.004108400539612866
+        ],
+        "residual_norms": [
+          1.210694241759559,
+          0.004751425910165764,
+          9.275144852419401e-08,
+          2.4179410561908265e-13
+        ],
+        "tangent_direction_relative_error": 7.531115597338406e-10,
+        "tip_bvp_k": 344.07946908270765,
+        "tip_fe_k": 344.074965961697
+      },
+      {
+        "elements": 16,
+        "maximum_nodal_error_k": 0.001124936926942155,
+        "quadratic_residual_ratios": [
+          0.004476992406938365,
+          0.005719862053911363
+        ],
+        "residual_norms": [
+          0.8780523355919284,
+          0.0034516532683125396,
+          6.814592335088894e-08,
+          5.782476573325523e-13
+        ],
+        "tangent_direction_relative_error": 2.618481521060961e-09,
+        "tip_bvp_k": 344.07946908270765,
+        "tip_fe_k": 344.0783441457807
+      }
+    ],
+    "reference_solver_tolerance": 1e-09,
+    "root_k": 353.15,
+    "status": "passed"
   },
   "optimization_history": [
     {
@@ -23542,7 +23587,7 @@
       -0.025742735551552924
     ],
     "adjoint_linear_solves_per_response": 1,
-    "adjoint_seconds": 0.1467883000150323,
+    "adjoint_seconds": 0.17883660038933158,
     "central_difference_state_solves": 80,
     "design_variables": 40,
     "family_relative_errors": {
@@ -23592,7 +23637,7 @@
       -0.02820893141297631,
       -0.02574273353372902
     ],
-    "finite_difference_seconds": 10.357324599754065,
+    "finite_difference_seconds": 12.450546000152826,
     "finite_difference_steps": [
       1e-06,
       1e-06,
@@ -23639,7 +23684,7 @@
     "penalty": 3.0,
     "physics": "nonlinear",
     "relative_gradient_error": 9.605431427623299e-08,
-    "speedup": 70.559605899744,
+    "speedup": 69.61967501645462,
     "timing_note": "One warmed measurement of state+adjoint versus state-only central FD; wall times are machine dependent."
   },
   "status": "final",

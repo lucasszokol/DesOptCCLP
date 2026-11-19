@@ -14986,9 +14986,9 @@
       -0.02574273353372902
     ],
     "design_variables": 40,
-    "adjoint_seconds": 0.1467883000150323,
-    "finite_difference_seconds": 10.357324599754065,
-    "speedup": 70.559605899744,
+    "adjoint_seconds": 0.17883660038933158,
+    "finite_difference_seconds": 12.450546000152826,
+    "speedup": 69.61967501645462,
     "relative_gradient_error": 9.605431427623299e-08,
     "family_relative_errors": {
       "height": 9.63115207985461e-08,
@@ -15163,9 +15163,9 @@
         -0.03151794699673971
       ],
       "design_variables": 40,
-      "adjoint_seconds": 0.05741079989820719,
-      "finite_difference_seconds": 2.9387044003233314,
-      "speedup": 51.1873098011843,
+      "adjoint_seconds": 0.06923560006543994,
+      "finite_difference_seconds": 3.8361269999295473,
+      "speedup": 55.40685711257974,
       "relative_gradient_error": 7.272062002132582e-09,
       "family_relative_errors": {
         "height": 7.305819747789872e-09,
@@ -15307,9 +15307,9 @@
         -0.036278570869630045
       ],
       "design_variables": 40,
-      "adjoint_seconds": 0.05781919974833727,
-      "finite_difference_seconds": 2.9364567999728024,
-      "speedup": 50.78688070319146,
+      "adjoint_seconds": 0.06496160011738539,
+      "finite_difference_seconds": 3.3768121004104614,
+      "speedup": 51.98166446498506,
       "relative_gradient_error": 7.624994865816801e-09,
       "family_relative_errors": {
         "height": 7.662197240053033e-09,
@@ -15451,9 +15451,9 @@
         -0.02574273353372902
       ],
       "design_variables": 40,
-      "adjoint_seconds": 0.1467883000150323,
-      "finite_difference_seconds": 10.357324599754065,
-      "speedup": 70.559605899744,
+      "adjoint_seconds": 0.17883660038933158,
+      "finite_difference_seconds": 12.450546000152826,
+      "speedup": 69.61967501645462,
       "relative_gradient_error": 9.605431427623299e-08,
       "family_relative_errors": {
         "height": 9.63115207985461e-08,
@@ -15595,9 +15595,9 @@
         -0.02759049406719782
       ],
       "design_variables": 40,
-      "adjoint_seconds": 0.16854619979858398,
-      "finite_difference_seconds": 13.105130100157112,
-      "speedup": 77.75393403006416,
+      "adjoint_seconds": 0.2036542003042996,
+      "finite_difference_seconds": 14.890903699677438,
+      "speedup": 73.11856901270627,
       "relative_gradient_error": 1.1203778137096544e-07,
       "family_relative_errors": {
         "height": 1.1235756625263817e-07,
