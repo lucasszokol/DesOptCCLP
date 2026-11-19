@@ -11,9 +11,9 @@
 | V2 | base heat rate | 2.55050602 | 2.551 | 0.000494 | 0.0005 | PASS |
 | V3 | energy-norm convergence slope | 0.9946297069 | 1 | 0.00537 | 0.12 | PASS |
 | V3 | L2 convergence slope | 1.99536135 | 2 | 0.00464 | 0.15 | PASS |
-| V4 | nominal linear energy balance | 1.231086344e-12 | 0 | 1.23e-12 | 1e-08 | PASS |
+| V4 | nominal linear energy balance | 1.070219469e-12 | 0 | 1.07e-12 | 1e-08 | PASS |
 | V4 | nominal nonlinear energy balance | 1.260929139e-12 | 0 | 1.26e-12 | 1e-08 | PASS |
-| V4 | overload linear energy balance | 1.122302251e-12 | 0 | 1.12e-12 | 1e-08 | PASS |
+| V4 | overload linear energy balance | 9.586405743e-13 | 0 | 9.59e-13 | 1e-08 | PASS |
 | V4 | overload nonlinear energy balance | 3.830535888e-12 | 0 | 3.83e-12 | 1e-08 | PASS |
 | V5 | reflection/permutation max error K | 2.040678737e-11 | 0 | 2.04e-11 | 2e-09 | PASS |
 | V5 | SI/mm line-matrix max error W/K | 0 | 0 | 0 | 1e-12 | PASS |

@@ -128,10 +128,10 @@
       "checks": [
         {
           "quantity": "nominal linear energy balance",
-          "computed": 1.2310863439779495e-12,
+          "computed": 1.070219468601863e-12,
           "exact": 0.0,
-          "absolute_error": 1.2310863439779495e-12,
-          "relative_error": 1.2310863439779495e-12,
+          "absolute_error": 1.070219468601863e-12,
+          "relative_error": 1.070219468601863e-12,
           "tolerance": 1e-08,
           "pass": true
         },
@@ -146,10 +146,10 @@
         },
         {
           "quantity": "overload linear energy balance",
-          "computed": 1.1223022511330782e-12,
+          "computed": 9.586405743296684e-13,
           "exact": 0.0,
-          "absolute_error": 1.1223022511330782e-12,
-          "relative_error": 1.1223022511330782e-12,
+          "absolute_error": 9.586405743296684e-13,
+          "relative_error": 9.586405743296684e-13,
           "tolerance": 1e-08,
           "pass": true
         },
