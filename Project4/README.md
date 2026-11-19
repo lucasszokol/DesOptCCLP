@@ -54,7 +54,5 @@ Somoshegyi-Szokol, and Polina Kondratiuk.
 
 ## Remaining human actions
 
-- Review the final AI-use statement and numerical report after the campaign.
-- Review and authorize the integration PR merge; verify the deployed site in a
-  private window, and confirm the participation-sheet URL.
+- Verify the deployed site in a private window and confirm the participation-sheet URL.
 - After the final campaign and site QA pass, submit both URLs on Canvas.

@@ -56,3 +56,9 @@ let frame=0,playing=false;const play=document.getElementById("play-history");if(
 function showHistory(index){const record=data.optimization_history[Math.floor(index)],design=record?.design;if(!design)return;const count=animatedFins.length;animatedFins.forEach((fin,i)=>{const height=design[i],density=design[count+i];fin.scale.y=height/fin.userData.referenceHeight;fin.position.y=data.geometry.base_thickness_m+height/2;fin.material.opacity=.35+.65*density;fin.visible=density>=.05;fin.userData.height=height;fin.userData.density=density})}
 function resize(){const w=host.clientWidth,h=host.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(35)/2)*Math.max(1,1.5/camera.aspect)));camera.updateProjectionMatrix()}
 function animate(){requestAnimationFrame(animate);resize();if(playing&&data.optimization_history.length){frame=(frame+.02)%data.optimization_history.length;showHistory(frame)}renderer.render(scene,camera)}animate();
+if (data.expanded_sensitivity?.constraint_checks) {
+  const checks = data.expanded_sensitivity.constraint_checks;
+  const summary = document.createElement("p");
+  summary.textContent = `Expanded sensitivity evidence: ${checks.filter(check => check.pass).length} of ${checks.length} directional sweeps passed across both physics modes and the configured SIMP penalties. The table and plot show representative nonlinear sweeps.`;
+  document.getElementById("sensitivity-summary").append(summary);
+}

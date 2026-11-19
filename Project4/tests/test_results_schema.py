@@ -17,6 +17,17 @@ def test_generated_results_match_schema() -> None:
     jsonschema.validate(results, schema)
 
 
+def test_reported_kkt_matches_campaign_evidence() -> None:
+    results = json.loads((ROOT / "Project4/site/assets/results.json").read_text(encoding="utf-8"))
+    campaign = json.loads((ROOT / "Project4/results/optimization/campaign.json").read_text(encoding="utf-8"))
+    assert results["kkt"]["bound_complementarity"] == pytest.approx(
+        campaign["kkt"]["bound_complementarity_inf_norm"], rel=1e-10, abs=1e-15
+    )
+    assert results["kkt"]["physical_stationarity_inf_norm"] == pytest.approx(
+        campaign["kkt"]["stationarity_inf_norm_physical"], rel=1e-10, abs=1e-15
+    )
+
+
 def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     assets = ROOT / "Project4" / "site" / "assets"
     results = json.loads((assets / "results.json").read_text(encoding="utf-8"))

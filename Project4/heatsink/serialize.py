@@ -112,12 +112,10 @@ def final_payload(
     # multipliers are nonpositive; bound multipliers are signed by active side.
     margins = -np.array([response.scaled_constraint for response in final_run.responses])
     constraint_complementarity = float(np.max(np.abs(np.asarray(multipliers[0]) * margins)))
-    heights = final_run.full_design[:g.candidate_fins]
-    low, high = g.fin_height_bounds_m
-    scaled_heights = heights / high
-    bound_multipliers = np.asarray(multipliers[1])
-    bound_slack = np.where(bound_multipliers >= 0, 1.0 - scaled_heights, scaled_heights - low / high)
-    bound_complementarity = float(np.max(np.abs(bound_multipliers * bound_slack)))
+    # The optimizer uses (height - lower) / (upper - lower). Its recorded
+    # physical-bound complementarity uses the corresponding transformed
+    # multipliers and physical slacks, so do not assume height / upper.
+    bound_complementarity = float(final_run.result.bound_complementarity_inf_norm)
     return {
         "schema_version": 1,
         "status": "final",
@@ -146,7 +144,7 @@ def final_payload(
              "max_scaled_constraint": max(r.scaled_constraint for r in run.responses),
              "raw_densities": run.full_design[model.config.geometry.candidate_fins:].tolist(),
              "filtered_densities": model.split_design(run.full_design)[2].tolist()}
-            for run in campaign.topology_starts
+            for run in campaign.topology_start_runs
         ],
         "verification": verification,
         "gradient_checks": gradient_checks,
@@ -155,6 +153,7 @@ def final_payload(
             "success": bool(final_run.result.success),
             "message": str(final_run.result.message),
             "optimality": float(getattr(final_run.result, "optimality", np.nan)),
+            "physical_stationarity_inf_norm": float(final_run.result.physical_stationarity_inf_norm),
             "constraint_violation": float(getattr(final_run.result, "constr_violation", np.nan)),
             "constraint_complementarity": constraint_complementarity,
             "bound_complementarity": bound_complementarity,

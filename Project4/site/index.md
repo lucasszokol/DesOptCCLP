@@ -114,7 +114,7 @@ python -m Project4.heatsink.run_all --config Project4/config.yaml
 
 ## Limitations and AI-use statement
 
-The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team must review this statement before submission. A feasibility bound caught a substantive specification bug: the original 100/125 W cases admitted no feasible design, so the documented study cases were corrected to 50/60 W before optimization. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
+The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team reported that it had reviewed the work on November 16, 2026. A feasibility bound caught a substantive specification bug: the original 100/125 W cases admitted no feasible design, so the documented study cases were corrected to 50/60 W before optimization. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
 
 ## References
 

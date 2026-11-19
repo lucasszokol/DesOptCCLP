@@ -8,21 +8,21 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 |---|---:|---|---|
 | Structure and formulation | 10 | `SPECIFICATION.md`, `config.yaml`, explicit formulas, property sources, and `approvals.yaml` | Team approved 2026-11-11 |
 | Analysis and verification | 20 | `results/verification/verification.md`: 20/20 V1--V6 checks pass, including Q4 convergence, balance, invariance, units, and Newton tangent | Passed |
-| Sensitivity analysis | 20 | `results/sensitivity/sensitivity.md`: both constraints and variable families pass; Taylor slopes 1.98--2.07 and all-variable relative error 2.28e-8 | Integrated checks pass; Agent 2's expanded branch separately passed 6 tests and 72/72 sweeps with DEC-002 settings but remains unmerged and conflicts with integration evidence |
+| Sensitivity analysis | 20 | `results/sensitivity/sensitivity.md` records both constraints, variable families, physics modes, and configured SIMP penalties | Expanded Agent 2 checks integrated in the reproducibility command; the output records each pass/fail result |
 | Optimization | 15 | Scaled SLSQP stages, continuation, two asymmetric starts, threshold re-optimization, trust-constr KKT polish; `site/assets/results.json` | Local full campaign passes, including feasibility and KKT; all three topology starts return the all-solid design |
 | Nonlinear component | 15 | Natural-convection/radiation N2 residual, Newton solve, consistent tangent, passing V6 benchmark, linear/N2 results | Local comparison generated; linear reference coefficient is a separate modeling choice |
 | Website and 3D | 10 | Local report, Three.js geometry, nodal field, history, hover and touch inspection, metrics, JSON contract | Local desktop and 390 px checks exercised hover, tap, animation and layout; live deployment and private-window check pending |
 | Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; Python 3.11 CI ran the complete campaign and schema validation successfully at 187fe1c |
-| Presentation | 5 | Report sections and generated numerical tables | Team review and final editing pending |
+| Presentation | 5 | Report sections and generated numerical tables | Team reported its review on 2026-11-16; deployed artifact and submission remain to be checked |
 | Bonus: fully nonlinear | +5 | N2 Newton, analytic tangent, implicit adjoint, nonlinear benchmark and comparison | Local evidence produced; final report review pending |
 | Bonus: topology | +5 | Ground-structure densities, filter, SIMP continuation, threshold and fixed-topology comparison | Current optimum is all-solid; mixed topology and threshold-filter behavior remain unverified, so bonus is not claimed |
 | Bonus: uncertainty | +5 | Four paired power/ambient scenarios, constrained optimization and 8 directional gradient checks | Local evidence produced; assumptions illustrative rather than calibrated probabilities |
 
 ## Mandatory completion evidence still missing
 
-1. Review independent branches and integrate their evidence; implement discrete topology reanalysis if claiming a vanished-fin bonus, and review robust-study reporting.
+1. Review independent branches and integrate appropriate evidence; implement discrete topology reanalysis if claiming a vanished-fin bonus, and review robust-study reporting.
 2. Rerun CI after future changes and verify the final deployed artifact.
-3. Obtain team review of the AI-use statement; merge and deploy with action-time approval; verify the public site in a private window.
+3. Merge the team-reviewed integration branch and verify the public site in a private window.
 4. Confirm the overdue participation-sheet URL and submit repository and site URLs on Canvas by a student.
 
 The DEC-002 human decision is recorded in
