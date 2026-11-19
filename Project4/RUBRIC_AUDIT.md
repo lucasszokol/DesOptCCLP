@@ -11,8 +11,8 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 | Sensitivity analysis | 20 | `results/sensitivity/sensitivity.md` records both constraints, variable families, physics modes, and configured SIMP penalties | Expanded Agent 2 checks integrated in the reproducibility command; the output records each pass/fail result |
 | Optimization | 15 | SLSQP stages, three topology starts, continuation, threshold re-optimization, unit-box trust-constr KKT polish; `site/assets/results.json` | Revised campaign passes with the approved numerical reserve and design-level mesh checks |
 | Nonlinear component | 15 | Natural-convection/radiation N2 residual, Newton solve, consistent tangent, passing V6 benchmark, linear/N2 results | Local comparison generated; linear reference coefficient is a separate modeling choice |
-| Website and 3D | 10 | Report, Three.js geometry, per-fragment bilinear base field, history, hover and touch inspection, metrics, JSON contract | Browser checks and current deployment evidence recorded in the handoff |
-| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Clean Python 3.10 environment reproduced both masses and passed 21 tests; Python 3.11 CI ran the complete campaign and schema validation successfully at 187fe1c |
+| Website and 3D | 10 | Report, Three.js geometry, per-fragment bilinear base field, history, hover and touch inspection, metrics, JSON contract | The deployed page passed private-browser desktop and 390 px emulation checks on 2026-11-19 |
+| Reproducibility | 5 | Repository-root command, schema test, Pages workflow, enforced human/V1--V7 and optimization gates | Python 3.11 CI completed the full campaign and physical-results comparison at 4d64f70; 41 local tests passed |
 | Presentation | 5 | Report sections and generated numerical tables | Team reported its review on 2026-11-16; deployed artifact and submission remain to be checked |
 | Bonus: fully nonlinear | +5 | N2 Newton, analytic tangent, implicit adjoint, nonlinear benchmark and comparison | Local evidence produced; final report review pending |
 | Bonus: topology | +5 | Ground-structure densities, filter, SIMP continuation, threshold and fixed-topology comparison | Current optimum is all-solid; mixed topology and threshold-filter behavior remain unverified, so bonus is not claimed |
@@ -21,8 +21,7 @@ yet occurred; it does not mean the criterion is being claimed as complete.
 ## Mandatory completion evidence still missing
 
 1. Implement discrete topology reanalysis if claiming a vanished-fin bonus.
-2. Verify the latest public deployment in a private window after changes.
-3. Confirm the participation-sheet URL and submit repository and site URLs on Canvas.
+2. Confirm the participation-sheet URL and submit repository and site URLs on Canvas.
 
 The DEC-002 human decision is recorded in
 `coordination/decisions/DEC-002-optimization-feasibility.md`: the approved

@@ -112,7 +112,7 @@ The scenario study perturbs each load case to paired low and high power and ambi
 
 ## Results
 
-The table compares mass and both temperature constraints. The physical peak and the smooth KS aggregate are shown separately: KS is a conservative upper bound, not an actual measured temperature. PASS uses the KS value and allows the configured scaled feasibility tolerance of $10^{-4}$.
+The table compares mass and both temperature constraints. The physical peak and the smooth KS aggregate are shown separately: KS bounds the temperatures at the fixed sample points, but it is not necessarily an upper bound between those points. The full piecewise-linear chip peak is checked separately. PASS uses the KS value and allows the configured scaled feasibility tolerance of $10^{-4}$.
 
 <div id="results-table"></div>
 
