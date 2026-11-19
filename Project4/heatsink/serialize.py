@@ -25,7 +25,7 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
                 "ambient_k": case.ambient_k,
                 "limit_k": case.chip_limit_k,
                 "ks_temperature_k": response.ks_temperature_k,
-                "chip_peak_temperature_k": float(np.max(response.solve.temperature_k[model.chip_dofs()])),
+                "chip_peak_temperature_k": model.chip_peak_temperature(response.solve.temperature_k),
                 "scaled_constraint": response.scaled_constraint,
                 "passed": response.scaled_constraint <= float(model.config.raw["optimization"]["scaled_feasibility_tolerance"]),
                 "energy_imbalance_w": response.solve.energy_imbalance_w,
@@ -110,7 +110,9 @@ def final_payload(
         raise ValueError("KKT polish did not return constraint and bound multipliers")
     # trust-constr uses lower-bounded positive margins, so its inequality
     # multipliers are nonpositive; bound multipliers are signed by active side.
-    margins = -np.array([response.scaled_constraint for response in final_run.responses])
+    reserve = float(model.config.raw["optimization"]["temperature_reserve_k"])
+    margins = -np.array([response.scaled_constraint + reserve / case.chip_limit_k
+                         for case, response in zip(model.config.load_cases, final_run.responses)])
     constraint_complementarity = float(np.max(np.abs(np.asarray(multipliers[0]) * margins)))
     # The optimizer uses (height - lower) / (upper - lower). Its recorded
     # physical-bound complementarity uses the corresponding transformed
@@ -234,6 +236,9 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     fin_check = payload.get("nonlinear_fin_check", {})
     if fin_check.get("status") != "passed" or len(fin_check.get("meshes", [])) != 2:
         raise ValueError("Nonlinear fin cross-check is missing or failed")
+    mesh = payload.get("design_mesh_validation", {})
+    if mesh.get("status") != "passed" or not mesh.get("cases") or not all(row.get("passed") for row in mesh["cases"]):
+        raise ValueError("Design mesh verification is missing or failed")
     if any(not c.get("pass") for c in payload["gradient_checks"]):
         raise ValueError("Gradient check failed")
     checks = payload["uncertainty"]["gradient_checks"]

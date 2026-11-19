@@ -2,32 +2,32 @@
 
 Status: **complete_with_authoritative_model_blockers**
 
-Campaign runtime: 85.091 s.
+Campaign runtime: 77.302 s.
 
 ## Runs
 
 | Run | Role | Method | Success | Accepted | Mass (kg) | Max scaled constraint | Iterations | Time (s) |
 |---|---|---|:---:|:---:|---:|---:|---:|---:|
-| linear_fixed_topology | linear_fixed_reference | SLSQP | PASS | PASS | 0.1497443198 | 3.85469e-13 | 18 | 3.932 |
-| nonlinear_fixed_uniform_max | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 7.0961e-12 | 14 | 8.879 |
-| nonlinear_fixed_uniform_75_percent | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.77491e-11 | 14 | 9.358 |
-| nonlinear_fixed_symmetric_taper | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1727902237 | 1.17255e-11 | 14 | 9.171 |
-| topology_start_from_fixed_topology_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 6.91558e-12 | 1 | 1.022 |
-| topology_start_uniform_density_0p60_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 8.13793e-13 | 16 | 8.655 |
-| topology_start_edge_weighted_density_p1 | topology_start | SLSQP | PASS | PASS | 0.1727902237 | 7.20979e-12 | 14 | 8.302 |
-| topology_simp_p2 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 6.63736e-12 | 1 | 1.630 |
-| topology_simp_p3 | simp_continuation | SLSQP | PASS | PASS | 0.1727902237 | 5.97566e-12 | 1 | 1.216 |
-| threshold_height_reoptimization | threshold_height_reoptimization | SLSQP | PASS | PASS | 0.1727902237 | 5.75007e-12 | 1 | 1.479 |
-| trust_constr_kkt_polish | kkt_polish | trust-constr | PASS | PASS | 0.172790224 | -3.13153e-11 | 83 | 31.045 |
+| linear_fixed_topology | linear_fixed_reference | SLSQP | PASS | PASS | 0.152513423 | 3.62483e-11 | 17 | 2.976 |
+| nonlinear_fixed_uniform_max | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1773042727 | 3.07452e-12 | 15 | 5.572 |
+| nonlinear_fixed_uniform_75_percent | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1773042726 | 1.91134e-11 | 13 | 6.315 |
+| nonlinear_fixed_symmetric_taper | nonlinear_fixed_start | SLSQP | PASS | PASS | 0.1773042727 | 9.97073e-13 | 13 | 6.546 |
+| topology_start_from_fixed_topology_p1 | topology_start | SLSQP | PASS | PASS | 0.1773042727 | 3.454e-12 | 1 | 1.102 |
+| topology_start_uniform_density_0p60_p1 | topology_start | SLSQP | PASS | PASS | 0.1773042727 | -6.9016e-15 | 30 | 21.447 |
+| topology_start_edge_weighted_density_p1 | topology_start | SLSQP | PASS | PASS | 0.1773042726 | 4.56484e-11 | 13 | 5.137 |
+| topology_simp_p2 | simp_continuation | SLSQP | PASS | PASS | 0.1773042727 | 3.43845e-12 | 1 | 1.945 |
+| topology_simp_p3 | simp_continuation | SLSQP | PASS | PASS | 0.1773042727 | 3.44978e-12 | 1 | 2.907 |
+| threshold_height_reoptimization | threshold_height_reoptimization | SLSQP | PASS | PASS | 0.1773042727 | 3.46787e-12 | 1 | 2.935 |
+| trust_constr_kkt_polish | kkt_polish | trust-constr | PASS | PASS | 0.177304273 | -2.41274e-11 | 78 | 20.169 |
 
 ## Comparisons
 
-- Linear fixed-topology feasibility: **True** (maximum scaled constraint 3.85469e-13).
-- Nonlinear fixed-topology mass: 0.1727902237 kg.
-- Final topology-continuation mass: 0.1727902237 kg.
-- Thresholded/re-optimized mass: 0.1727902237 kg.
-- KKT-polished mass: 0.172790224 kg.
-- Topology mass change relative to nonlinear fixed topology: 1.52831e-12 kg (0.000000%).
+- Linear fixed-topology feasibility: **True** (maximum scaled constraint 3.62483e-11).
+- Nonlinear fixed-topology mass: 0.1773042727 kg.
+- Final topology-continuation mass: 0.1773042727 kg.
+- Thresholded/re-optimized mass: 0.1773042727 kg.
+- KKT-polished mass: 0.177304273 kg.
+- Topology mass change relative to nonlinear fixed topology: -1.74416e-12 kg (-0.000000%).
 
 ## Topology
 
@@ -40,14 +40,14 @@ Campaign runtime: 85.091 s.
 
 ## KKT evidence
 
-- Physical stationarity infinity norm: 2.18236350397555e-09.
-- Constraint complementarity infinity norm: 4.2674924841142157e-10.
-- Bound complementarity infinity norm: 6.23706330487983e-10.
+- Physical stationarity infinity norm: 2.1672321804664475e-10.
+- Constraint complementarity infinity norm: 4.095999760051005e-10.
+- Bound complementarity infinity norm: 4.075634533408367e-10.
 - Constraint violation: 0.0.
 
 | Active constraint | Scaled value | Normalized multiplier | kg per unit scaled relaxation |
 |---|---:|---:|---:|
-| overload | -3.13153e-11 | 13.6275 | 1.66187 |
+| overload | -0.00133994 | 14.7377 | 1.79726 |
 
 The single-fin screen lowers one raw density and retains the density filter; it is not a reanalysis of a physically removed fin. Interpret the results accordingly and do not claim a vanished-fin bonus without a feasible discrete reanalysis.
 

@@ -211,7 +211,8 @@ def student_truth_summary(truth: dict) -> dict:
 def ks_state_checks(model: HeatSinkModel) -> list[dict]:
     """Check all state components, ties, support, and translation invariance."""
     rng = np.random.default_rng(20261112)
-    chip = model.chip_dofs()
+    sampling = model.chip_sampling_matrix()
+    chip = np.flatnonzero(np.any(sampling != 0.0, axis=0))
     states = {
         "uniform_tie": np.full(model.ndof, 340.0),
         "nonuniform": rng.uniform(320.0, 370.0, model.ndof),
@@ -232,7 +233,7 @@ def ks_state_checks(model: HeatSinkModel) -> list[dict]:
         support_error = float(np.max(np.abs(gradient[outside])))
         sum_error = abs(float(gradient.sum()) - 1.0)
         shift_error = abs(model.ks_temperature(state + 7.0)[0] - value - 7.0)
-        tie_error = float(np.max(np.abs(gradient[chip] - 1.0 / len(chip)))) if name == "uniform_tie" else 0.0
+        tie_error = float(np.max(np.abs(gradient - sampling.mean(axis=0)))) if name == "uniform_tie" else 0.0
         passed = error <= 1.0e-5 and support_error == 0.0 and sum_error <= 1.0e-12 and shift_error <= 1.0e-10 and tie_error <= 1.0e-12
         records.append({"state": name, "relative_error": error, "off_chip_error": support_error,
                         "gradient_sum_error": sum_error, "translation_error_k": shift_error,

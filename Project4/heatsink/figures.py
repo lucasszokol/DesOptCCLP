@@ -58,6 +58,19 @@ def generate_figures(results_path: Path, output_directory: Path) -> list[Path]:
     ax.legend()
     save(fig, "mesh-convergence.png")
 
+    mesh = data["design_mesh_validation"]
+    fig, ax = plt.subplots(figsize=(8, 5), layout="constrained")
+    for design, case, label in (("nominal design", "overload", "Nominal optimum, overload"),
+                                ("uncertainty design", "overload_high", "Scenario optimum, high overload")):
+        rows = [row for row in mesh["cases"] if row["design"] == design and row["case"] == case]
+        ax.plot([row["base_elements_x"] for row in rows], [row["ks_temperature_k"] for row in rows], "o-", label=label)
+    ax.axhline(next(row["limit_k"] for row in mesh["cases"] if row["case"] == "overload"),
+               color="black", linestyle="--", label="Engineering limit")
+    ax.set(xlabel="Base elements along width", ylabel="Fixed-sample KS temperature (K)", title="Final-design mesh reanalysis")
+    ax.grid(True, alpha=.25)
+    ax.legend()
+    save(fig, "design-mesh-convergence.png")
+
     u = data["uncertainty"]
     baseline = u["baseline_design"]["load_cases"]
     robust = u["design"]["load_cases"]

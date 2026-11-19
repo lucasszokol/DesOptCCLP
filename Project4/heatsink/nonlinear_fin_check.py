@@ -51,7 +51,7 @@ def nonlinear_fin_check(model: HeatSinkModel) -> dict:
             norms.append(norm)
             if norm < 1e-11:
                 break
-            state[dofs] += np.linalg.solve(tangent[np.ix_(dofs, dofs)], -residual[dofs])
+            state[dofs] += np.linalg.solve(tangent[np.ix_(dofs, dofs)].toarray(), -residual[dofs])
         if norms[-1] >= 1e-11:
             raise RuntimeError("Production fin assembly did not converge")
         nodes = np.linspace(0.0, length, n+1)

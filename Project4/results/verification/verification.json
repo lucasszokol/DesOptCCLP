@@ -128,37 +128,37 @@
       "checks": [
         {
           "quantity": "nominal linear energy balance",
-          "computed": 1.070219468601863e-12,
+          "computed": 8.834888376441086e-13,
           "exact": 0.0,
-          "absolute_error": 1.070219468601863e-12,
-          "relative_error": 1.070219468601863e-12,
+          "absolute_error": 8.834888376441086e-13,
+          "relative_error": 8.834888376441086e-13,
           "tolerance": 1e-08,
           "pass": true
         },
         {
           "quantity": "nominal nonlinear energy balance",
-          "computed": 1.2609291388798738e-12,
+          "computed": 1.3673684406967368e-12,
           "exact": 0.0,
-          "absolute_error": 1.2609291388798738e-12,
-          "relative_error": 1.2609291388798738e-12,
+          "absolute_error": 1.3673684406967368e-12,
+          "relative_error": 1.3673684406967368e-12,
           "tolerance": 1e-08,
           "pass": true
         },
         {
           "quantity": "overload linear energy balance",
-          "computed": 9.586405743296684e-13,
+          "computed": 8.489801454440264e-13,
           "exact": 0.0,
-          "absolute_error": 9.586405743296684e-13,
-          "relative_error": 9.586405743296684e-13,
+          "absolute_error": 8.489801454440264e-13,
+          "relative_error": 8.489801454440264e-13,
           "tolerance": 1e-08,
           "pass": true
         },
         {
           "quantity": "overload nonlinear energy balance",
-          "computed": 3.8305358884827e-12,
+          "computed": 4.0843180689383496e-12,
           "exact": 0.0,
-          "absolute_error": 3.8305358884827e-12,
-          "relative_error": 3.8305358884827e-12,
+          "absolute_error": 4.0843180689383496e-12,
+          "relative_error": 4.0843180689383496e-12,
           "tolerance": 1e-08,
           "pass": true
         }
@@ -170,10 +170,10 @@
       "checks": [
         {
           "quantity": "reflection/permutation max error K",
-          "computed": 2.0406787371030077e-11,
+          "computed": 1.6200374375330284e-11,
           "exact": 0.0,
-          "absolute_error": 2.0406787371030077e-11,
-          "relative_error": 20406.787371030077,
+          "absolute_error": 1.6200374375330284e-11,
+          "relative_error": 16200.374375330282,
           "tolerance": 2e-09,
           "pass": true
         },

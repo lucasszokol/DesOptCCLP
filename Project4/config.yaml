@@ -26,6 +26,7 @@ physics:
   nonlinear_h_reference_delta_k: 20.0
   ambient_smoothing_delta_k: 1.0e-6
   ks_rho_per_k: 0.25
+  ks_sample_positions_fraction_of_half_width: [-1.0, -0.9, -0.75, -0.6, -0.45, -0.3, -0.15, 0.0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.0]
 load_cases:
   nominal: {power_w: 50.0, ambient_k: 298.15, chip_limit_k: 358.15}
   overload: {power_w: 60.0, ambient_k: 308.15, chip_limit_k: 373.15}
@@ -40,6 +41,8 @@ optimization:
   simp_penalties: [1.0, 2.0, 3.0]
   topology_threshold: 0.50
   scaled_feasibility_tolerance: 1.0e-4
+  # Extra separation from the engineering limit to cover observed mesh changes.
+  temperature_reserve_k: 0.5
 uncertainty:
   # Demonstration scenarios, not a statistically calibrated reliability model.
   power_fraction: 0.01
@@ -49,6 +52,7 @@ verification:
   gradient_relative_tolerance: 1.0e-5
   energy_balance_relative_tolerance: 1.0e-8
   taylor_slope_bounds: [1.8, 2.2]
+  mesh_temperature_change_tolerance_k: 0.1
 outputs:
   results_json: Project4/site/assets/results.json
   results_directory: Project4/results

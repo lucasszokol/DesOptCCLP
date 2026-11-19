@@ -26,11 +26,11 @@ $$m=\rho_{Al}\left(V_b+d t_f\sum_i \bar\rho_iH_i\right).$$
 
 <span id="formulation-loads">Loading load cases and constraints.</span> A bounding analysis rejected the original power-load draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
 
-For load case $s$, the explicit scaled constraint is $g_s=\mathrm{KS}_{\beta}(T_{chip,s})/T_{limit,s}-1\le0$, where
+For load case $s$, the optimizer imposes the buffered constraint $g_s=(\mathrm{KS}_{\beta}(T_{chip,s})+r)/T_{limit,s}-1\le0$, where $r$ is a numerical refinement reserve and
 
 $$\mathrm{KS}_{\beta}(T)=T_{\max}+\beta^{-1}\log\!\sum_j\exp[\beta(T_j-T_{\max})].$$
 
-The limits are project engineering targets, not a specific chip datasheet. The mass expression counts a fixed base plus filtered fin volumes; the ground-structure variables are raw densities, filtered before use in the physics and mass. Constants, bounds, mesh and loads are recorded in the repository's configuration.
+<span id="sampling-reserve">Loading the fixed sampling and numerical reserve.</span> The original temperature limits remain project engineering targets, not a specific chip datasheet. The KS aggregate spans the full chip footprint, with finite-element interpolation at fixed physical locations; it is an upper bound on the sampled values. The actual peak over the piecewise-linear chip interface is also checked separately. Keeping the sample positions fixed prevents the number of mesh nodes from changing the aggregate. The mass expression counts a fixed base plus filtered fin volumes; constants, bounds, mesh and loads are recorded in the repository's configuration.
 
 ## Analysis model
 
@@ -44,7 +44,7 @@ The quarter-power law is a simplified modeling assumption, not a full Churchillâ
 
 Newton's method uses the consistent analytic tangent and backtracking. <span id="dof-count">Loading model size.</span> Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
 
-The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is applied over the centered chip footprint; the remainder of the underside and the base side edges are insulated. The full base top receives surface loss, including the area represented by fin roots: fins connect to nodes rather than replacing a finite-width base patch. Each fin carries axial conduction and loses heat from its sides and tip. This full-top exposure and the lack of resolved air flow or mutual fin shielding can overestimate cooling; extrapolating to a manufactured design requires external validation.
+The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is integrated over the exact centered chip footprint, including partial boundary elements; the remainder of the underside and the base side edges are insulated. The global conduction and tangent matrices are sparse. The full base top receives surface loss, including the area represented by fin roots: fins connect to nodes rather than replacing a finite-width base patch. Each fin carries axial conduction and loses heat from its sides and tip. This full-top exposure, point-like fin-root coupling, and the lack of resolved air flow or mutual fin shielding can affect mesh behavior and overestimate cooling; extrapolating to a manufactured design requires external validation.
 
 ## Verification
 
@@ -60,13 +60,19 @@ The independently derived scalar Newton benchmark above is supplemented by a pre
 
 <div id="fin-check-summary">Loading nonlinear fin cross-check.</div>
 
+The final nominal and uncertainty designs are also held fixed and reanalysed on progressively finer base meshes. The fixed physical chip-sampling positions and original engineering limits are used on every mesh. The final two mesh levels must differ by less than the stated verification tolerance, and every case must remain feasible.
+
+<div id="design-mesh-summary">Loading design mesh study.</div>
+
+![Design-level mesh refinement](assets/figures/design-mesh-convergence.png)
+
 ## Sensitivities
 
 For residual $R(T,x)=0$ and response $f(T,x)$, each discrete adjoint solves
 
 $$R_T^T\lambda=-f_T^T,\qquad \frac{df}{dx}=f_x+\lambda^TR_x.$$
 
-This follows by differentiating $R(T(x),x)=0$: $R_TT_x+R_x=0$. Multiplying by $\lambda^T$ eliminates $T_x$ from the total derivative. For each scaled temperature constraint $f_T$ is the KS softmax weight vector divided by its temperature limit and $f_x=0$ at fixed state. Mass is independent of the thermal state, so its gradient is computed directly. The same adjoint relation applies to the converged nonlinear tangent.
+This follows by differentiating $R(T(x),x)=0$: $R_TT_x+R_x=0$. Multiplying by $\lambda^T$ eliminates $T_x$ from the total derivative. For each scaled temperature constraint, $f_T$ is the KS softmax weight vector mapped back to FE nodes through the transpose of the fixed-point interpolation matrix and divided by the temperature limit; $f_x=0$ at fixed state. The fixed numerical reserve has zero design derivative. Mass is independent of the thermal state, so its gradient is computed directly. The same adjoint relation applies to the converged nonlinear tangent.
 
 The implementation includes analytic $R_x$ for every height and raw density, including density-filter propagation, SIMP conduction, changing fin length, and density-scaled surface loss. The table compares adjoint and central-difference directions for both load cases and both variable families.
 
@@ -76,7 +82,7 @@ The implementation includes analytic $R_x$ for every height and raw density, inc
 
 ## Optimization
 
-The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT polish. The mass objective is divided by the starting mass; SLSQP uses physical design-variable units, while the KKT polish maps each bounded height to the unit interval. The overload constraint governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation.
+The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT polish. The mass objective is divided by the starting mass; SLSQP uses physical design-variable units, while the KKT polish maps each bounded height to the unit interval. The overload constraint at the buffered target governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation. The reserve is an engineering numerical margin, not a proof of convergence at infinite mesh resolution.
 
 <div id="kkt-summary"></div>
 

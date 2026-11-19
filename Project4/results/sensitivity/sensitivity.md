@@ -6,78 +6,78 @@ The fixed slope window uses the largest four steps, selected before observing er
 
 | Physics / p | Response | Direction | Variable family | Taylor slope | Best relative directional error | Pass |
 |---|---|---|---|---:|---:|:---:|
-| linear / 1.0 | nominal constraint | structured | height | 1.98098 | 3.96e-10 | PASS |
-| linear / 1.0 | nominal constraint | structured | density | 2.06671 | 3.86e-10 | PASS |
-| linear / 1.0 | nominal constraint | random_0 | height | 1.99799 | 5.52e-09 | PASS |
-| linear / 1.0 | nominal constraint | random_0 | density | 1.99018 | 7.46e-11 | PASS |
-| linear / 1.0 | nominal constraint | random_1 | height | 2.00056 | 6.09e-09 | PASS |
-| linear / 1.0 | nominal constraint | random_1 | density | 1.98645 | 3.56e-11 | PASS |
-| linear / 1.0 | overload constraint | structured | height | 1.98098 | 4.47e-10 | PASS |
-| linear / 1.0 | overload constraint | structured | density | 2.06672 | 3.87e-10 | PASS |
-| linear / 1.0 | overload constraint | random_0 | height | 1.998 | 5.59e-09 | PASS |
-| linear / 1.0 | overload constraint | random_0 | density | 1.99017 | 5.08e-11 | PASS |
-| linear / 1.0 | overload constraint | random_1 | height | 2.00056 | 6.13e-09 | PASS |
-| linear / 1.0 | overload constraint | random_1 | density | 1.98644 | 1.23e-11 | PASS |
-| linear / 2.0 | nominal constraint | structured | height | 1.98071 | 7.02e-10 | PASS |
-| linear / 2.0 | nominal constraint | structured | density | 2.07168 | 4.5e-10 | PASS |
-| linear / 2.0 | nominal constraint | random_0 | height | 1.99828 | 2.15e-09 | PASS |
-| linear / 2.0 | nominal constraint | random_0 | density | 1.99113 | 7.45e-10 | PASS |
-| linear / 2.0 | nominal constraint | random_1 | height | 2.00069 | 1.46e-09 | PASS |
-| linear / 2.0 | nominal constraint | random_1 | density | 1.98732 | 2.41e-10 | PASS |
-| linear / 2.0 | overload constraint | structured | height | 1.98071 | 6.54e-10 | PASS |
-| linear / 2.0 | overload constraint | structured | density | 2.07169 | 4.58e-10 | PASS |
-| linear / 2.0 | overload constraint | random_0 | height | 1.99828 | 2.08e-09 | PASS |
-| linear / 2.0 | overload constraint | random_0 | density | 1.99112 | 8.44e-10 | PASS |
-| linear / 2.0 | overload constraint | random_1 | height | 2.00069 | 1.68e-09 | PASS |
-| linear / 2.0 | overload constraint | random_1 | density | 1.98731 | 2.54e-10 | PASS |
-| linear / 3.0 | nominal constraint | structured | height | 1.9801 | 1e-09 | PASS |
-| linear / 3.0 | nominal constraint | structured | density | 2.08674 | 2.82e-10 | PASS |
-| linear / 3.0 | nominal constraint | random_0 | height | 1.99903 | 8.94e-10 | PASS |
-| linear / 3.0 | nominal constraint | random_0 | density | 1.99008 | 3.65e-10 | PASS |
-| linear / 3.0 | nominal constraint | random_1 | height | 2.00104 | 5.82e-09 | PASS |
-| linear / 3.0 | nominal constraint | random_1 | density | 1.98548 | 1.64e-10 | PASS |
-| linear / 3.0 | overload constraint | structured | height | 1.9801 | 9.5e-10 | PASS |
-| linear / 3.0 | overload constraint | structured | density | 2.08675 | 2.57e-10 | PASS |
-| linear / 3.0 | overload constraint | random_0 | height | 1.99904 | 8.63e-10 | PASS |
-| linear / 3.0 | overload constraint | random_0 | density | 1.99008 | 2.89e-10 | PASS |
-| linear / 3.0 | overload constraint | random_1 | height | 2.00104 | 6.34e-09 | PASS |
-| linear / 3.0 | overload constraint | random_1 | density | 1.98547 | 1.22e-10 | PASS |
-| nonlinear / 1.0 | nominal constraint | structured | height | 1.98357 | 4.07e-09 | PASS |
-| nonlinear / 1.0 | nominal constraint | structured | density | 2.05643 | 2.94e-09 | PASS |
-| nonlinear / 1.0 | nominal constraint | random_0 | height | 1.99821 | 5.37e-09 | PASS |
-| nonlinear / 1.0 | nominal constraint | random_0 | density | 1.99095 | 2.59e-09 | PASS |
-| nonlinear / 1.0 | nominal constraint | random_1 | height | 2.00055 | 4.41e-10 | PASS |
-| nonlinear / 1.0 | nominal constraint | random_1 | density | 1.98776 | 3.35e-09 | PASS |
-| nonlinear / 1.0 | overload constraint | structured | height | 1.98368 | 4.48e-09 | PASS |
-| nonlinear / 1.0 | overload constraint | structured | density | 2.05585 | 7.67e-10 | PASS |
-| nonlinear / 1.0 | overload constraint | random_0 | height | 1.99827 | 2.88e-08 | PASS |
-| nonlinear / 1.0 | overload constraint | random_0 | density | 1.9909 | 1.66e-09 | PASS |
-| nonlinear / 1.0 | overload constraint | random_1 | height | 2.00056 | 2.37e-10 | PASS |
-| nonlinear / 1.0 | overload constraint | random_1 | density | 1.98774 | 1.28e-09 | PASS |
-| nonlinear / 2.0 | nominal constraint | structured | height | 1.98322 | 7.41e-09 | PASS |
-| nonlinear / 2.0 | nominal constraint | structured | density | 2.06377 | 2.42e-10 | PASS |
-| nonlinear / 2.0 | nominal constraint | random_0 | height | 1.99871 | 9.12e-09 | PASS |
-| nonlinear / 2.0 | nominal constraint | random_0 | density | 1.993 | 7.83e-09 | PASS |
-| nonlinear / 2.0 | nominal constraint | random_1 | height | 2.00079 | 4.6e-08 | PASS |
-| nonlinear / 2.0 | nominal constraint | random_1 | density | 1.98968 | 3.19e-09 | PASS |
-| nonlinear / 2.0 | overload constraint | structured | height | 1.98328 | 4.53e-10 | PASS |
-| nonlinear / 2.0 | overload constraint | structured | density | 2.06337 | 3.72e-09 | PASS |
-| nonlinear / 2.0 | overload constraint | random_0 | height | 1.99883 | 2.58e-08 | PASS |
-| nonlinear / 2.0 | overload constraint | random_0 | density | 1.99336 | 8.4e-12 | PASS |
-| nonlinear / 2.0 | overload constraint | random_1 | height | 2.00084 | 4.82e-08 | PASS |
-| nonlinear / 2.0 | overload constraint | random_1 | density | 1.99008 | 9.28e-10 | PASS |
-| nonlinear / 3.0 | nominal constraint | structured | height | 1.98245 | 1.02e-09 | PASS |
-| nonlinear / 3.0 | nominal constraint | structured | density | 2.0758 | 1.6e-09 | PASS |
-| nonlinear / 3.0 | nominal constraint | random_0 | height | 1.99982 | 6.32e-09 | PASS |
-| nonlinear / 3.0 | nominal constraint | random_0 | density | 1.99763 | 2.03e-10 | PASS |
-| nonlinear / 3.0 | nominal constraint | random_1 | height | 2.00127 | 1.8e-08 | PASS |
-| nonlinear / 3.0 | nominal constraint | random_1 | density | 1.99329 | 1.44e-09 | PASS |
-| nonlinear / 3.0 | overload constraint | structured | height | 1.98242 | 5.18e-09 | PASS |
-| nonlinear / 3.0 | overload constraint | structured | density | 2.07403 | 2.51e-09 | PASS |
-| nonlinear / 3.0 | overload constraint | random_0 | height | 2.00004 | 4.02e-09 | PASS |
-| nonlinear / 3.0 | overload constraint | random_0 | density | 1.99994 | 5.19e-10 | PASS |
-| nonlinear / 3.0 | overload constraint | random_1 | height | 2.00137 | 1.29e-09 | PASS |
-| nonlinear / 3.0 | overload constraint | random_1 | density | 1.99553 | 2.06e-10 | PASS |
+| linear / 1.0 | nominal constraint | structured | height | 1.98098 | 1.62e-09 | PASS |
+| linear / 1.0 | nominal constraint | structured | density | 2.06672 | 7e-10 | PASS |
+| linear / 1.0 | nominal constraint | random_0 | height | 1.998 | 1e-11 | PASS |
+| linear / 1.0 | nominal constraint | random_0 | density | 1.99017 | 1.45e-09 | PASS |
+| linear / 1.0 | nominal constraint | random_1 | height | 2.00056 | 1.6e-09 | PASS |
+| linear / 1.0 | nominal constraint | random_1 | density | 1.98644 | 2.37e-09 | PASS |
+| linear / 1.0 | overload constraint | structured | height | 1.98098 | 1.45e-09 | PASS |
+| linear / 1.0 | overload constraint | structured | density | 2.06673 | 7.9e-10 | PASS |
+| linear / 1.0 | overload constraint | random_0 | height | 1.998 | 7.88e-11 | PASS |
+| linear / 1.0 | overload constraint | random_0 | density | 1.99016 | 1.43e-09 | PASS |
+| linear / 1.0 | overload constraint | random_1 | height | 2.00056 | 1.37e-09 | PASS |
+| linear / 1.0 | overload constraint | random_1 | density | 1.98643 | 2.35e-09 | PASS |
+| linear / 2.0 | nominal constraint | structured | height | 1.98071 | 5.1e-10 | PASS |
+| linear / 2.0 | nominal constraint | structured | density | 2.07169 | 6.26e-10 | PASS |
+| linear / 2.0 | nominal constraint | random_0 | height | 1.99828 | 1.33e-08 | PASS |
+| linear / 2.0 | nominal constraint | random_0 | density | 1.99112 | 2.88e-10 | PASS |
+| linear / 2.0 | nominal constraint | random_1 | height | 2.00069 | 4.58e-09 | PASS |
+| linear / 2.0 | nominal constraint | random_1 | density | 1.98731 | 4.71e-10 | PASS |
+| linear / 2.0 | overload constraint | structured | height | 1.9807 | 6.22e-10 | PASS |
+| linear / 2.0 | overload constraint | structured | density | 2.07171 | 6.99e-10 | PASS |
+| linear / 2.0 | overload constraint | random_0 | height | 1.99829 | 1.4e-08 | PASS |
+| linear / 2.0 | overload constraint | random_0 | density | 1.99111 | 2.59e-10 | PASS |
+| linear / 2.0 | overload constraint | random_1 | height | 2.00069 | 4.11e-09 | PASS |
+| linear / 2.0 | overload constraint | random_1 | density | 1.9873 | 5.14e-10 | PASS |
+| linear / 3.0 | nominal constraint | structured | height | 1.9801 | 1.07e-09 | PASS |
+| linear / 3.0 | nominal constraint | structured | density | 2.08675 | 9.35e-10 | PASS |
+| linear / 3.0 | nominal constraint | random_0 | height | 1.99904 | 1.51e-09 | PASS |
+| linear / 3.0 | nominal constraint | random_0 | density | 1.99007 | 9.87e-10 | PASS |
+| linear / 3.0 | nominal constraint | random_1 | height | 2.00103 | 6.76e-09 | PASS |
+| linear / 3.0 | nominal constraint | random_1 | density | 1.98547 | 1.4e-10 | PASS |
+| linear / 3.0 | overload constraint | structured | height | 1.9801 | 1.06e-09 | PASS |
+| linear / 3.0 | overload constraint | structured | density | 2.08677 | 1.23e-09 | PASS |
+| linear / 3.0 | overload constraint | random_0 | height | 1.99905 | 1.56e-09 | PASS |
+| linear / 3.0 | overload constraint | random_0 | density | 1.99006 | 1.18e-09 | PASS |
+| linear / 3.0 | overload constraint | random_1 | height | 2.00103 | 6.36e-09 | PASS |
+| linear / 3.0 | overload constraint | random_1 | density | 1.98545 | 1.19e-10 | PASS |
+| nonlinear / 1.0 | nominal constraint | structured | height | 1.98357 | 1.56e-09 | PASS |
+| nonlinear / 1.0 | nominal constraint | structured | density | 2.05644 | 6.61e-10 | PASS |
+| nonlinear / 1.0 | nominal constraint | random_0 | height | 1.99821 | 8.52e-09 | PASS |
+| nonlinear / 1.0 | nominal constraint | random_0 | density | 1.99093 | 3.79e-09 | PASS |
+| nonlinear / 1.0 | nominal constraint | random_1 | height | 2.00054 | 2.14e-08 | PASS |
+| nonlinear / 1.0 | nominal constraint | random_1 | density | 1.98774 | 1.64e-09 | PASS |
+| nonlinear / 1.0 | overload constraint | structured | height | 1.98368 | 1.78e-10 | PASS |
+| nonlinear / 1.0 | overload constraint | structured | density | 2.05587 | 1.1e-09 | PASS |
+| nonlinear / 1.0 | overload constraint | random_0 | height | 1.99828 | 1.61e-08 | PASS |
+| nonlinear / 1.0 | overload constraint | random_0 | density | 1.99088 | 1.96e-09 | PASS |
+| nonlinear / 1.0 | overload constraint | random_1 | height | 2.00056 | 2.24e-08 | PASS |
+| nonlinear / 1.0 | overload constraint | random_1 | density | 1.98772 | 3.88e-09 | PASS |
+| nonlinear / 2.0 | nominal constraint | structured | height | 1.98321 | 6.93e-09 | PASS |
+| nonlinear / 2.0 | nominal constraint | structured | density | 2.06378 | 5.06e-09 | PASS |
+| nonlinear / 2.0 | nominal constraint | random_0 | height | 1.99872 | 3.29e-08 | PASS |
+| nonlinear / 2.0 | nominal constraint | random_0 | density | 1.99298 | 1.58e-09 | PASS |
+| nonlinear / 2.0 | nominal constraint | random_1 | height | 2.00078 | 7.02e-09 | PASS |
+| nonlinear / 2.0 | nominal constraint | random_1 | density | 1.98966 | 6.91e-10 | PASS |
+| nonlinear / 2.0 | overload constraint | structured | height | 1.98327 | 9.93e-10 | PASS |
+| nonlinear / 2.0 | overload constraint | structured | density | 2.06339 | 4.71e-10 | PASS |
+| nonlinear / 2.0 | overload constraint | random_0 | height | 1.99884 | 2.44e-09 | PASS |
+| nonlinear / 2.0 | overload constraint | random_0 | density | 1.99333 | 5.87e-09 | PASS |
+| nonlinear / 2.0 | overload constraint | random_1 | height | 2.00084 | 1.93e-08 | PASS |
+| nonlinear / 2.0 | overload constraint | random_1 | density | 1.99005 | 1.83e-09 | PASS |
+| nonlinear / 3.0 | nominal constraint | structured | height | 1.98245 | 2.15e-11 | PASS |
+| nonlinear / 3.0 | nominal constraint | structured | density | 2.07582 | 8.81e-10 | PASS |
+| nonlinear / 3.0 | nominal constraint | random_0 | height | 1.99983 | 9.22e-09 | PASS |
+| nonlinear / 3.0 | nominal constraint | random_0 | density | 1.99761 | 6.91e-10 | PASS |
+| nonlinear / 3.0 | nominal constraint | random_1 | height | 2.00126 | 5.78e-08 | PASS |
+| nonlinear / 3.0 | nominal constraint | random_1 | density | 1.99326 | 1.3e-09 | PASS |
+| nonlinear / 3.0 | overload constraint | structured | height | 1.98242 | 1.74e-09 | PASS |
+| nonlinear / 3.0 | overload constraint | structured | density | 2.07406 | 2.86e-09 | PASS |
+| nonlinear / 3.0 | overload constraint | random_0 | height | 2.00004 | 1.58e-08 | PASS |
+| nonlinear / 3.0 | overload constraint | random_0 | density | 1.99991 | 2.43e-09 | PASS |
+| nonlinear / 3.0 | overload constraint | random_1 | height | 2.00137 | 6.96e-09 | PASS |
+| nonlinear / 3.0 | overload constraint | random_1 | density | 1.99549 | 5.69e-10 | PASS |
 
 | Objective | Direction | Variable family | Relative error | Pass |
 |---|---|---|---:|:---:|
@@ -90,18 +90,18 @@ The fixed slope window uses the largest four steps, selected before observing er
 
 | KS state | Relative derivative error | Pass |
 |---|---:|:---:|
-| uniform_tie | 8.24707e-09 | PASS |
-| nonuniform | 3.28146e-09 | PASS |
-| large_offset | 3.62465e-09 | PASS |
+| uniform_tie | 7.78308e-09 | PASS |
+| nonuniform | 3.25679e-09 | PASS |
+| large_offset | 2.88215e-09 | PASS |
 
 | Physics | Load | Full-gradient relative error | State + adjoint (s) | State-only FD (s) | Speedup |
 |---|---|---:|---:|---:|---:|
-| linear | nominal | 7.27206e-09 | 0.06924 | 3.836 | 55.4 |
-| linear | overload | 7.62499e-09 | 0.06496 | 3.377 | 52 |
-| nonlinear | nominal | 9.60543e-08 | 0.1788 | 12.45 | 69.6 |
-| nonlinear | overload | 1.12038e-07 | 0.2037 | 14.89 | 73.1 |
+| linear | nominal | 3.83449e-08 | 0.04315 | 2.305 | 53.4 |
+| linear | overload | 3.995e-08 | 0.04369 | 2.27 | 52 |
+| nonlinear | nominal | 1.56862e-07 | 0.1223 | 8.783 | 71.8 |
+| nonlinear | overload | 1.26047e-07 | 0.1502 | 10.32 | 68.7 |
 
 Finite differences compute no adjoints. Timings are single warmed measurements, not a portable performance guarantee. Mass is state independent, so its exact direct gradient needs no adjoint solve.
 
-Adjoint/finite-difference relative gradient error: `9.60543e-08`.
-Measured speedup: `69.6x` (80 central-difference state solves).
+Adjoint/finite-difference relative gradient error: `1.56862e-07`.
+Measured speedup: `71.8x` (80 central-difference state solves).
