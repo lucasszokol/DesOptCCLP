@@ -26,9 +26,17 @@ $$m=\rho_{Al}\left(V_b+d t_f\sum_i \bar\rho_iH_i\right).$$
 
 <span id="formulation-loads">Loading load cases and constraints.</span> A bounding analysis rejected the original power-load draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
 
-For load case $s$, the optimizer imposes the buffered constraint $g_s=(\mathrm{KS}_{\beta}(T_{chip,s})+r)/T_{limit,s}-1\le0$, where $r$ is a numerical refinement reserve and
+For load case $s$, the optimizer imposes the buffered constraint:
 
-$$\mathrm{KS}_{\beta}(T)=T_{\max}+\beta^{-1}\log\!\sum_j\exp[\beta(T_j-T_{\max})].$$
+$$
+g_s = \frac{\mathrm{KS}_{\beta}(T_{\mathrm{chip},s}) + r}{T_{\mathrm{limit},s}} - 1 \leq 0
+$$
+
+where $r$ is the numerical refinement reserve, and the KS aggregation function is defined as:
+
+$$
+\mathrm{KS}_{\beta}(T) = T_{\max} + \frac{1}{\beta}\ln\left(\sum_j \exp\left[\beta(T_j - T_{\max})\right]\right)
+$$
 
 <span id="sampling-reserve">Loading the fixed sampling and numerical reserve.</span> The original temperature limits remain project engineering targets, not a specific chip datasheet. The KS aggregate spans the full chip footprint, with finite-element interpolation at fixed physical locations; it is an upper bound on the sampled values. The actual peak over the piecewise-linear chip interface is also checked separately. Keeping the sample positions fixed prevents the number of mesh nodes from changing the aggregate. The mass expression counts a fixed base plus filtered fin volumes; constants, bounds, mesh and loads are recorded in the repository's configuration.
 
