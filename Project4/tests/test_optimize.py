@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from heatsink.config import load_config
 from heatsink.model import HeatSinkModel
@@ -104,12 +105,17 @@ def test_generated_campaign_evidence_meets_agent3_contract() -> None:
     assert evidence["topology"]["intermediate_count_0p01_0p99"] == 0
     assert evidence["topology"]["threshold_filtered_intermediate_count_0p01_0p99"] == 0
     assert not evidence["topology"]["topology_bonus_demonstrated"]
+    assert not evidence["topology"]["single_fin_screen_is_discrete_removal"]
     screen = evidence["topology"]["single_fin_removal_screen"]
-    assert evidence["topology"]["any_single_fin_removal_feasible"] == any(
+    screen_feasible = any(
         row["max_scaled_constraint"] <= evidence["feasibility_tolerance"] for row in screen
     )
+    assert evidence["topology"]["any_filtered_single_fin_screen_feasible"] == screen_feasible
+    assert evidence["topology"]["any_single_fin_removal_feasible"] == screen_feasible
     assert len(evidence["topology"]["single_fin_removal_screen"]) == 20
-    assert evidence["topology"]["active_fins_after_threshold"] <= evidence["topology"]["candidate_fins"]
+    assert [row["screened_raw_density_index"] for row in screen] == list(range(20))
+    assert evidence["topology"]["active_fins_after_threshold"] == evidence["topology"]["candidate_fins"] == 20
+    np.testing.assert_allclose(evidence["topology"]["raw_density"], 1.0)
     assert len(evidence["starting_points"]["fixed_topology"]) >= 3
     assert len(evidence["starting_points"]["topology"]) >= 3
     final_roles = {
@@ -128,3 +134,58 @@ def test_generated_campaign_evidence_meets_agent3_contract() -> None:
     assert evidence["kkt"]["stationarity_inf_norm_physical"] < 1.0e-6
     assert evidence["kkt"]["constraint_complementarity_inf_norm"] < 1.0e-6
     assert evidence["kkt"]["bound_complementarity_inf_norm"] < 1.0e-6
+    for active in evidence["kkt"]["active_constraints"]:
+        assert active["constraint_margin"] == pytest.approx(
+            -active["buffered_scaled_constraint"], rel=0.0, abs=1.0e-15
+        )
+
+
+def test_canonical_results_match_agent3_campaign() -> None:
+    campaign = json.loads(
+        (ROOT / "Project4/results/optimization/campaign.json").read_text(encoding="utf-8")
+    )
+    results = json.loads(
+        (ROOT / "Project4/site/assets/results.json").read_text(encoding="utf-8")
+    )
+    runs = {run["name"]: run for run in campaign["runs"]}
+    expected = {
+        "linear_fixed": next(
+            run for run in campaign["runs"] if run["role"] == "linear_fixed_reference"
+        ),
+        "nonlinear_fixed": runs[campaign["starting_points"]["selected_fixed_topology"]],
+        "optimized": next(
+            run for run in campaign["runs"] if run["role"] == "kkt_polish"
+        ),
+    }
+    for design_name, run in expected.items():
+        design = results["designs"][design_name]
+        assert design["mass_kg"] == pytest.approx(run["mass_kg"], rel=1.0e-10)
+        np.testing.assert_allclose(
+            design["heights_m"], run["final_design"]["heights_m"], rtol=1.0e-10
+        )
+        np.testing.assert_allclose(
+            design["densities"], run["final_design"]["filtered_density"], rtol=1.0e-10
+        )
+        for reported_case, campaign_case in zip(
+            design["load_cases"], run["load_cases"], strict=True
+        ):
+            assert reported_case["name"] == campaign_case["name"]
+            assert reported_case["ks_temperature_k"] == pytest.approx(
+                campaign_case["ks_temperature_k"], rel=1.0e-10
+            )
+            assert reported_case["scaled_constraint"] == pytest.approx(
+                campaign_case["scaled_constraint"], rel=1.0e-10
+            )
+    assert campaign["comparisons"]["linear_reference_feasible"]
+    assert all(results["designs"]["linear_fixed"]["load_cases"][i]["passed"] for i in range(2))
+    assert campaign["topology"]["active_fins_after_threshold"] == 20
+    assert not campaign["topology"]["topology_bonus_demonstrated"]
+    assert results["kkt"]["physical_stationarity_inf_norm"] == pytest.approx(
+        campaign["kkt"]["stationarity_inf_norm_physical"], rel=1.0e-10
+    )
+    assert results["kkt"]["constraint_complementarity"] == pytest.approx(
+        campaign["kkt"]["constraint_complementarity_inf_norm"], rel=1.0e-10
+    )
+    assert results["kkt"]["bound_complementarity"] == pytest.approx(
+        campaign["kkt"]["bound_complementarity_inf_norm"], rel=1.0e-10
+    )

@@ -375,8 +375,12 @@ def _run_record(model: HeatSinkModel, run: OptimizationRun, role: str) -> dict:
     return record
 
 
-def _single_fin_removal_screen(model: HeatSinkModel, penalty: float) -> list[dict]:
-    """Evaluate every one-fin deletion at the maximum admissible height."""
+def _filtered_single_fin_screen(model: HeatSinkModel, penalty: float) -> list[dict]:
+    """Screen one low raw density at a time with the density filter active.
+
+    This is not a discrete removed-fin reanalysis: neighboring raw densities
+    contribute to the screened fin's filtered physical density.
+    """
 
     count = model.config.geometry.candidate_fins
     height = model.config.geometry.fin_height_bounds_m[1]
@@ -398,6 +402,9 @@ def _single_fin_removal_screen(model: HeatSinkModel, penalty: float) -> list[dic
             constraints.append(ks_temperature / case.chip_limit_k - 1.0)
         records.append(
             {
+                "screened_raw_density_index": index,
+                # Retained for compatibility with the original evidence file.
+                # No fin is physically removed in this filtered screen.
                 "removed_fin_index": index,
                 "scaled_constraints": [float(value) for value in constraints],
                 "max_scaled_constraint": float(max(constraints)),
@@ -422,7 +429,7 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
     threshold_filtered_density = model.split_design(
         campaign.threshold_polish.full_design
     )[2]
-    removal_screen = _single_fin_removal_screen(model, final_topology.penalty)
+    filtered_screen = _filtered_single_fin_screen(model, final_topology.penalty)
     kkt = campaign.kkt_polish
     active_tolerance = float(
         model.config.raw["optimization"]["scaled_feasibility_tolerance"]
@@ -439,6 +446,14 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
                 {
                     "name": case.name,
                     "scaled_constraint": response.scaled_constraint,
+                    "buffered_scaled_constraint": (
+                        response.scaled_constraint
+                        + kkt.temperature_reserve_k / case.chip_limit_k
+                    ),
+                    "constraint_margin": -(
+                        response.scaled_constraint
+                        + kkt.temperature_reserve_k / case.chip_limit_k
+                    ),
                     "normalized_objective_multiplier": (
                         -float(multipliers[index])
                         if np.isfinite(multipliers[index])
@@ -526,11 +541,19 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
             "grayness": grayness(raw_density),
             "threshold_filtered_grayness": grayness(threshold_filtered_density),
             "topology_bonus_demonstrated": topology_bonus_demonstrated,
+            "single_fin_screen_is_discrete_removal": False,
+            "any_filtered_single_fin_screen_feasible": any(
+                record["max_scaled_constraint"] <= active_tolerance
+                for record in filtered_screen
+            ),
+            # Retained for artifact compatibility with the original Agent 3
+            # artifact. The interpretation field above makes clear that these
+            # are filtered low-raw-density screens, not discrete removals.
             "any_single_fin_removal_feasible": any(
                 record["max_scaled_constraint"] <= active_tolerance
-                for record in removal_screen
+                for record in filtered_screen
             ),
-            "single_fin_removal_screen": removal_screen,
+            "single_fin_removal_screen": filtered_screen,
         },
         "kkt": {
             "active_constraint_tolerance": active_tolerance,
@@ -552,6 +575,25 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
 
 
 def write_campaign_evidence(evidence: dict, directory: str | Path) -> None:
+    # Enrich older generated evidence without changing its numerical results.
+    # This keeps the Markdown writer usable for the pre-clarification artifact
+    # already integrated on main while fresh campaigns emit these fields in
+    # ``campaign_evidence`` directly.
+    topology = evidence["topology"]
+    topology.setdefault("single_fin_screen_is_discrete_removal", False)
+    topology.setdefault(
+        "any_filtered_single_fin_screen_feasible",
+        topology["any_single_fin_removal_feasible"],
+    )
+    for row in topology["single_fin_removal_screen"]:
+        row.setdefault("screened_raw_density_index", row["removed_fin_index"])
+    kkt_run = next(run for run in evidence["runs"] if run["role"] == "kkt_polish")
+    kkt_cases = {case["name"]: case for case in kkt_run["load_cases"]}
+    for active in evidence["kkt"]["active_constraints"]:
+        case = kkt_cases[active["name"]]
+        active.setdefault("constraint_margin", case["constraint_margin"])
+        active.setdefault("buffered_scaled_constraint", -case["constraint_margin"])
+
     destination = Path(directory)
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "campaign.json").write_text(
@@ -586,7 +628,8 @@ def write_campaign_evidence(evidence: dict, directory: str | Path) -> None:
             "## Comparisons",
             "",
             f"- Linear fixed-topology feasibility: **{comparison['linear_reference_feasible']}** "
-            f"(maximum scaled constraint {comparison['linear_reference_max_scaled_constraint']:.6g}).",
+            f"(maximum buffered scaled constraint "
+            f"{comparison['linear_reference_max_scaled_constraint']:.6g}).",
             f"- Nonlinear fixed-topology mass: {comparison['nonlinear_fixed_mass_kg']:.10g} kg.",
             f"- Final topology-continuation mass: {comparison['topology_continuation_mass_kg']:.10g} kg.",
             f"- Thresholded/re-optimized mass: {comparison['threshold_reoptimized_mass_kg']:.10g} kg.",
@@ -606,8 +649,9 @@ def write_campaign_evidence(evidence: dict, directory: str | Path) -> None:
             f"- Grayness metric: {topology['grayness']:.6g}.",
             f"- Topology bonus demonstrated by a vanished fin: "
             f"**{topology['topology_bonus_demonstrated']}**.",
-            f"- Any single-fin deletion feasible at maximum height: "
-            f"**{topology['any_single_fin_removal_feasible']}**.",
+            f"- Any filtered single-low-raw-density screen feasible at maximum height: "
+            f"**{topology['any_filtered_single_fin_screen_feasible']}** "
+            f"(not a discrete removed-fin result).",
             "",
             "## KKT evidence",
             "",
@@ -619,20 +663,21 @@ def write_campaign_evidence(evidence: dict, directory: str | Path) -> None:
             f"{evidence['kkt']['bound_complementarity_inf_norm']}.",
             f"- Constraint violation: {evidence['kkt']['constraint_violation']}.",
             "",
-            "| Active constraint | Scaled value | Normalized multiplier | kg per unit scaled relaxation |",
-            "|---|---:|---:|---:|",
+            "| Active constraint | Raw scaled value | Buffered scaled value | Normalized multiplier | kg per unit scaled relaxation |",
+            "|---|---:|---:|---:|---:|",
         ]
     )
     for active in evidence["kkt"]["active_constraints"]:
         lines.append(
             f"| {active['name']} | {active['scaled_constraint']:.6g} | "
+            f"{active['buffered_scaled_constraint']:.6g} | "
             f"{active['normalized_objective_multiplier']:.6g} | "
             f"{active['mass_kg_per_unit_scaled_relaxation']:.6g} |"
         )
     lines.extend(
         [
             "",
-            "The single-fin screen lowers one raw density and retains the density "
+            "The filtered screen lowers one raw density and retains the density "
             "filter; it is not a reanalysis of a physically removed fin. Interpret "
             "the results accordingly and do not claim a vanished-fin bonus without "
             "a feasible discrete reanalysis.",
