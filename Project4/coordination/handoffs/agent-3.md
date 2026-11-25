@@ -49,9 +49,10 @@ PR was created.
 - Focused Agent 3 suite:
   `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest
   Project4/tests/test_optimize.py Project4/tests/test_topology.py -q -p
-  no:cacheprovider`: **10 passed**.
+  no:cacheprovider`: **10 passed in 6.90 s** on the finalized branch.
 - Full suite in an isolated copy, using the repository virtual environment:
-  `python -m pytest Project4/tests -q -p no:cacheprovider`: **42 passed**.
+  `python -m pytest Project4/tests -q -p no:cacheprovider`: **42 passed in
+  25.66 s** on the finalized branch.
 - Static-site build in the isolated copy: passed.
 - `node --check Project4/site/assets/viewer.js`: passed.
 - `git diff --check`: passed.
@@ -80,7 +81,8 @@ PR was created.
 
 ### Final commit information
 
-- Audit implementation commit: `AUDIT_IMPLEMENTATION_SHA`.
+- Current-main merge commit: `7218e1b35ff6cf92a4ee1d8fbbe9bcf5d1a8a48a`.
+- Audit implementation commit: `0a10e3bb6fd0efb0e1a9f06795803a58ffa1e601`.
 - The final handoff update is the subsequent commit containing this section.
 
 - Agent/account: Polina / `pkondratkippy`
