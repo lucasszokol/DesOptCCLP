@@ -1,6 +1,8 @@
-# Frozen Engineering Specification — Approval Required
+# Frozen Engineering Specification
 
-Status: **awaiting team approval**
+Status: Engineering loads and limits **team approved**, including DEC-002.
+The mesh-consistent KS sampling and 0.5 K numerical reserve were approved by
+the team on 2026-11-19 (DEC-003).
 
 ## Engineering problem
 
@@ -16,7 +18,7 @@ two chip-interface temperature requirements.
 | Chip-heating width | 20 mm, centered on the lower base face |
 | Candidate fins | 20 equally spaced ground-structure locations |
 | Fin thickness | 1.0 mm in the primary study |
-| Fin-height bounds | 10–50 mm |
+| Fin-height bounds | 10–55 mm |
 | Topology-density bounds | 0.001–1.0 |
 | Nominal case | 50 W, ambient 25 °C, aggregated chip temperature ≤ 85 °C |
 | Overload case | 60 W, ambient 35 °C, aggregated chip temperature ≤ 100 °C |
@@ -34,8 +36,12 @@ m(\mathbf{x})=\rho_{Al}\left(V_{base}+d\,t_f
 \sum_{i=1}^{20}\bar\rho_i H_i\right).
 $$
 
-Each temperature constraint uses a smooth KS aggregate of the chip-interface
-nodal temperatures. All optimization constraints are scaled to order one.
+Each temperature constraint uses a smooth KS aggregate of temperatures at 15
+fixed physical points across the chip, evaluated by FE interpolation. The
+optimizer requires the aggregate to be at least 0.5 K below the approved
+engineering limit; the exact piecewise-linear chip peak and the original
+engineering limits are separately checked. All optimization constraints are
+scaled to order one. See `coordination/decisions/DEC-003-mesh-consistency.md`.
 
 ## Governing model
 
@@ -44,7 +50,8 @@ cross-section. Each candidate fin uses one-dimensional conduction elements
 coupled to a top-face base node. The extrusion depth supplies the out-of-plane
 area and exposed surface.
 
-The linear comparison uses constant convection and omits radiation. The N2
+The linear comparison uses constant convection with
+$h=15\ \mathrm{W/(m^2\,K)}$ and omits radiation. The N2
 model uses
 
 $$
@@ -86,10 +93,16 @@ design domain contains a feasible point while the 30 mm starting design still
 fails both constraints. This check prevents an optimizer from being blamed for
 an infeasible engineering specification.
 
+## DEC-002 feasibility amendment
+
+The team approved an increase of the fin-height upper bound from 50 mm to
+55 mm after a bounding check showed that no thresholded topology with a
+vanished fin could satisfy both load cases under the original cap. The team
+also approved $h=15\ \mathrm{W/(m^2\,K)}$ for the linear reference comparison;
+the nonlinear N2 physics remains unchanged. Design under uncertainty is the
+backup bonus path if the topology result receives limited credit.
+
 ## Approval statement
 
-Before full optimization, a team member should reply with either:
-
-> We approve the Project 4 heat-sink specification as written.
-
-or list the exact changes required.
+The original specification and DEC-002 amendment are recorded in
+`approvals.yaml`. Kellen Worthington is confirmed as a Project 4 author.

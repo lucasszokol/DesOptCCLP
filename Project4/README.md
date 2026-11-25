@@ -5,33 +5,55 @@ discrete adjoint, and a ground-structure topology optimization for a naturally
 cooled 6061-T6 aluminum heat sink. The final report and interactive comparison
 are generated from one canonical `site/assets/results.json` file.
 
-## Required human gate
+## Links
 
-Do **not** add expected benchmark answers to the automated tests until the team
-has completed [`HUMAN_BENCHMARK_WORKSHEET.md`](HUMAN_BENCHMARK_WORKSHEET.md).
-The course brief requires the students to derive the verification truth
-independently of the coding agent.
+- Repository: <https://github.com/lucasszokol/DesOptCCLP>
+- Live report: <https://lucasszokol.github.io/DesOptCCLP/>
+- Integration status: [issue #12](https://github.com/lucasszokol/DesOptCCLP/issues/12)
+- Agent assignments: [`coordination/ASSIGNMENTS.md`](coordination/ASSIGNMENTS.md)
 
-The team must also approve [`SPECIFICATION.md`](SPECIFICATION.md) before the
-full optimization campaign begins.
+## Current status
+
+- The specification approval and student-authored benchmark gates pass.
+- V1--V6 reports 20/20 checks passing; V7 adjoint/Taylor evidence passes.
+- GitHub Pages test, build, and deployment jobs pass, and the public site
+  responds successfully.
+- An audit found mesh dependence in the earlier KS constraint and a mismatch
+  in the chip footprint. The team-approved DEC-003 amendment corrects those
+  issues and adds a 0.5 K numerical reserve and design-level mesh verification.
+- The public site follows `main`; verify that the latest approved results have
+  deployed before submission.
+
+## Human gates
+
+The completed benchmark derivations remain in
+[`HUMAN_BENCHMARK_WORKSHEET.md`](HUMAN_BENCHMARK_WORKSHEET.md), and their
+transcription/attestation is read-only solver truth. Agents must not replace
+those answers.
+
+The team approved the DEC-002 feasibility amendment: a 55 mm height cap,
+linear comparison coefficient of 15 W/(m² K), and design under uncertainty as
+the backup bonus path. See
+[`DEC-002-optimization-feasibility.md`](coordination/decisions/DEC-002-optimization-feasibility.md).
+The later numerical amendment is documented in
+[`DEC-003-mesh-consistency.md`](coordination/decisions/DEC-003-mesh-consistency.md).
 
 ## Intended reproducibility command
 
 ```powershell
-python -m Project4.heatsink.run_all --config Project4/config.yaml
+.\.venv\Scripts\python.exe -m Project4.heatsink.run_all --config Project4\config.yaml
 ```
 
-The command will run verification, gradient checks, the three optimization
-cases, plots, report-table generation, and JSON serialization. Until the human
-gate is cleared, it stops before inserting or consuming benchmark truth.
+The command runs verification, gradient checks, optimization, uncertainty
+scenarios, final-data validation, JSON serialization, and the static-site build.
+It must exit successfully before `site/assets/results.json` is treated as final.
 
 ## Team
 
-Charles Green, Christian Miranda, Lucas Somoshegyi-Szokol, and Polina
-Kondratiuk.
+Charles Green, Christian Miranda, Kellen Worthington, Lucas
+Somoshegyi-Szokol, and Polina Kondratiuk.
 
-## Immediate administrative action
+## Remaining human actions
 
-The course-sheet URL milestone was November 4, 2026. The team should contact
-the instructor and add the repository URL (and the Pages URL once available)
-immediately.
+- Verify the deployed site in a private window and confirm the participation-sheet URL.
+- After the final campaign and site QA pass, submit both URLs on Canvas.

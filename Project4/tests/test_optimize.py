@@ -22,6 +22,20 @@ def test_optimizer_interface_shapes_and_gradients() -> None:
     topology = OptimizationProblem(model, fixed_topology=False, nonlinear=True, penalty=3.0)
     assert topology.objective_gradient(full).shape == (40,)
     np.testing.assert_allclose(topology.full_design(full), full)
+    actual = topology.margins(full)
+    expected = np.array([-response.scaled_constraint - config.raw["optimization"]["temperature_reserve_k"] / case.chip_limit_k
+                         for case, response in zip(config.load_cases, topology._evaluate(full))])
+    np.testing.assert_allclose(actual, expected, rtol=0, atol=1e-15)
+
+
+def test_joint_mass_hessian_matches_gradient_difference() -> None:
+    model = HeatSinkModel(load_config(ROOT / "Project4" / "config.yaml"))
+    problem = OptimizationProblem(model, fixed_topology=False, nonlinear=True, penalty=3.0)
+    design = model.initial_design()
+    direction = np.r_[np.linspace(-.2, .2, 20), np.linspace(.1, -.1, 20)]
+    step = 1e-6
+    reference = (problem.objective_gradient(design + step*direction) - problem.objective_gradient(design - step*direction))/(2*step)
+    np.testing.assert_allclose(problem.objective_hessian(design) @ direction, reference, rtol=1e-8, atol=1e-9)
 
 
 def test_nonlinear_fixed_run_records_history_and_acceptance() -> None:
@@ -86,11 +100,14 @@ def test_generated_campaign_evidence_meets_agent3_contract() -> None:
     assert path.exists(), "run python -m Project4.heatsink.campaign first"
     evidence = json.loads(path.read_text(encoding="utf-8"))
     assert evidence["status"] == "complete_with_authoritative_model_blockers"
-    assert not evidence["comparisons"]["linear_reference_feasible"]
+    assert evidence["comparisons"]["linear_reference_feasible"]
     assert evidence["topology"]["intermediate_count_0p01_0p99"] == 0
     assert evidence["topology"]["threshold_filtered_intermediate_count_0p01_0p99"] == 0
     assert not evidence["topology"]["topology_bonus_demonstrated"]
-    assert not evidence["topology"]["any_single_fin_removal_feasible"]
+    screen = evidence["topology"]["single_fin_removal_screen"]
+    assert evidence["topology"]["any_single_fin_removal_feasible"] == any(
+        row["max_scaled_constraint"] <= evidence["feasibility_tolerance"] for row in screen
+    )
     assert len(evidence["topology"]["single_fin_removal_screen"]) == 20
     assert evidence["topology"]["active_fins_after_threshold"] <= evidence["topology"]["candidate_fins"]
     assert len(evidence["starting_points"]["fixed_topology"]) >= 3

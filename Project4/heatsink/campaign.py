@@ -128,6 +128,7 @@ def _strictly_feasible_kkt_seed(
                 nonlinear=True,
                 penalty=penalty,
             ).scaled_constraint
+            + float(model.config.raw["optimization"]["temperature_reserve_k"]) / case.chip_limit_k
             for case in model.config.load_cases
         )
         if maximum_constraint < -1.0e-8:
@@ -339,8 +340,8 @@ def _run_record(model: HeatSinkModel, run: OptimizationRun, role: str) -> dict:
                 "ks_temperature_k": response.ks_temperature_k,
                 "limit_k": case.chip_limit_k,
                 "scaled_constraint": response.scaled_constraint,
-                "constraint_margin": -response.scaled_constraint,
-                "feasible": response.scaled_constraint
+                "constraint_margin": -response.scaled_constraint - run.temperature_reserve_k / case.chip_limit_k,
+                "feasible": response.scaled_constraint + run.temperature_reserve_k / case.chip_limit_k
                 <= run.feasibility_tolerance,
                 "newton_converged": response.solve.converged,
                 "newton_iterations": response.solve.iterations,
@@ -433,7 +434,7 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
     for index, (case, response) in enumerate(
         zip(model.config.load_cases, kkt.responses)
     ):
-        if abs(response.scaled_constraint) <= active_tolerance:
+        if abs(response.scaled_constraint + kkt.temperature_reserve_k / case.chip_limit_k) <= active_tolerance:
             active_constraints.append(
                 {
                     "name": case.name,
@@ -468,13 +469,12 @@ def campaign_evidence(model: HeatSinkModel, campaign: CampaignResult) -> dict:
     blockers = []
     if not campaign.linear_fixed.accepted:
         blockers.append(
-            "The frozen linear comparison is infeasible at the maximum-material "
-            "height bound."
+            "The linear comparison did not produce an accepted feasible design."
         )
     if not topology_bonus_demonstrated:
         blockers.append(
-            "No fin vanishes in the feasible optimum; every screened one-fin "
-            "deletion is infeasible at maximum height."
+            "No fin vanishes in the selected topology. The one-fin screen uses "
+            "filtered densities and does not establish feasibility of a physically removed fin."
         )
     status = "complete" if core_complete and near_binary else "failed"
     if status == "complete" and blockers:
@@ -632,14 +632,10 @@ def write_campaign_evidence(evidence: dict, directory: str | Path) -> None:
     lines.extend(
         [
             "",
-            "The linear fixed-topology reference is retained as an unsuccessful, "
-            "infeasible baseline because the maximum-material linear design violates "
-            "the frozen temperature limits. It is not relabeled as a successful optimum.",
-            "",
-            "No topology bonus is claimed: all twenty fins remain active, and the "
-            "generated one-fin-removal screen found every deletion infeasible at the "
-            "maximum height. Changing the height or physics assumptions requires a "
-            "human-approved shared-contract update outside Agent 3's scope.",
+            "The single-fin screen lowers one raw density and retains the density "
+            "filter; it is not a reanalysis of a physically removed fin. Interpret "
+            "the results accordingly and do not claim a vanished-fin bonus without "
+            "a feasible discrete reanalysis.",
             "",
             "All values in this report are generated from `campaign.json` by the campaign command.",
         ]

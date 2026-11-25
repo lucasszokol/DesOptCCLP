@@ -3,3 +3,20 @@ specification_approved: true
 approver: "Charles Green; Christian Miranda; Lucas Somoshegyi-Szokol; Polina Kondratiuk"
 approval_date: "2026-11-11"
 notes: "All team members approved Project4/SPECIFICATION.md."
+project_authors:
+  - Charles Green
+  - Christian Miranda
+  - Kellen Worthington
+  - Lucas Somoshegyi-Szokol
+  - Polina Kondratiuk
+decisions:
+  DEC-002:
+    approved: true
+    approval_date: "2026-11-11"
+    approved_changes:
+      fin_height_upper_bound_m: 0.055
+      linear_h_w_m2k: 15.0
+      uncertainty_bonus_backup: true
+    approval_statement: >-
+      We approve DEC-002: the 55 mm fin-height cap, linear comparison
+      h = 15 W/(m^2 K), and uncertainty bonus as the backup path to at least +10.
