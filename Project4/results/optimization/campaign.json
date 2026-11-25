@@ -19,6 +19,8 @@
     "active_constraint_tolerance": 0.0001,
     "active_constraints": [
       {
+        "buffered_scaled_constraint": -2.41273849857504e-11,
+        "constraint_margin": 2.41273849857504e-11,
         "mass_kg_per_unit_scaled_relaxation": 1.7972626663865945,
         "name": "overload",
         "normalized_objective_multiplier": 14.737701241382485,
@@ -10904,6 +10906,7 @@
   "status": "complete_with_authoritative_model_blockers",
   "topology": {
     "active_fins_after_threshold": 20,
+    "any_filtered_single_fin_screen_feasible": true,
     "any_single_fin_removal_feasible": true,
     "binary_density": [
       1.0,
@@ -11003,7 +11006,8 @@
         "scaled_constraints": [
           -0.0053045134160776275,
           -0.0018128723848289674
-        ]
+        ],
+        "screened_raw_density_index": 0
       },
       {
         "filtered_density": [
@@ -11033,7 +11037,8 @@
         "scaled_constraints": [
           -0.00439661809163705,
           -0.0008059575193445356
-        ]
+        ],
+        "screened_raw_density_index": 1
       },
       {
         "filtered_density": [
@@ -11063,7 +11068,8 @@
         "scaled_constraints": [
           -0.004629716306076892,
           -0.0010525834293146907
-        ]
+        ],
+        "screened_raw_density_index": 2
       },
       {
         "filtered_density": [
@@ -11093,7 +11099,8 @@
         "scaled_constraints": [
           -0.004473505277933665,
           -0.0008721899011774337
-        ]
+        ],
+        "screened_raw_density_index": 3
       },
       {
         "filtered_density": [
@@ -11123,7 +11130,8 @@
         "scaled_constraints": [
           -0.00424920912149962,
           -0.0006126627943029428
-        ]
+        ],
+        "screened_raw_density_index": 4
       },
       {
         "filtered_density": [
@@ -11153,7 +11161,8 @@
         "scaled_constraints": [
           -0.003959648182061959,
           -0.0002767574740550893
-        ]
+        ],
+        "screened_raw_density_index": 5
       },
       {
         "filtered_density": [
@@ -11183,7 +11192,8 @@
         "scaled_constraints": [
           -0.0036278534664073714,
           0.00010955000643342316
-        ]
+        ],
+        "screened_raw_density_index": 6
       },
       {
         "filtered_density": [
@@ -11213,7 +11223,8 @@
         "scaled_constraints": [
           -0.003308172352722183,
           0.00048357747434457643
-        ]
+        ],
+        "screened_raw_density_index": 7
       },
       {
         "filtered_density": [
@@ -11243,7 +11254,8 @@
         "scaled_constraints": [
           -0.003063380404889293,
           0.000771522993316287
-        ]
+        ],
+        "screened_raw_density_index": 8
       },
       {
         "filtered_density": [
@@ -11273,7 +11285,8 @@
         "scaled_constraints": [
           -0.0029333254781582774,
           0.0009251440474167261
-        ]
+        ],
+        "screened_raw_density_index": 9
       },
       {
         "filtered_density": [
@@ -11303,7 +11316,8 @@
         "scaled_constraints": [
           -0.0029333254781641616,
           0.0009251440474302708
-        ]
+        ],
+        "screened_raw_density_index": 10
       },
       {
         "filtered_density": [
@@ -11333,7 +11347,8 @@
         "scaled_constraints": [
           -0.0030633804048958435,
           0.0007715229933371592
-        ]
+        ],
+        "screened_raw_density_index": 11
       },
       {
         "filtered_density": [
@@ -11363,7 +11378,8 @@
         "scaled_constraints": [
           -0.0033081723527051965,
           0.0004835774743578991
-        ]
+        ],
+        "screened_raw_density_index": 12
       },
       {
         "filtered_density": [
@@ -11393,7 +11409,8 @@
         "scaled_constraints": [
           -0.003627853466386277,
           0.00010955000644319313
-        ]
+        ],
+        "screened_raw_density_index": 13
       },
       {
         "filtered_density": [
@@ -11423,7 +11440,8 @@
         "scaled_constraints": [
           -0.003959648182076503,
           -0.0002767574740401013
-        ]
+        ],
+        "screened_raw_density_index": 14
       },
       {
         "filtered_density": [
@@ -11453,7 +11471,8 @@
         "scaled_constraints": [
           -0.0042492091214985095,
           -0.0006126627943002783
-        ]
+        ],
+        "screened_raw_density_index": 15
       },
       {
         "filtered_density": [
@@ -11483,7 +11502,8 @@
         "scaled_constraints": [
           -0.004473505277951428,
           -0.0008721899011917555
-        ]
+        ],
+        "screened_raw_density_index": 16
       },
       {
         "filtered_density": [
@@ -11513,7 +11533,8 @@
         "scaled_constraints": [
           -0.004629716306063569,
           -0.0010525834293250158
-        ]
+        ],
+        "screened_raw_density_index": 17
       },
       {
         "filtered_density": [
@@ -11543,7 +11564,8 @@
         "scaled_constraints": [
           -0.004396618091635274,
           -0.0008059575193518631
-        ]
+        ],
+        "screened_raw_density_index": 18
       },
       {
         "filtered_density": [
@@ -11573,9 +11595,11 @@
         "scaled_constraints": [
           -0.005304513416093393,
           -0.0018128723848390704
-        ]
+        ],
+        "screened_raw_density_index": 19
       }
     ],
+    "single_fin_screen_is_discrete_removal": false,
     "threshold_filtered_density": [
       1.0,
       1.0,

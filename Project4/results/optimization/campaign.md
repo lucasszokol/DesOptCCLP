@@ -22,7 +22,7 @@ Campaign runtime: 77.302 s.
 
 ## Comparisons
 
-- Linear fixed-topology feasibility: **True** (maximum scaled constraint 3.62483e-11).
+- Linear fixed-topology feasibility: **True** (maximum buffered scaled constraint 3.62483e-11).
 - Nonlinear fixed-topology mass: 0.1773042727 kg.
 - Final topology-continuation mass: 0.1773042727 kg.
 - Thresholded/re-optimized mass: 0.1773042727 kg.
@@ -36,7 +36,7 @@ Campaign runtime: 77.302 s.
 - Intermediate filtered densities after thresholding: 0.
 - Grayness metric: 0.
 - Topology bonus demonstrated by a vanished fin: **False**.
-- Any single-fin deletion feasible at maximum height: **True**.
+- Any filtered single-low-raw-density screen feasible at maximum height: **True** (not a discrete removed-fin result).
 
 ## KKT evidence
 
@@ -45,10 +45,10 @@ Campaign runtime: 77.302 s.
 - Bound complementarity infinity norm: 4.075634533408367e-10.
 - Constraint violation: 0.0.
 
-| Active constraint | Scaled value | Normalized multiplier | kg per unit scaled relaxation |
-|---|---:|---:|---:|
-| overload | -0.00133994 | 14.7377 | 1.79726 |
+| Active constraint | Raw scaled value | Buffered scaled value | Normalized multiplier | kg per unit scaled relaxation |
+|---|---:|---:|---:|---:|
+| overload | -0.00133994 | -2.41274e-11 | 14.7377 | 1.79726 |
 
-The single-fin screen lowers one raw density and retains the density filter; it is not a reanalysis of a physically removed fin. Interpret the results accordingly and do not claim a vanished-fin bonus without a feasible discrete reanalysis.
+The filtered screen lowers one raw density and retains the density filter; it is not a reanalysis of a physically removed fin. Interpret the results accordingly and do not claim a vanished-fin bonus without a feasible discrete reanalysis.
 
 All values in this report are generated from `campaign.json` by the campaign command.
