@@ -5,10 +5,14 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 import shutil
 from pathlib import Path
 
 import markdown
+
+
+_DISPLAY_MATH = re.compile(r"^[ \t]*\$\$(.*?)\$\$[ \t]*$", re.MULTILINE | re.DOTALL)
 
 
 def _table(headers: list[str], rows: list[list[object]]) -> str:
@@ -102,6 +106,35 @@ def _strip_front_matter(source: str) -> str:
     return source[end + 5 :]
 
 
+def _protect_display_math(source: str) -> tuple[str, list[str]]:
+    """Hide TeX blocks from Markdown emphasis parsing until HTML is built."""
+
+    blocks: list[str] = []
+
+    def replace(match: re.Match[str]) -> str:
+        marker = f"P4DISPLAYMATH{len(blocks)}TOKEN"
+        blocks.append(match.group(1).strip())
+        return marker
+
+    return _DISPLAY_MATH.sub(replace, source), blocks
+
+
+def _restore_display_math(content: str, blocks: list[str]) -> str:
+    """Restore protected TeX as MathJax display delimiters."""
+
+    for index, tex in enumerate(blocks):
+        marker = f"<p>P4DISPLAYMATH{index}TOKEN</p>"
+        if marker not in content:
+            raise ValueError(f"display-math marker was altered: {index}")
+        rendered = (
+            '<div class="math-display">\\[\n'
+            + html.escape(tex, quote=False)
+            + '\n\\]</div>'
+        )
+        content = content.replace(marker, rendered, 1)
+    return content
+
+
 def build_site(source_directory: str | Path) -> Path:
     source = Path(source_directory).resolve()
     destination = source / "_site"
@@ -110,11 +143,13 @@ def build_site(source_directory: str | Path) -> Path:
     destination.mkdir(parents=True)
     report = _strip_front_matter((source / "index.md").read_text(encoding="utf-8"))
     report = _static_evidence(report, json.loads((source / "assets" / "results.json").read_text(encoding="utf-8")))
+    report, display_math = _protect_display_math(report)
     content = markdown.markdown(
         report,
         extensions=["fenced_code", "tables", "sane_lists"],
         output_format="html5",
     )
+    content = _restore_display_math(content, display_math)
     layout = (source / "_layouts" / "default.html").read_text(encoding="utf-8")
     if "__REPORT_CONTENT__" not in layout:
         raise ValueError("layout is missing __REPORT_CONTENT__ marker")

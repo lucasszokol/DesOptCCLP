@@ -33,3 +33,17 @@ def test_static_site_build_contains_report_and_assets() -> None:
     assert "Verification evidence awaits" not in html
     assert "Uncertainty study awaits" not in html
     assert "The selected result retains all 20 fins" not in html
+
+
+def test_display_math_survives_markdown_build_without_emphasis_corruption() -> None:
+    source = (ROOT / "Project4/site/index.md").read_text(encoding="utf-8")
+    assert re.search(r"\$\$\s*g_s =", source)
+    assert re.search(r"\$\$\s*\\mathrm\{KS\}_\{\\beta\}\(T\)", source)
+
+    destination = build_site(ROOT / "Project4" / "site")
+    html = (destination / "index.html").read_text(encoding="utf-8")
+    assert "P4DISPLAYMATH" not in html
+    assert "$$" not in html
+    assert r"\mathrm{KS}_{\beta}(T_{\mathrm{chip},s})" in html
+    assert r"\mathrm{KS}_{\beta}(T)" in html
+    assert r"\mathrm{KS}<em>" not in html
