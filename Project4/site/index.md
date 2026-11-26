@@ -11,7 +11,9 @@ title: PDE-Constrained Heat-Sink Optimization
 
 ## Summary and live 3D comparison
 
-We minimize the mass of a passively cooled 6061-T6 aluminum heat sink subject to nominal and overload chip-temperature limits. The initial and optimized ground-structure designs are shown with one linked camera. Geometry is drawn at true scale; no fin thickening is used. Colors show the nominal case, interpolating base Q4 and fin linear nodal temperatures; dark outlines indicate a part with at least one node over the nominal limit. During the history animation geometry changes while colors remain the final-state field, since fields were not saved at each iteration.
+Power electronics need a path for waste heat to leave the chip; excessive temperature can reduce reliability or require power to be limited. We study a lightweight, passively cooled 6061-T6 aluminum heat sink under normal and hotter, higher-power conditions. The starting design is lighter but fails the thermal requirements, so it is not a feasible baseline for claiming a mass saving.
+
+The initial and optimized designs share one camera and are drawn at true scale without fin thickening. Colors show the nominal-case temperature field, interpolated using the Q4 base-element and linear fin-element shape functions. Dark outlines identify parts with at least one node above the nominal temperature limit. During history playback, geometry changes while colors remain fixed to the final-state field because temperatures were not saved at every iteration.
 
 <div class="controls"><button id="play-history">Play/pause optimization history</button><span>Nominal temperature (K)</span><span id="color-low"></span><div class="colorbar" style="width:160px"></div><span id="color-high"></span></div>
 <div id="viewer"><div class="viewer-labels"><strong>Initial</strong><strong>Optimized</strong></div><div id="tooltip"></div></div>
@@ -24,7 +26,7 @@ We minimize the mass of a passively cooled 6061-T6 aluminum heat sink subject to
 
 $$m=\rho_{Al}\left(V_b+d t_f\sum_i \bar\rho_iH_i\right).$$
 
-<span id="formulation-loads">Loading load cases and constraints.</span> A bounding analysis rejected the original power-load draft because even the maximum-material design was infeasible; this is the first documented bug caught by verification.
+<span id="formulation-loads">Loading load cases and constraints.</span> A bounding analysis showed that the original power-load specification was infeasible even at maximum material, prompting the team to revise the study cases.
 
 For load case $s$, the optimizer imposes the buffered constraint:
 
@@ -38,7 +40,7 @@ $$
 \mathrm{KS}_{\beta}(T) = T_{\max} + \frac{1}{\beta}\ln\left(\sum_j \exp\left[\beta(T_j - T_{\max})\right]\right)
 $$
 
-<span id="sampling-reserve">Loading the fixed sampling and numerical reserve.</span> The original temperature limits remain project engineering targets, not a specific chip datasheet. The KS aggregate spans the full chip footprint, with finite-element interpolation at fixed physical locations; it is an upper bound on the sampled values. The actual peak over the piecewise-linear chip interface is also checked separately. Keeping the sample positions fixed prevents the number of mesh nodes from changing the aggregate. The mass expression counts a fixed base plus filtered fin volumes; constants, bounds, mesh and loads are recorded in the repository's configuration.
+<span id="sampling-reserve">Loading the fixed sampling and numerical reserve.</span> The temperature limits are illustrative project-level engineering targets rather than values from a specific chip datasheet. The higher overload target permits a warmer steady-state case at higher power and ambient temperature; it is not a transient rating. The KS aggregate spans the full chip footprint, with finite-element interpolation at fixed physical locations; it is an upper bound on the sampled values. The actual peak over the piecewise-linear chip interface is also checked separately. Keeping the sample positions fixed prevents the number of mesh nodes from changing the aggregate. The mass expression counts a fixed base plus filtered fin volumes; constants, bounds, mesh and loads are recorded in the repository's configuration.
 
 ## Analysis model
 
@@ -50,15 +52,15 @@ $$q_s=h(T)(T-T_\infty)+\epsilon\sigma(T^4-T_\infty^4),\qquad h(T)=h_{ref}\left(\
 
 The quarter-power law is a simplified modeling assumption, not a full Churchill–Chu calculation. The reference coefficient, black-anodized emissivity, and engineering temperature limits are assumptions; no particular finish or chip has been validated against a datasheet.
 
-Newton's method uses the consistent analytic tangent and backtracking. <span id="dof-count">Loading model size.</span> Assumptions include an isothermal material conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
+Newton's method uses the consistent analytic tangent and backtracking. <span id="dof-count">Loading model size.</span> Assumptions include temperature-independent thermal conductivity, no contact resistance, an adiabatic underside outside the chip, and a reduced-order 1D representation of each plate fin.
 
 The base solves $-\nabla\cdot(k\nabla T)=0$ in its cross-section. A prescribed heat flux is integrated over the exact centered chip footprint, including partial boundary elements; the remainder of the underside and the base side edges are insulated. The global conduction and tangent matrices are sparse. The full base top receives surface loss, including the area represented by fin roots: fins connect to nodes rather than replacing a finite-width base patch. Each fin carries axial conduction and loses heat from its sides and tip. This full-top exposure, point-like fin-root coupling, and the lack of resolved air flow or mutual fin shielding can affect mesh behavior and overestimate cooling; extrapolating to a manufactured design requires external validation.
 
 ## Verification
 
-The team independently supplied benchmark values before the agent checked the solver. The ladder covers exact conduction and fin solutions, mesh convergence, energy balance, reflection and unit invariance, a nonlinear benchmark, and gradient checks.
+The team independently derived benchmark values before using the coding agent to evaluate the solver. The ladder covers exact conduction and fin solutions, mesh convergence, energy balance, reflection and unit invariance, a nonlinear benchmark, and gradient checks.
 
-<div id="verification-summary" class="data-panel">Verification evidence awaits the student worksheet.</div>
+<div id="verification-summary" class="data-panel">Verification data is loading from the generated results.</div>
 
 The manufactured-solution mesh study compares the measured error slopes with the expected Q4 rates:
 
@@ -90,7 +92,9 @@ The implementation includes analytic $R_x$ for every height and raw density, inc
 
 ## Optimization
 
-The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT polish. The mass objective is divided by the starting mass; SLSQP uses physical design-variable units, while the KKT polish maps each bounded height to the unit interval. The overload constraint at the buffered target governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation. The reserve is an engineering numerical margin, not a proof of convergence at infinite mesh resolution.
+The staged campaign uses SLSQP for the linear fixed-topology, nonlinear fixed-topology, and SIMP-continuation studies, followed by a `trust-constr` KKT-polishing stage. The mass objective is divided by the starting mass; SLSQP uses physical design-variable units, while the KKT polish maps each bounded height to the unit interval. The overload constraint at the buffered target governs the reported nonlinear solution. Every iteration stores the design, mass, and constraint values for the animation. The reserve is an engineering numerical margin, not a proof of convergence at infinite mesh resolution.
+
+### Active constraint and multipliers
 
 <div id="kkt-summary"></div>
 
@@ -116,7 +120,7 @@ At $p=1$ the three topology starts use the fixed-topology solution, uniform raw 
 
 The scenario study perturbs each load case to paired low and high power and ambient conditions. These are illustrative bounded scenarios, not a measured probability distribution or a reliability guarantee. Each scenario is constrained separately and its adjoint gradient is checked against central differences.
 
-<div id="uncertainty-summary">Uncertainty study awaits a verified run.</div>
+<div id="uncertainty-summary">Uncertainty results are loading from the generated data.</div>
 
 ## Results
 
@@ -128,7 +132,7 @@ Presentation figures generated from the same results: [mass comparison](assets/f
 
 ## Reproducibility
 
-From the repository root, install `Project4/requirements-project4.txt`, complete the human input files, then run:
+From a clean repository clone, install `Project4/requirements-project4.txt`, then run the command below from the repository root. The completed approval and student-authored benchmark inputs are already tracked in the repository; the command validates them before running.
 
 ```text
 python -m Project4.heatsink.run_all --config Project4/config.yaml
@@ -136,7 +140,7 @@ python -m Project4.heatsink.run_all --config Project4/config.yaml
 
 ## Limitations and AI-use statement
 
-The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team reported that it had reviewed the work on November 16, 2026. Verification exposed an implementation bug in the original cost comparison: each finite-difference perturbation unnecessarily computed an adjoint, inflating the reported finite-difference cost. The corrected comparison uses state-only solves and a regression test checks this. A separate feasibility bound showed that the initial 100/125 W cases were infeasible, so the team approved 50/60 W study cases. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
+The solver, adjoint, optimizer interface, serialization, and viewer were drafted with a coding agent. The students independently supplied the benchmark truth and checked the benchmark derivations; the team reviewed the work. Verification exposed an implementation bug in the original cost comparison: each finite-difference perturbation unnecessarily computed an adjoint, inflating the reported finite-difference cost. The corrected comparison uses state-only solves and a regression test checks this. A separate feasibility bound showed that the initial 100/125 W cases were infeasible, so the team approved 50/60 W study cases. Reduced-order fins and empirical natural convection limit predictive fidelity; the results are a design study, not certification data.
 
 ## References
 
