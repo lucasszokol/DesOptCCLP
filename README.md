@@ -1,5 +1,5 @@
 # DesOptCCLP
-Design Optimization Group with Charles Green, Christian Miranda, Lucas Somoshegyi-Szokol, and Polina Kondratiuk,
+Design Optimization Group with Charles Green, Christian Miranda, Kellen Worthington, Lucas Somoshegyi-Szokol, and Polina Kondratiuk.
 
 ## Projects
 
