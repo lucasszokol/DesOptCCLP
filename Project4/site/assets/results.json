@@ -24068,7 +24068,8 @@
         1.0
       ],
       "mass_kg": 0.17730427266036963,
-      "max_scaled_constraint": -0.0013399437189096641,
+      "max_buffered_scaled_constraint": 3.4539966373148268e-12,
+      "max_raw_scaled_constraint": -0.0013399437189096641,
       "message": "Optimization terminated successfully",
       "name": "topology_start_from_fixed_topology_p1",
       "raw_densities": [
@@ -24119,7 +24120,8 @@
         0.9999999999999905
       ],
       "mass_kg": 0.17730427266656484,
-      "max_scaled_constraint": -0.0013399437223705624,
+      "max_buffered_scaled_constraint": -6.901597349173727e-15,
+      "max_raw_scaled_constraint": -0.0013399437223705624,
       "message": "Optimization terminated successfully",
       "name": "topology_start_uniform_density_0p60_p1",
       "raw_densities": [
@@ -24170,7 +24172,8 @@
         1.0
       ],
       "mass_kg": 0.1773042725846165,
-      "max_scaled_constraint": -0.001339943676715305,
+      "max_buffered_scaled_constraint": 4.564835575510129e-11,
+      "max_raw_scaled_constraint": -0.001339943676715305,
       "message": "Optimization terminated successfully",
       "name": "topology_start_edge_weighted_density_p1",
       "raw_densities": [
@@ -24198,6 +24201,60 @@
       "success": true
     }
   ],
+  "topology_summary": {
+    "active_fins_after_threshold": 20,
+    "all_candidate_fins_retained": true,
+    "binary_density": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "candidate_fins": 20,
+    "discrete_removed_fin_feasibility_demonstrated": false,
+    "intermediate_binary_density_count_0p01_0p99": 0,
+    "intermediate_filtered_density_count_0p01_0p99": 0,
+    "threshold_filtered_density": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "threshold_reoptimization_feasible": true,
+    "topology_bonus_demonstrated": false
+  },
   "uncertainty": {
     "assumptions": {
       "ambient_delta_k": 0.5,
@@ -25260,67 +25317,371 @@
     },
     "gradient_checks": [
       {
-        "adjoint": 0.090860507371471,
-        "central_difference": 0.09086052105900613,
-        "relative_error": 1.5064337044908729e-07,
+        "adjoint": 0.09086050737144835,
+        "central_difference": 0.09086050803387724,
+        "relative_error": 7.2906139735938016e-09,
         "scenario": "nominal_low",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 3e-05,
+        "step_sweep": [
+          {
+            "central_difference": 0.09086141376129063,
+            "relative_error": 9.975519912772557e-06,
+            "step": 0.001
+          },
+          {
+            "central_difference": 0.09086058899256569,
+            "relative_error": 8.983115588629358e-07,
+            "step": 0.0003
+          },
+          {
+            "central_difference": 0.09086051644598372,
+            "relative_error": 9.987325329068871e-08,
+            "step": 0.0001
+          },
+          {
+            "central_difference": 0.09086050803387724,
+            "relative_error": 7.2906139735938016e-09,
+            "step": 3e-05
+          },
+          {
+            "central_difference": 0.09086050606053317,
+            "relative_error": 1.442777747875855e-08,
+            "step": 1e-05
+          },
+          {
+            "central_difference": 0.09086051558337313,
+            "relative_error": 9.037946490113881e-08,
+            "step": 3e-06
+          },
+          {
+            "central_difference": 0.0908605059018192,
+            "relative_error": 1.6174564692605547e-08,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "height"
       },
       {
-        "adjoint": -0.011271238080302972,
-        "central_difference": -0.011271252660322586,
-        "relative_error": 1.2935580501030247e-06,
+        "adjoint": -0.011271238080300219,
+        "central_difference": -0.011271238129421091,
+        "relative_error": 4.358072443880535e-09,
         "scenario": "nominal_low",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 0.001,
+        "step_sweep": [
+          {
+            "central_difference": -0.011271238129421091,
+            "relative_error": 4.358072443880535e-09,
+            "step": 0.001
+          },
+          {
+            "central_difference": -0.011271237972929088,
+            "relative_error": 9.526116857654844e-09,
+            "step": 0.0003
+          },
+          {
+            "central_difference": -0.011271237738825938,
+            "relative_error": 3.029607561390151e-08,
+            "step": 0.0001
+          },
+          {
+            "central_difference": -0.011271237765013748,
+            "relative_error": 2.7972656446102337e-08,
+            "step": 3e-05
+          },
+          {
+            "central_difference": -0.01127123694763665,
+            "relative_error": 1.0049149532377781e-07,
+            "step": 1e-05
+          },
+          {
+            "central_difference": -0.011271244777527284,
+            "relative_error": 5.94186995028473e-07,
+            "step": 3e-06
+          },
+          {
+            "central_difference": -0.011271266944582525,
+            "relative_error": 2.5608729212286216e-06,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "density"
       },
       {
-        "adjoint": -0.3886785940381382,
-        "central_difference": -0.3886785840782926,
-        "relative_error": 2.5624888449447167e-08,
+        "adjoint": -0.3886785940381363,
+        "central_difference": -0.3886785935376469,
+        "relative_error": 1.2876691316587745e-09,
         "scenario": "nominal_high",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 1e-05,
+        "step_sweep": [
+          {
+            "central_difference": -0.38868474702446565,
+            "relative_error": 1.583027473147984e-05,
+            "step": 0.001
+          },
+          {
+            "central_difference": -0.3886791478346506,
+            "relative_error": 1.4248166317717664e-06,
+            "step": 0.0003
+          },
+          {
+            "central_difference": -0.3886786555979949,
+            "relative_error": 1.5838240076460403e-07,
+            "step": 0.0001
+          },
+          {
+            "central_difference": -0.38867860003698523,
+            "relative_error": 1.543395730312681e-08,
+            "step": 3e-05
+          },
+          {
+            "central_difference": -0.3886785935376469,
+            "relative_error": 1.2876691316587745e-09,
+            "step": 1e-05
+          },
+          {
+            "central_difference": -0.3886785983890048,
+            "relative_error": 1.1194000690668848e-08,
+            "step": 3e-06
+          },
+          {
+            "central_difference": -0.38867858693514457,
+            "relative_error": 1.8274718132876258e-08,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "height"
       },
       {
-        "adjoint": 0.009617946121441064,
-        "central_difference": 0.009617950196955534,
-        "relative_error": 4.23740442178284e-07,
+        "adjoint": 0.00961794612144079,
+        "central_difference": 0.00961794611800575,
+        "relative_error": 3.571490631324636e-10,
         "scenario": "nominal_high",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 1e-05,
+        "step_sweep": [
+          {
+            "central_difference": 0.009617946196331108,
+            "relative_error": 7.786518699177816e-09,
+            "step": 0.001
+          },
+          {
+            "central_difference": 0.009617946178052547,
+            "relative_error": 5.886054662908811e-09,
+            "step": 0.0003
+          },
+          {
+            "central_difference": 0.00961794609657936,
+            "relative_error": 2.5849001760471988e-09,
+            "step": 0.0001
+          },
+          {
+            "central_difference": 0.00961794638781955,
+            "relative_error": 2.7696012078583934e-08,
+            "step": 3e-05
+          },
+          {
+            "central_difference": 0.00961794611800575,
+            "relative_error": 3.571490631324636e-10,
+            "step": 1e-05
+          },
+          {
+            "central_difference": 0.00961794919176687,
+            "relative_error": 3.1922876893681136e-07,
+            "step": 3e-06
+          },
+          {
+            "central_difference": 0.00961793210355961,
+            "relative_error": 1.4574713773070036e-06,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "density"
       },
       {
-        "adjoint": 0.21721954739052896,
-        "central_difference": 0.21721956507041967,
-        "relative_error": 8.139179687783405e-08,
+        "adjoint": 0.2172195473905345,
+        "central_difference": 0.21721954832130022,
+        "relative_error": 4.284907696820916e-09,
         "scenario": "overload_low",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 1e-05,
+        "step_sweep": [
+          {
+            "central_difference": 0.21722287101709065,
+            "relative_error": 1.530053691205623e-05,
+            "step": 0.001
+          },
+          {
+            "central_difference": 0.2172198466214157,
+            "relative_error": 1.3775485336105622e-06,
+            "step": 0.0003
+          },
+          {
+            "central_difference": 0.2172195807851914,
+            "relative_error": 1.537368628563506e-07,
+            "step": 0.0001
+          },
+          {
+            "central_difference": 0.2172195501823135,
+            "relative_error": 1.2852337646758586e-08,
+            "step": 3e-05
+          },
+          {
+            "central_difference": 0.21721954832130022,
+            "relative_error": 4.284907696820916e-09,
+            "step": 1e-05
+          },
+          {
+            "central_difference": 0.21721954321049575,
+            "relative_error": 1.9243382143947653e-08,
+            "step": 3e-06
+          },
+          {
+            "central_difference": 0.21721955014169114,
+            "relative_error": 1.266532701151395e-08,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "height"
       },
       {
-        "adjoint": -0.0034082596652176365,
-        "central_difference": -0.003408251191061729,
-        "relative_error": 2.486358652145301e-06,
+        "adjoint": -0.003408259665217794,
+        "central_difference": -0.0034082596677613513,
+        "relative_error": 7.462921333924991e-10,
         "scenario": "overload_low",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 0.001,
+        "step_sweep": [
+          {
+            "central_difference": -0.0034082596677613513,
+            "relative_error": 7.462921333924991e-10,
+            "step": 0.001
+          },
+          {
+            "central_difference": -0.0034082596879963798,
+            "relative_error": 6.683348089753664e-09,
+            "step": 0.0003
+          },
+          {
+            "central_difference": -0.0034082595541963805,
+            "relative_error": 3.257422389195799e-08,
+            "step": 0.0001
+          },
+          {
+            "central_difference": -0.003408259094655588,
+            "relative_error": 1.6740573255353338e-07,
+            "step": 3e-05
+          },
+          {
+            "central_difference": -0.0034082597065303454,
+            "relative_error": 1.212130384046015e-08,
+            "step": 1e-05
+          },
+          {
+            "central_difference": -0.0034082543646859896,
+            "relative_error": 1.5552018698479256e-06,
+            "step": 3e-06
+          },
+          {
+            "central_difference": -0.0034082419748568756,
+            "relative_error": 5.19043812854566e-06,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "density"
       },
       {
-        "adjoint": -0.010087141197276245,
-        "central_difference": -0.010087154492217884,
-        "relative_error": 1.318007139592591e-06,
+        "adjoint": -0.010087141197281338,
+        "central_difference": -0.010087141033512118,
+        "relative_error": 1.6235444434068243e-08,
         "scenario": "overload_high",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 1e-05,
+        "step_sweep": [
+          {
+            "central_difference": -0.010087257929493302,
+            "relative_error": 1.1572244189674746e-05,
+            "step": 0.001
+          },
+          {
+            "central_difference": -0.010087151634432709,
+            "relative_error": 1.0346975785484578e-06,
+            "step": 0.0003
+          },
+          {
+            "central_difference": -0.010087142447171307,
+            "relative_error": 1.2390922164997503e-07,
+            "step": 0.0001
+          },
+          {
+            "central_difference": -0.010087141505747407,
+            "relative_error": 3.058012703445773e-08,
+            "step": 3e-05
+          },
+          {
+            "central_difference": -0.010087141033512118,
+            "relative_error": 1.6235444434068243e-08,
+            "step": 1e-05
+          },
+          {
+            "central_difference": -0.010087144666677171,
+            "relative_error": 3.439423095202902e-07,
+            "step": 3e-06
+          },
+          {
+            "central_difference": -0.010087132327626046,
+            "relative_error": 8.793031759952913e-07,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "height"
       },
       {
-        "adjoint": 0.0029054128111282596,
-        "central_difference": 0.0029054197766083477,
-        "relative_error": 2.3974091951172066e-06,
+        "adjoint": 0.002905412811128474,
+        "central_difference": 0.0029054128198970227,
+        "relative_error": 3.0180044505259135e-09,
         "scenario": "overload_high",
-        "step": 1e-06,
+        "selection_method": "minimum relative error over the predeclared central-difference step sweep",
+        "step": 0.001,
+        "step_sweep": [
+          {
+            "central_difference": 0.0029054128198970227,
+            "relative_error": 3.0180044505259135e-09,
+            "step": 0.001
+          },
+          {
+            "central_difference": 0.0029054127679765296,
+            "relative_error": 1.4852259235644006e-08,
+            "step": 0.0003
+          },
+          {
+            "central_difference": 0.002905412795904423,
+            "relative_error": 5.2398924842542e-09,
+            "step": 0.0001
+          },
+          {
+            "central_difference": 0.002905413381120737,
+            "relative_error": 1.9618284500507963e-07,
+            "step": 3e-05
+          },
+          {
+            "central_difference": 0.0029054137594167486,
+            "relative_error": 3.2638665376114506e-07,
+            "step": 1e-05
+          },
+          {
+            "central_difference": 0.0029054122868550918,
+            "relative_error": 1.8044712272141698e-07,
+            "step": 3e-06
+          },
+          {
+            "central_difference": 0.0029053826832879867,
+            "relative_error": 1.036955587576148e-05,
+            "step": 1e-06
+          }
+        ],
         "variable_family": "density"
       }
     ],

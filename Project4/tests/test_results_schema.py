@@ -28,6 +28,30 @@ def test_reported_kkt_matches_campaign_evidence() -> None:
     )
 
 
+def test_reported_topology_matches_campaign_evidence() -> None:
+    results = json.loads((ROOT / "Project4/site/assets/results.json").read_text(encoding="utf-8"))
+    campaign = json.loads((ROOT / "Project4/results/optimization/campaign.json").read_text(encoding="utf-8"))
+    summary = results["topology_summary"]
+    evidence = campaign["topology"]
+
+    assert summary["candidate_fins"] == evidence["candidate_fins"]
+    assert summary["active_fins_after_threshold"] == evidence["active_fins_after_threshold"]
+    assert summary["topology_bonus_demonstrated"] == evidence["topology_bonus_demonstrated"]
+    assert not summary["discrete_removed_fin_feasibility_demonstrated"]
+    assert summary["binary_density"] == pytest.approx(evidence["binary_density"])
+    assert summary["threshold_filtered_density"] == pytest.approx(
+        evidence["threshold_filtered_density"]
+    )
+
+    runs = {run["name"]: run for run in campaign["runs"]}
+    for reported in results["topology_starts"]:
+        run = runs[reported["name"]]
+        raw = max(case["scaled_constraint"] for case in run["load_cases"])
+        buffered = max(-case["constraint_margin"] for case in run["load_cases"])
+        assert reported["max_raw_scaled_constraint"] == pytest.approx(raw)
+        assert reported["max_buffered_scaled_constraint"] == pytest.approx(buffered)
+
+
 def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     assets = ROOT / "Project4" / "site" / "assets"
     results = json.loads((assets / "results.json").read_text(encoding="utf-8"))
@@ -63,10 +87,24 @@ def test_final_evidence_rejects_missing_and_infeasible_results() -> None:
     with pytest.raises(ValueError, match="KKT"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
     results["kkt"]["constraint_violation"] = 0.0
+    original_stationarity = results["kkt"]["physical_stationarity_inf_norm"]
+    results["kkt"]["physical_stationarity_inf_norm"] = 0.1
+    with pytest.raises(ValueError, match="KKT"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["kkt"]["physical_stationarity_inf_norm"] = original_stationarity
     results["kkt"]["bound_complementarity"] = 0.1
     with pytest.raises(ValueError, match="KKT"):
         validate_final_payload(results, schema, 1e-4, 1e-5)
     results["kkt"]["bound_complementarity"] = 0.0
+    selected = results["uncertainty"]["gradient_checks"][0]
+    selected["step"] *= 2
+    with pytest.raises(ValueError, match="gradient selection"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    selected["step"] /= 2
+    results["topology_summary"]["active_fins_after_threshold"] -= 1
+    with pytest.raises(ValueError, match="Topology summary"):
+        validate_final_payload(results, schema, 1e-4, 1e-5)
+    results["topology_summary"]["active_fins_after_threshold"] += 1
     results["uncertainty"]["baseline_design"]["load_cases"][0]["name"] = "wrong_scenario"
     with pytest.raises(ValueError, match="Load-case coverage"):
         validate_final_payload(results, schema, 1e-4, 1e-5)

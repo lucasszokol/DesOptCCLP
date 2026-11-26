@@ -40,7 +40,7 @@ def _static_evidence(report: str, data: dict) -> str:
     k = data["kkt"]
     mu = k["multipliers"][0]
     marginal = -mu[1] * data["designs"]["initial"]["mass_kg"] / data["designs"]["optimized"]["load_cases"][1]["limit_k"]
-    kkt = (f"<p>KKT convergence: {html.escape(k['message'])}; stationarity {k['optimality']:.3e}, constraint violation {k['constraint_violation']:.3e}, thermal complementarity {k['constraint_complementarity']:.3e}, bound complementarity {k['bound_complementarity']:.3e}. Scaled signed constraint multipliers (nominal, overload): {mu[0]:.5g}, {mu[1]:.5g}. Negative signs follow SciPy's lower-bound convention for the positive margin; the large overload magnitude identifies the active thermal requirement. Locally, a 1 K relaxation of the overload limit is estimated to reduce mass by {marginal:.3g} kg, holding the active set and model fixed.</p>")
+    kkt = (f"<p>KKT convergence: {html.escape(k['message'])}; physical-variable stationarity infinity norm {k['physical_stationarity_inf_norm']:.3e}, scaled unit-box optimizer optimality {k['optimality']:.3e}, constraint violation {k['constraint_violation']:.3e}, thermal complementarity {k['constraint_complementarity']:.3e}, bound complementarity {k['bound_complementarity']:.3e}. Scaled signed constraint multipliers (nominal, overload): {mu[0]:.5g}, {mu[1]:.5g}. Negative signs follow SciPy's lower-bound convention for the positive margin; the large overload magnitude identifies the active thermal requirement. Locally, a 1 K relaxation of the overload limit is estimated to reduce mass by {marginal:.3g} kg, holding the active set and model fixed.</p>")
     linear, nonlinear = data["designs"]["linear_fixed"], data["designs"]["nonlinear_fixed"]
     difference = 100 * (nonlinear["mass_kg"] / linear["mass_kg"] - 1)
     mean = lambda values: sum(values) / len(values) * 1000
@@ -56,12 +56,34 @@ def _static_evidence(report: str, data: dict) -> str:
         scenarios.append([case["name"], fmt(original), fmt(case)])
     uncertainty = (f"<p>Power variation ±{100*u['assumptions']['power_fraction']:.1f}%; ambient variation ±{u['assumptions']['ambient_delta_k']:.2f} K. Nominal optimum mass: {baseline['mass_kg']:.6f} kg; scenario-optimized mass: {robust['mass_kg']:.6f} kg ({100*(robust['mass_kg']/baseline['mass_kg']-1):+.2f}%).</p>"
         + _table(["Scenario", "Nominal optimum KS / limit (K)", "Scenario optimum KS / limit (K)"], scenarios)
-        + f"<p>Worst directional gradient relative error: {max(c['relative_error'] for c in u['gradient_checks']):.3e}.</p>")
+        + f"<p>Each directional derivative uses a predeclared central-difference step sweep; the best-agreeing step and every sampled step remain in the JSON evidence. Worst selected relative error: {max(c['relative_error'] for c in u['gradient_checks']):.3e}.</p>")
+    topology = data["topology_summary"]
+    topology_outcome = (
+        f"<p id=\"topology-outcome\">The accepted thresholded and re-optimized "
+        f"design retains {topology['active_fins_after_threshold']} of "
+        f"{topology['candidate_fins']} candidate fins. The campaign did not "
+        "demonstrate feasibility of a physically removed fin; the topology "
+        f"bonus is {'demonstrated' if topology['topology_bonus_demonstrated'] else 'not claimed'}.</p>"
+    )
+    topology_rows = [
+        [start["name"], "success" if start["success"] else "failed",
+         f"{start['mass_kg']:.6f}", f"{start['max_raw_scaled_constraint']:.2e}",
+         f"{start['max_buffered_scaled_constraint']:.2e}",
+         f"{min(start['filtered_densities']):.4f}"]
+        for start in data["topology_starts"]
+    ]
+    topology_starts = _table(
+        ["Start", "Solver", "Mass (kg)", "Max raw scaled constraint",
+         "Max buffered scaled constraint", "Minimum filtered density"],
+        topology_rows,
+    )
     replacements = {
         '<div id="verification-summary" class="data-panel">Verification data is loading from the generated results.</div>': f'<div id="verification-summary" class="data-panel">{v}</div>',
         '<div id="sensitivity-summary"></div>': f'<div id="sensitivity-summary">{sensitivity}</div>',
         '<div id="kkt-summary"></div>': f'<div id="kkt-summary">{kkt}</div>',
         '<div id="comparison-summary"></div>': f'<div id="comparison-summary">{comparison}</div>',
+        '<p id="topology-outcome">Final topology outcome is loading from the generated data.</p>': topology_outcome,
+        '<div id="topology-starts"></div>': f'<div id="topology-starts">{topology_starts}</div>',
         '<div id="uncertainty-summary">Uncertainty results are loading from the generated data.</div>': f'<div id="uncertainty-summary">{uncertainty}</div>',
     }
     for marker, value in replacements.items():

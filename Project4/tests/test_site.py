@@ -18,11 +18,18 @@ def test_static_site_build_contains_report_and_assets() -> None:
     for panel, evidence in [
         ("verification-summary", "V1: T(1/4L)"),
         ("sensitivity-summary", "Taylor slope"),
-        ("kkt-summary", "stationarity"),
+        ("kkt-summary", "physical-variable stationarity"),
         ("comparison-summary", "Mean fin heights"),
+        ("topology-outcome", "topology bonus is not claimed"),
+        ("topology-starts", "Max buffered scaled constraint"),
         ("uncertainty-summary", "Scenario optimum KS"),
     ]:
-        match = re.search(rf'<div id="{panel}"[^>]*>(.*?)</div>', html, re.DOTALL)
-        assert match is not None and evidence in match.group(1)
+        match = re.search(
+            rf'<(?P<tag>div|p) id="{panel}"[^>]*>(.*?)</(?P=tag)>',
+            html,
+            re.DOTALL,
+        )
+        assert match is not None and evidence in match.group(2)
     assert "Verification evidence awaits" not in html
     assert "Uncertainty study awaits" not in html
+    assert "The selected result retains all 20 fins" not in html

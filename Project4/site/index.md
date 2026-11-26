@@ -112,13 +112,15 @@ The N2 state includes temperature-dependent natural convection and $T^4$ radiati
 
 Candidate fins may vanish through filtered density variables. A density floor prevents singular conduction matrices, SIMP continuation discourages gray fins, and a one-dimensional filter suppresses alternating artifacts. Filtering makes an isolated thresholded raw density differ from the physical density, so mixed topologies need further validation before they can be treated as removed fins.
 
-At $p=1$ the three topology starts use the fixed-topology solution, uniform raw density 0.60, and an edge-weighted density profile. Feasible starts compete on mass; the selected design then proceeds through $p=2$ and $p=3$, thresholding, and height re-optimization. The selected result retains all 20 fins. The screened low-density candidate is filtered, so it does not establish a feasible physically removed fin; we do not claim the topology bonus on that basis.
+At $p=1$ the three topology starts use the fixed-topology solution, uniform raw density 0.60, and an edge-weighted density profile. Feasible starts compete on mass; the selected design then proceeds through $p=2$ and $p=3$, thresholding, and height re-optimization. The screened low-density candidate is filtered, so it does not establish a feasible physically removed fin.
+
+<p id="topology-outcome">Final topology outcome is loading from the generated data.</p>
 
 <div id="topology-starts"></div>
 
 ## Design under uncertainty — bonus +5
 
-The scenario study perturbs each load case to paired low and high power and ambient conditions. These are illustrative bounded scenarios, not a measured probability distribution or a reliability guarantee. Each scenario is constrained separately and its adjoint gradient is checked against central differences.
+The scenario study perturbs each load case to paired low and high power and ambient conditions. These are illustrative bounded scenarios, not a measured probability distribution or a reliability guarantee. Each scenario is constrained separately and its adjoint gradient is checked over a predeclared central-difference step sweep. The sweep exposes large-step truncation error and small-step subtraction/cancellation instead of depending on one platform-sensitive step.
 
 <div id="uncertainty-summary">Uncertainty results are loading from the generated data.</div>
 

@@ -49,6 +49,65 @@ def _design_view(model: HeatSinkModel, name: str, design: np.ndarray, nonlinear:
     }
 
 
+def _topology_start_view(model: HeatSinkModel, run, reserve_k: float) -> dict:
+    raw_constraints = [response.scaled_constraint for response in run.responses]
+    buffered_constraints = [
+        response.scaled_constraint + reserve_k / case.chip_limit_k
+        for case, response in zip(model.config.load_cases, run.responses)
+    ]
+    return {
+        "name": run.name,
+        "success": bool(run.result.success),
+        "message": str(run.result.message),
+        "mass_kg": run.mass_kg,
+        "max_raw_scaled_constraint": max(raw_constraints),
+        "max_buffered_scaled_constraint": max(buffered_constraints),
+        "raw_densities": run.full_design[
+            model.config.geometry.candidate_fins :
+        ].tolist(),
+        "filtered_densities": model.split_design(run.full_design)[2].tolist(),
+    }
+
+
+def _topology_summary(model: HeatSinkModel, campaign: CampaignResult) -> dict:
+    count = model.config.geometry.candidate_fins
+    threshold = float(model.config.raw["optimization"]["topology_threshold"])
+    binary_density = np.asarray(campaign.binary_density)
+    threshold_filtered_density = model.split_design(
+        campaign.threshold_polish.full_design
+    )[2]
+    active_fins = int(np.count_nonzero(binary_density > threshold))
+    raw_intermediate = int(
+        np.count_nonzero((binary_density > 0.01) & (binary_density < 0.99))
+    )
+    filtered_intermediate = int(
+        np.count_nonzero(
+            (threshold_filtered_density > 0.01)
+            & (threshold_filtered_density < 0.99)
+        )
+    )
+    near_binary = raw_intermediate == 0 and filtered_intermediate == 0
+    discrete_removed_fin_feasibility_demonstrated = False
+    return {
+        "candidate_fins": count,
+        "active_fins_after_threshold": active_fins,
+        "all_candidate_fins_retained": active_fins == count,
+        "binary_density": binary_density.tolist(),
+        "threshold_filtered_density": threshold_filtered_density.tolist(),
+        "intermediate_binary_density_count_0p01_0p99": raw_intermediate,
+        "intermediate_filtered_density_count_0p01_0p99": filtered_intermediate,
+        "threshold_reoptimization_feasible": bool(campaign.threshold_polish.accepted),
+        "discrete_removed_fin_feasibility_demonstrated": (
+            discrete_removed_fin_feasibility_demonstrated
+        ),
+        "topology_bonus_demonstrated": bool(
+            active_fins < count
+            and near_binary
+            and discrete_removed_fin_feasibility_demonstrated
+        ),
+    }
+
+
 def preliminary_payload(model: HeatSinkModel) -> dict:
     design = model.initial_design()
     g = model.config.geometry
@@ -141,13 +200,10 @@ def final_payload(
         },
         "optimization_history": history,
         "topology_starts": [
-            {"name": run.name, "success": bool(run.result.success),
-             "message": str(run.result.message), "mass_kg": run.mass_kg,
-             "max_scaled_constraint": max(r.scaled_constraint for r in run.responses),
-             "raw_densities": run.full_design[model.config.geometry.candidate_fins:].tolist(),
-             "filtered_densities": model.split_design(run.full_design)[2].tolist()}
+            _topology_start_view(model, run, reserve)
             for run in campaign.topology_start_runs
         ],
+        "topology_summary": _topology_summary(model, campaign),
         "verification": verification,
         "gradient_checks": gradient_checks,
         "sensitivity_cost": sensitivity_cost,
@@ -249,10 +305,69 @@ def validate_final_payload(payload: dict, schema_path: Path, tolerance: float, g
     coverage = {(c["scenario"], c["variable_family"]) for c in checks}
     if coverage != {(name, family) for name in scenarios for family in ("height", "density")}:
         raise ValueError("Uncertainty gradient coverage is incomplete")
-    if any(not np.isfinite(c["relative_error"]) or c["relative_error"] > gradient_tolerance for c in checks):
-        raise ValueError("Uncertainty gradient check failed")
+    for check in checks:
+        samples = check["step_sweep"]
+        if any(
+            not np.isfinite(sample[key])
+            for sample in samples
+            for key in ("step", "central_difference", "relative_error")
+        ):
+            raise ValueError("Uncertainty gradient step sweep is non-finite")
+        selected = min(samples, key=lambda sample: sample["relative_error"])
+        if not all(
+            np.isclose(check[key], selected[key], rtol=1e-12, atol=1e-15)
+            for key in ("step", "central_difference", "relative_error")
+        ):
+            raise ValueError("Uncertainty gradient selection is inconsistent")
+        if check["relative_error"] > gradient_tolerance:
+            raise ValueError("Uncertainty gradient check failed")
+    for start in payload["topology_starts"]:
+        if (
+            len(start["raw_densities"]) != count
+            or len(start["filtered_densities"]) != count
+            or start["max_buffered_scaled_constraint"]
+            <= start["max_raw_scaled_constraint"]
+        ):
+            raise ValueError("Topology-start constraint evidence is inconsistent")
+    topology = payload["topology_summary"]
+    threshold = config["optimization"]["topology_threshold"]
+    binary_density = np.asarray(topology["binary_density"])
+    filtered_density = np.asarray(topology["threshold_filtered_density"])
+    binary_intermediate = int(
+        np.count_nonzero((binary_density > 0.01) & (binary_density < 0.99))
+    )
+    filtered_intermediate = int(
+        np.count_nonzero((filtered_density > 0.01) & (filtered_density < 0.99))
+    )
+    if (
+        topology["active_fins_after_threshold"]
+        != int(np.count_nonzero(binary_density > threshold))
+        or topology["candidate_fins"] != count
+        or len(binary_density) != count
+        or len(filtered_density) != count
+        or topology["intermediate_binary_density_count_0p01_0p99"]
+        != binary_intermediate
+        or topology["intermediate_filtered_density_count_0p01_0p99"]
+        != filtered_intermediate
+        or topology["all_candidate_fins_retained"]
+        != (topology["active_fins_after_threshold"] == count)
+        or topology["topology_bonus_demonstrated"]
+        != (
+            topology["active_fins_after_threshold"] < count
+            and binary_intermediate == 0
+            and filtered_intermediate == 0
+            and topology["discrete_removed_fin_feasibility_demonstrated"]
+        )
+        or not topology["threshold_reoptimization_feasible"]
+        or (
+            topology["topology_bonus_demonstrated"]
+            and not topology["discrete_removed_fin_feasibility_demonstrated"]
+        )
+    ):
+        raise ValueError("Topology summary is inconsistent")
     kkt = payload["kkt"]
-    residuals = (kkt["optimality"], kkt["constraint_violation"],
+    residuals = (kkt["physical_stationarity_inf_norm"], kkt["optimality"],
+                 kkt["constraint_violation"],
                  kkt["constraint_complementarity"], kkt["bound_complementarity"])
     if any(not np.isfinite(value) or value > tolerance for value in residuals):
         raise ValueError("KKT residual exceeds tolerance")
